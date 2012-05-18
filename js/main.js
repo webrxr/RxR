@@ -281,8 +281,8 @@ var Stone = tm.createClass({
             // 盤面端の場合は離脱
             if( (x+(i*vy)) < 0 ){ break;}
             else if( (y+(i*vx)) < 0 ){ break;}
-            else if( (x+(i*vy)) > this.height ){ break;}
-            else if( (y+(i*vx)) > this.width ){ break;}
+            else if( (x+(i*vy)) > currentSize.height ){ break;}
+            else if( (y+(i*vx)) > currentSize.width ){ break;}
 
             debugStr += "["+ (x+(i*vy)) + "]" + "[" + (y+(i*vx)) + "]"/* + ":" + stone[x+(i*vy)][y+(i*vx)].color*/+", ";
             if( stone[x+(i*vy)][y+(i*vx)].color == color ){
