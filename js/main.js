@@ -110,6 +110,9 @@ function setTotalWhiteStone(){
     }
 }
 
+/**
+ * コンソールに盤面を表示
+ */
 function showBoard(all){
     var w = 0, h = 0;
     if(all == 0){ w = currentSize.width; h = currentSize.height; }
