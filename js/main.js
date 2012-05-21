@@ -4,6 +4,7 @@ tm.preload(function() {
     tm.graphics.TextureManager.add("blackStone", "img/blackStone.png");
 });
 
+// グローバルな値の初期化
 var MAX_WIDTH = 8;
 var MAX_HEIGHT = 8;
 var currentSize = {
@@ -17,8 +18,6 @@ tm.main(function(){
     app = tm.app.CanvasApp("#world");
     app.background = "black";
 
-    // グローバルな値の初期化
-    var timer = 0;
     var gameOver = false;
 
     // シーンの生成
@@ -29,7 +28,11 @@ tm.main(function(){
 
     app.replaceScene(startScene);
 
-    // 石
+    // タイマーの生成
+    var timer = Timer();
+    mainScene.addChild(timer);
+
+    // 石の生成
     stone = new Array();
     for(var i = 0; i < MAX_WIDTH; i++){
         stone[i] = new Array();
@@ -41,25 +44,17 @@ tm.main(function(){
 
     // 石の初期化
     initBoard();
-    setTotalWhiteStone();
-    showBoard(0);
 
     startScene.update = function(){
         app.replaceScene(mainScene);
+        // タイマーのリセット
+        timer.width = 480;
     };
 
     mainScene.update = function(app) {
-        ++timer;
 
-        if(goalStones == whiteStones){
-            console.log("Clear!");
-            initBoard();
-            setTotalWhiteStone();
-            showBoard(0);
-        }
-
-        if(timer % 60 == 0){
-            //gameOver = true;
+        if(timer.timer % timer.limit == 0){
+            gameOver = true;
         }
         else if(gameOver == true){
             gameOver = false;
@@ -85,6 +80,7 @@ function initBoard(){
 
     goalStones = Math.rand(0, currentSize.width * currentSize.height);    // 目標の白石数
 
+    // 石の初期化
     for(var i = 0; i < MAX_WIDTH; i++){
         for(var j = 0; j < MAX_HEIGHT; j++){
             if( i < currentSize.width && j < currentSize.height ){
@@ -96,6 +92,9 @@ function initBoard(){
             }
         }
     }
+
+    setTotalWhiteStone();
+    showBoard(0);
 }
 
 /**
@@ -164,10 +163,18 @@ var Stone = tm.createClass({
         if(this.sprite.isHitPoint(app.pointing.x, app.pointing.y) == true && app.pointing.getPointingEnd() == true && this.visible == true){
             console.log("Hit! [{0}][{1}]".format(this.iter.i, this.iter.j));
             var reverseTotal = this.reverseStoneManager( this.iter.i, this.iter.j );
-            setTotalWhiteStone();
-            console.log("w{0},h{1}, pos{2},{3}:{4}, [0][1]{5}, [1][0]{6}, White{7}, Goal{8}".format(currentSize.width, currentSize.height, this.iter.i, this.iter.j, this.color, stone[0][1], stone[1][0], whiteStones, goalStones));
-            console.log("Total:", reverseTotal);
-            showBoard(0);
+            if(reverseTotal){
+                setTotalWhiteStone();
+                console.log("w{0},h{1}, pos{2},{3}:{4}, White{5}, Goal{6}".format(currentSize.width, currentSize.height, this.iter.i, this.iter.j, this.color, whiteStones, goalStones));
+                console.log("Total:", reverseTotal);
+                showBoard(0);
+
+                // クリアー判定
+                if(goalStones == whiteStones){
+                    console.log("Clear!");
+                    initBoard();
+                }
+            }
         }
     },
 
@@ -176,17 +183,15 @@ var Stone = tm.createClass({
      */
     reverseStoneManager: function(x, y){
         var reverseTotal = 0;
-        reverseTotal += this.checkReverseDirection(x, y, 1, 0);  // 右
-        reverseTotal += this.checkReverseDirection(x, y, -1, 0); // 左
+        reverseTotal += this.checkReverseDirection(x, y, -1, 0);    // 上
+        reverseTotal += this.checkReverseDirection(x, y, 0, 1);     // 右
+        reverseTotal += this.checkReverseDirection(x, y, 1, 0);     // 下
+        reverseTotal += this.checkReverseDirection(x, y, 0, -1);    // 左
 
-        reverseTotal += this.checkReverseDirection(x, y, 0, 1);  // 下
-        reverseTotal += this.checkReverseDirection(x, y, 0, -1); // 上
-
-        reverseTotal += this.checkReverseDirection(x, y, 1, -1); // 右上
-        reverseTotal += this.checkReverseDirection(x, y, 1, 1);  // 右下
-
-        reverseTotal += this.checkReverseDirection(x, y, -1, 1); // 左下
-        reverseTotal += this.checkReverseDirection(x, y, -1, -1);    // 左上
+        reverseTotal += this.checkReverseDirection(x, y, -1, 1);    // 右上
+        reverseTotal += this.checkReverseDirection(x, y, 1, 1);     // 右下
+        reverseTotal += this.checkReverseDirection(x, y, 1, -1);    // 左下
+        reverseTotal += this.checkReverseDirection(x, y, -1, -1);   // 左上
 
         if( reverseTotal > 0){
             var color = this.color;
@@ -219,9 +224,9 @@ var Stone = tm.createClass({
         var rangeW = 0;
         var rangeH = 0;
 
-        if(vx == 1) { rangeW = currentSize.width-y-1; }
+        if(vx == 1) { rangeW = currentSize.height-y-1; }
         else if(vx == -1) { rangeW = y; }
-        if(vy == 1) { rangeH = currentSize.height-x-1; }
+        if(vy == 1) { rangeH = currentSize.width-x-1; }
         else if(vy == -1) { rangeH = x; }
 
         var range = new Array(rangeW, rangeH);
@@ -254,7 +259,7 @@ var Stone = tm.createClass({
     },
 
     /**
-     * 壁までの距離を方向ごとに調整
+     * 壁までの距離を方向ごとに調整した値を返す
      */
     getOptimumRange: function(vx, vy, rangeW, rangeH){
         var wall = 0;
@@ -269,7 +274,7 @@ var Stone = tm.createClass({
     },
 
     /**
-     * 1方向の裏返えした数
+     * 1方向の裏返えした数を返す
      */
     getReverseCount: function(x, y, vx, vy, range, wall, color, anotherColor){
         var count = 0;
@@ -284,7 +289,7 @@ var Stone = tm.createClass({
             else if( (x+(i*vy)) > currentSize.height ){ break;}
             else if( (y+(i*vx)) > currentSize.width ){ break;}
 
-            debugStr += "["+ (x+(i*vy)) + "]" + "[" + (y+(i*vx)) + "]"/* + ":" + stone[x+(i*vy)][y+(i*vx)].color*/+", ";
+            //debugStr += "["+ (x+(i*vy)) + "]" + "[" + (y+(i*vx)) + "]"/* + ":" + stone[x+(i*vy)][y+(i*vx)].color*/+", ";
             if( stone[x+(i*vy)][y+(i*vx)].color == color ){
                 ++count;
             }
@@ -292,7 +297,7 @@ var Stone = tm.createClass({
                 sameColor = true;
                 break;
             }
-            debugStr += "\n";
+            //debugStr += "\n";
         }
 
         var col = this.color;
@@ -302,5 +307,33 @@ var Stone = tm.createClass({
 
         if(sameColor == false || count == 0){ return 0; }
         else{ return count; }
+    }
+});
+
+/**
+ * タイマー
+ */
+var Timer = tm.createClass({
+    superClass: tm.app.CanvasElement,
+
+    init: function(){
+        this.superInit();
+        this.timer = 1;
+        this.limit = 10000;
+        this.x = 0;
+        this.y = 280;
+        this.width = 480;
+        this.color = "hsla(200, 75%, 50%, 0.90)";
+        this.timerSpeed = this.width / this.limit;
+    },
+
+    update: function(){
+        ++this.timer;
+        this.width -= this.timerSpeed;
+    },
+
+    draw: function(canvas) {
+        canvas.fillStyle = this.color;
+        canvas.fillRect(this.x, this.y, this.width, 30);
     }
 });
