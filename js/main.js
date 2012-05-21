@@ -11,8 +11,6 @@ var currentSize = {
     "width": 0,
     "height": 0
 };
-var whiteStones = 0;
-var goalStones = 0;
 
 tm.main(function(){
     app = tm.app.CanvasApp("#world");
@@ -31,6 +29,17 @@ tm.main(function(){
     // タイマーの生成
     var timer = Timer();
     mainScene.addChild(timer);
+
+    // ステータス
+    scoreLabel = StatusLabel(150, 30);
+    scoreLabel.label = 0;
+    mainScene.addChild(scoreLabel);
+
+    whiteStoneLabel = StatusLabel(300, 30);
+    mainScene.addChild(whiteStoneLabel);
+
+    goalStonesLabel = StatusLabel(400, 30);
+    mainScene.addChild(goalStonesLabel);
 
     // 石の生成
     stone = new Array();
@@ -78,7 +87,7 @@ function initBoard(){
     currentSize.width = Math.rand(4, MAX_WIDTH);
     currentSize.height = Math.rand(4, MAX_HEIGHT);
 
-    goalStones = Math.rand(0, currentSize.width * currentSize.height);    // 目標の白石数
+    goalStonesLabel.label = Math.rand(0, currentSize.width * currentSize.height);    // 目標の白石数
 
     // 石の初期化
     for(var i = 0; i < MAX_WIDTH; i++){
@@ -101,10 +110,10 @@ function initBoard(){
  * 白石の総数をセット
  */
 function setTotalWhiteStone(){
-    whiteStones = 0;
+    whiteStoneLabel.label = 0;
     for(var i = 0; i < currentSize.width; i++){
         for(var j = 0; j < currentSize.height; j++){
-            if(stone[i][j].color == 0){ ++whiteStones; }
+            if(stone[i][j].color == 0){ ++whiteStoneLabel.label; }
         }
     }
 }
@@ -145,7 +154,7 @@ var Stone = tm.createClass({
         this.width = this.height = 94;
 
         this.x = this.width/2 * (x+1);
-        this.y = this.height/2 * (y+1);
+        this.y = this.height/2 * (y+1) + 150;
 
         this.color = Math.rand(0,1);
 
@@ -165,13 +174,16 @@ var Stone = tm.createClass({
             var reverseTotal = this.reverseStoneManager( this.iter.i, this.iter.j );
             if(reverseTotal){
                 setTotalWhiteStone();
-                console.log("w{0},h{1}, pos{2},{3}:{4}, White{5}, Goal{6}".format(currentSize.width, currentSize.height, this.iter.i, this.iter.j, this.color, whiteStones, goalStones));
+                console.log("w{0},h{1}, pos{2},{3}:{4}, White{5}, Goal{6}".format(currentSize.width, currentSize.height, this.iter.i, this.iter.j, this.color, whiteStoneLabel.label, goalStonesLabel.label));
                 console.log("Total:", reverseTotal);
                 showBoard(0);
 
+                scoreLabel.label += 30*reverseTotal;
+
                 // クリアー判定
-                if(goalStones == whiteStones){
+                if(goalStonesLabel.label == whiteStoneLabel.label){
                     console.log("Clear!");
+                    scoreLabel.label += 1000;
                     initBoard();
                 }
             }
@@ -335,5 +347,25 @@ var Timer = tm.createClass({
     draw: function(canvas) {
         canvas.fillStyle = this.color;
         canvas.fillRect(this.x, this.y, this.width, 30);
+    }
+});
+
+/**
+ * ステータス
+ */
+var StatusLabel = tm.createClass({
+    superClass: tm.app.Label,
+
+    init: function(x, y){
+        this.superInit(128, 128);
+        this.x = x;
+        this.y = y;
+        this.label = "";
+        this.align     = "end";
+        this.baseline  = "top";
+    },
+
+    update: function(){
+        this.text = this.label.padding(3, ' ');
     }
 });
