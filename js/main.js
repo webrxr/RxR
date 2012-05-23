@@ -2,6 +2,7 @@
 tm.preload(function() {
     tm.graphics.TextureManager.add("whiteStone", "img/whiteStone.png");
     tm.graphics.TextureManager.add("blackStone", "img/blackStone.png");
+    tm.graphics.TextureManager.add("statusImage", "img/status.png");
 });
 
 // グローバルな値の初期化
@@ -31,14 +32,25 @@ tm.main(function(){
     mainScene.addChild(timer);
 
     // ステータス
-    scoreLabel = StatusLabel(150, 30);
+    statusImage = tm.app.Sprite(640, 120);
+    statusImage.scaleX = statusImage.scaleY = 0.5;
+    statusImage.setImage(tm.graphics.TextureManager.get("statusImage"));
+    statusImage.position.set(240,60);
+    mainScene.addChild(statusImage);
+
+    // ステータスのラベル
+    scoreLabel = StatusLabel(260, 67, 18);
     scoreLabel.label = 0;
     mainScene.addChild(scoreLabel);
 
-    whiteStoneLabel = StatusLabel(300, 30);
+    levelLabel = StatusLabel(260, 40, 24);
+    levelLabel.label = 1;
+    mainScene.addChild(levelLabel);
+
+    whiteStoneLabel = StatusLabel(320, 58, 28);
     mainScene.addChild(whiteStoneLabel);
 
-    goalStonesLabel = StatusLabel(400, 30);
+    goalStonesLabel = StatusLabel(385, 58, 28);
     mainScene.addChild(goalStonesLabel);
 
     // 石の生成
@@ -58,6 +70,8 @@ tm.main(function(){
         app.replaceScene(mainScene);
         // タイマーのリセット
         timer.width = 480;
+        scoreLabel.label = 0;
+        levelLabel.label = 1;
     };
 
     mainScene.update = function(app) {
@@ -182,9 +196,10 @@ var Stone = tm.createClass({
 
                 // クリアー判定
                 if(goalStonesLabel.label == whiteStoneLabel.label){
-                    console.log("Clear!");
                     scoreLabel.label += 1000;
+                    levelLabel.label += 1;
                     initBoard();
+                    console.log("Clear! Next Stage{0}".format(levelLabel.label));
                 }
             }
         }
@@ -331,7 +346,7 @@ var Timer = tm.createClass({
     init: function(){
         this.superInit();
         this.timer = 1;
-        this.limit = 10000;
+        this.limit = 1000;
         this.x = 0;
         this.y = 280;
         this.width = 480;
@@ -356,11 +371,12 @@ var Timer = tm.createClass({
 var StatusLabel = tm.createClass({
     superClass: tm.app.Label,
 
-    init: function(x, y){
+    init: function(x, y, size){
         this.superInit(128, 128);
         this.x = x;
         this.y = y;
-        this.label = "";
+        this.size = size;
+        this.label = 0;
         this.align     = "end";
         this.baseline  = "top";
     },
