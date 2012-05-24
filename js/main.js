@@ -3,9 +3,29 @@ tm.preload(function() {
     tm.graphics.TextureManager.add("whiteStone", "img/whiteStone.png");
     tm.graphics.TextureManager.add("blackStone", "img/blackStone.png");
     tm.graphics.TextureManager.add("statusImage", "img/status.png");
+    tm.graphics.TextureManager.add("gameBackground", "img/game_bg.png");
 });
 
-// グローバルな値の初期化
+var waveImage = (function(){
+    var c = tm.graphics.Canvas();
+    c.width = c.height = 128;
+    c.setTransformCenter();
+    c.setColorStyle("white", "rgb(30, 80, 150)");
+    c.fillCircle(0, 0, 100);
+
+    return c;
+})();
+
+var waveImage2 = (function(){
+    var c = tm.graphics.Canvas();
+    c.width = c.height = 128;
+    c.setTransformCenter();
+    c.setColorStyle("white", "rgb(30, 30, 30)");
+    c.fillCircle(0, 0, 100);
+
+    return c;
+})();
+
 var MAX_WIDTH = 8;
 var MAX_HEIGHT = 8;
 var currentSize = {
@@ -26,6 +46,13 @@ tm.main(function(){
     startScene.onmousedown = null;
 
     app.replaceScene(startScene);
+
+    // バックグラウンド画像
+    var gameBackground = tm.app.Sprite(app.width, app.height);
+    //gameBackground.scaleX = gameBackground.scaleY = 0.5;
+    gameBackground.setImage( tm.graphics.TextureManager.get("gameBackground") );
+    gameBackground.position.set(240, 320);
+    mainScene.addChild(gameBackground);
 
     // タイマーの生成
     var timer = Timer();
@@ -101,7 +128,11 @@ function initBoard(){
     currentSize.width = Math.rand(4, MAX_WIDTH);
     currentSize.height = Math.rand(4, MAX_HEIGHT);
 
+    getMargin();
+
     goalStonesLabel.label = Math.rand(0, currentSize.width * currentSize.height);    // 目標の白石数
+
+    var margin = getMargin();
 
     // 石の初期化
     for(var i = 0; i < MAX_WIDTH; i++){
@@ -109,6 +140,7 @@ function initBoard(){
             if( i < currentSize.width && j < currentSize.height ){
                 stone[i][j].color = Math.rand(0,1);
                 stone[i][j].visible = true;
+                stone[i][j].setPosition(i, j, margin);
             }
             else{
                 stone[i][j].visible = false;
@@ -154,6 +186,20 @@ function showBoard(all){
 }
 
 /**
+ * 中央揃えのためのマージンを取得
+ */
+function getMargin(){
+    var marginW = (app.width - (stone[0][0].width / 2) * currentSize.width) / 2;
+
+    var margin = marginW;
+
+    console.log(margin);
+
+    return margin;
+}
+
+
+/**
  * 石
  */
 var Stone = tm.createClass({
@@ -167,8 +213,8 @@ var Stone = tm.createClass({
         };
         this.width = this.height = 94;
 
-        this.x = this.width/2 * (x+1);
-        this.y = this.height/2 * (y+1) + 150;
+        this.x = 0;
+        this.y = 0;
 
         this.color = Math.rand(0,1);
 
@@ -194,6 +240,10 @@ var Stone = tm.createClass({
 
                 scoreLabel.label += 30*reverseTotal;
 
+                // 波紋
+                var wave = Wave(this.x, this.y, waveImage);
+                app.currentScene.addChild(wave);
+
                 // クリアー判定
                 if(goalStonesLabel.label == whiteStoneLabel.label){
                     scoreLabel.label += 1000;
@@ -203,6 +253,14 @@ var Stone = tm.createClass({
                 }
             }
         }
+    },
+
+    /**
+     * 石の位置をリセット
+     */
+    setPosition: function(x, y, margin){
+        this.x = this.width/2 * x + margin + this.width/4;
+        this.y = this.height/2 * (y+1) + 130;
     },
 
     /**
@@ -279,6 +337,10 @@ var Stone = tm.createClass({
                 if( stone[x+(i*vy)][y+(i*vx)].color == anotherColor ){ break; }
                 stone[x+(i*vy)][y+(i*vx)].color = anotherColor;
                 console.log("["+ (x+(i*vy)) + "]" + "[" + (y+(i*vx)) + "], ");
+
+                // 波紋
+                var wave = Wave(stone[x+(i*vy)][y+(i*vx)].x, stone[x+(i*vy)][y+(i*vx)].y, waveImage2);
+                app.currentScene.addChild(wave);
             }
 
             return count;
@@ -348,7 +410,7 @@ var Timer = tm.createClass({
         this.timer = 1;
         this.limit = 1000;
         this.x = 0;
-        this.y = 280;
+        this.y = 290;
         this.width = 480;
         this.color = "hsla(200, 75%, 50%, 0.90)";
         this.timerSpeed = this.width / this.limit;
@@ -383,5 +445,36 @@ var StatusLabel = tm.createClass({
 
     update: function(){
         this.text = this.label.padding(3, ' ');
+    }
+});
+
+/**
+ * 波紋
+ */
+var Wave = tm.createClass({
+    superClass: tm.app.CanvasElement,
+
+    init: function(x, y, img) {
+        this.superInit();
+        this.x = x;
+        this.y = y;
+        this.timer = 20;
+
+        var self = this;
+        var particle = tm.app.Sprite(64,64);
+        particle.scaleX = particle.scaleY = 1;
+        particle.setImage(img);
+        particle.blendMode = "lighter";
+        particle.update = function(){
+            this.scaleX += 0.05;
+            this.scaleY += 0.05;
+            this.alpha = (self.timer/30.0);
+        }
+        this.addChild(particle);
+    },
+
+    update: function(){
+        this.timer -= 1;
+        if(this.timer <= 0){ this.remove(); }
     }
 });
