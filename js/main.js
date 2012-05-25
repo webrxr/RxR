@@ -4,6 +4,8 @@ tm.preload(function() {
     tm.graphics.TextureManager.add("blackStone", "img/blackStone.png");
     tm.graphics.TextureManager.add("statusImage", "img/status.png");
     tm.graphics.TextureManager.add("gameBackground", "img/game_bg.png");
+    tm.graphics.TextureManager.add("resultBackground", "img/result_bg.png");
+    tm.graphics.TextureManager.add("resultText", "img/result_text.png");
 });
 
 var waveImage = (function(){
@@ -42,42 +44,51 @@ tm.main(function(){
     // シーンの生成
     var startScene = tm.app.StartScene();
     var mainScene = tm.app.Scene();
-    var endScene = tm.app.EndScene();
+    var endScene = tm.app.Scene();
     startScene.onmousedown = null;
 
     app.replaceScene(startScene);
 
     // バックグラウンド画像
-    var gameBackground = tm.app.Sprite(app.width, app.height);
-    //gameBackground.scaleX = gameBackground.scaleY = 0.5;
+    var gameBackground = tm.app.Sprite(640, 960);
+    gameBackground.scaleX = gameBackground.scaleY = 0.75;
     gameBackground.setImage( tm.graphics.TextureManager.get("gameBackground") );
-    gameBackground.position.set(240, 320);
+    gameBackground.position.set(240, 360);
     mainScene.addChild(gameBackground);
+
+    // リザルトのバックグラウンド画像
+    var resultBackground = tm.app.Sprite(640, 960);
+    resultBackground.scaleX = resultBackground.scaleY = 0.75;
+    resultBackground.setImage( tm.graphics.TextureManager.get("resultBackground") );
+    resultBackground.position.set(240, 360);
+    endScene.addChild(resultBackground);
+
+    var resultText = tm.app.Sprite(640, 960);
+    resultText.scaleX = resultText.scaleY = 0.75;
+    resultText.setImage( tm.graphics.TextureManager.get("resultText") );
+    resultText.position.set(240, 360);
+    endScene.addChild(resultText);
 
     // タイマーの生成
     var timer = Timer();
     mainScene.addChild(timer);
 
     // ステータス
-    statusImage = tm.app.Sprite(640, 120);
-    statusImage.scaleX = statusImage.scaleY = 0.5;
+    var statusImage = tm.app.Sprite(640, 120);
+    statusImage.scaleX = statusImage.scaleY = 0.75;
     statusImage.setImage(tm.graphics.TextureManager.get("statusImage"));
     statusImage.position.set(240,60);
     mainScene.addChild(statusImage);
 
     // ステータスのラベル
-    scoreLabel = StatusLabel(260, 67, 18);
-    scoreLabel.label = 0;
-    mainScene.addChild(scoreLabel);
+    levelLabel = StatusLabel(260, 35, 32);
 
-    levelLabel = StatusLabel(260, 40, 24);
-    levelLabel.label = 1;
-    mainScene.addChild(levelLabel);
+    scoreLabel = StatusLabel(260, 70, 24);
 
-    whiteStoneLabel = StatusLabel(320, 58, 28);
+    whiteStoneLabel = StatusLabel(360, 60, 32);
     mainScene.addChild(whiteStoneLabel);
 
-    goalStonesLabel = StatusLabel(385, 58, 28);
+    goalStonesLabel = StatusLabel(450, 60, 32);
     mainScene.addChild(goalStonesLabel);
 
     // 石の生成
@@ -90,15 +101,24 @@ tm.main(function(){
         }
     }
 
-    // 石の初期化
-    initBoard();
-
     startScene.update = function(){
-        app.replaceScene(mainScene);
         // タイマーのリセット
         timer.width = 480;
-        scoreLabel.label = 0;
-        levelLabel.label = 1;
+
+        levelLabel.text = 1;
+        levelLabel.size = 32;
+        levelLabel.position.set(260, 30);
+        mainScene.addChild(levelLabel);
+
+        scoreLabel.text = 0;
+        scoreLabel.size = 24;
+        scoreLabel.position.set(260, 70);
+        mainScene.addChild(scoreLabel);
+
+        // 石の初期化
+        initBoard();
+
+        app.replaceScene(mainScene);
     };
 
     mainScene.update = function(app) {
@@ -108,6 +128,15 @@ tm.main(function(){
         }
         else if(gameOver == true){
             gameOver = false;
+
+            levelLabel.size = 48;
+            levelLabel.position.set(380, 180);
+            endScene.addChild(levelLabel);
+
+            scoreLabel.size = 64;
+            scoreLabel.position.set(260, 480);
+            endScene.addChild(scoreLabel);
+
             app.replaceScene(endScene);
         }
     };
@@ -130,7 +159,7 @@ function initBoard(){
 
     getMargin();
 
-    goalStonesLabel.label = Math.rand(0, currentSize.width * currentSize.height);    // 目標の白石数
+    goalStonesLabel.text = Math.rand(0, currentSize.width * currentSize.height);    // 目標の白石数
 
     var margin = getMargin();
 
@@ -156,10 +185,10 @@ function initBoard(){
  * 白石の総数をセット
  */
 function setTotalWhiteStone(){
-    whiteStoneLabel.label = 0;
+    whiteStoneLabel.text = 0;
     for(var i = 0; i < currentSize.width; i++){
         for(var j = 0; j < currentSize.height; j++){
-            if(stone[i][j].color == 0){ ++whiteStoneLabel.label; }
+            if(stone[i][j].color == 0){ ++whiteStoneLabel.text; }
         }
     }
 }
@@ -191,13 +220,8 @@ function showBoard(all){
 function getMargin(){
     var marginW = (app.width - (stone[0][0].width / 2) * currentSize.width) / 2;
 
-    var margin = marginW;
-
-    console.log(margin);
-
-    return margin;
+    return marginW;
 }
-
 
 /**
  * 石
@@ -234,22 +258,22 @@ var Stone = tm.createClass({
             var reverseTotal = this.reverseStoneManager( this.iter.i, this.iter.j );
             if(reverseTotal){
                 setTotalWhiteStone();
-                console.log("w{0},h{1}, pos{2},{3}:{4}, White{5}, Goal{6}".format(currentSize.width, currentSize.height, this.iter.i, this.iter.j, this.color, whiteStoneLabel.label, goalStonesLabel.label));
+                console.log("w{0},h{1}, pos{2},{3}:{4}, White{5}, Goal{6}".format(currentSize.width, currentSize.height, this.iter.i, this.iter.j, this.color, whiteStoneLabel.text, goalStonesLabel.text));
                 console.log("Total:", reverseTotal);
                 showBoard(0);
 
-                scoreLabel.label += 30*reverseTotal;
+                scoreLabel.text += 30*reverseTotal;
 
                 // 波紋
                 var wave = Wave(this.x, this.y, waveImage);
                 app.currentScene.addChild(wave);
 
                 // クリアー判定
-                if(goalStonesLabel.label == whiteStoneLabel.label){
-                    scoreLabel.label += 1000;
-                    levelLabel.label += 1;
+                if(goalStonesLabel.text == whiteStoneLabel.text){
+                    scoreLabel.text += 1000;
+                    levelLabel.text += 1;
                     initBoard();
-                    console.log("Clear! Next Stage{0}".format(levelLabel.label));
+                    console.log("Clear! Next Stage{0}".format(levelLabel.text));
                 }
             }
         }
@@ -260,7 +284,7 @@ var Stone = tm.createClass({
      */
     setPosition: function(x, y, margin){
         this.x = this.width/2 * x + margin + this.width/4;
-        this.y = this.height/2 * (y+1) + 130;
+        this.y = this.height/2 * (y+1) + 160;
     },
 
     /**
@@ -408,9 +432,9 @@ var Timer = tm.createClass({
     init: function(){
         this.superInit();
         this.timer = 1;
-        this.limit = 1000;
+        this.limit = 100;
         this.x = 0;
-        this.y = 290;
+        this.y = 320;
         this.width = 480;
         this.color = "hsla(200, 75%, 50%, 0.90)";
         this.timerSpeed = this.width / this.limit;
@@ -438,13 +462,12 @@ var StatusLabel = tm.createClass({
         this.x = x;
         this.y = y;
         this.size = size;
-        this.label = 0;
+        this.text = 0;
         this.align     = "end";
         this.baseline  = "top";
     },
 
     update: function(){
-        this.text = this.label.padding(3, ' ');
     }
 });
 
