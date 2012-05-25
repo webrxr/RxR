@@ -40,6 +40,7 @@ tm.main(function(){
     app.background = "black";
 
     var gameOver = false;
+    touchCount = 0;
 
     // シーンの生成
     var startScene = tm.app.StartScene();
@@ -91,6 +92,9 @@ tm.main(function(){
     goalStonesLabel = StatusLabel(450, 60, 32);
     mainScene.addChild(goalStonesLabel);
 
+    touchCountLabel = StatusLabel(380, 240, 48);
+    endScene.addChild(touchCountLabel);
+
     // 石の生成
     stone = new Array();
     for(var i = 0; i < MAX_WIDTH; i++){
@@ -102,8 +106,9 @@ tm.main(function(){
     }
 
     startScene.update = function(){
-        // タイマーのリセット
+        // 色々リセット
         timer.width = 480;
+        touchCountLabel.text = 0;
 
         levelLabel.text = 1;
         levelLabel.size = 32;
@@ -224,6 +229,18 @@ function getMargin(){
 }
 
 /**
+ * タッチ数からスコアの倍率を取得
+ */
+function getScoreFromTouchCount(tc){
+    var iter = tc-1;
+    if(tc-1 > 10){ iter = 10; }
+
+    var magnification = new Array(10,10,9,9,9,8,8,7,7,6,5);
+
+    return magnification[iter];
+}
+
+/**
  * 石
  */
 var Stone = tm.createClass({
@@ -262,16 +279,23 @@ var Stone = tm.createClass({
                 console.log("Total:", reverseTotal);
                 showBoard(0);
 
-                scoreLabel.text += 30*reverseTotal;
+                ++touchCount;
+
+                scoreLabel.text += 30*reverseTotal*getScoreFromTouchCount(touchCount);
+
+                console.log(30*reverseTotal*getScoreFromTouchCount(touchCount), getScoreFromTouchCount(touchCount));
 
                 // 波紋
                 var wave = Wave(this.x, this.y, waveImage);
+                wave.timer = 40;
                 app.currentScene.addChild(wave);
 
                 // クリアー判定
                 if(goalStonesLabel.text == whiteStoneLabel.text){
                     scoreLabel.text += 1000;
                     levelLabel.text += 1;
+                    touchCountLabel.text += touchCount;
+                    touchCount = 0;
                     initBoard();
                     console.log("Clear! Next Stage{0}".format(levelLabel.text));
                 }
@@ -364,7 +388,7 @@ var Stone = tm.createClass({
 
                 // 波紋
                 var wave = Wave(stone[x+(i*vy)][y+(i*vx)].x, stone[x+(i*vy)][y+(i*vx)].y, waveImage2);
-                app.currentScene.addChild(wave);
+                this.addChild(wave);
             }
 
             return count;
@@ -481,7 +505,7 @@ var Wave = tm.createClass({
         this.superInit();
         this.x = x;
         this.y = y;
-        this.timer = 20;
+        this.timer = 120;
 
         var self = this;
         var particle = tm.app.Sprite(64,64);
