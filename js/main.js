@@ -55,14 +55,14 @@ tm.main(function(){
     gameBackground.scaleX = gameBackground.scaleY = 0.75;
     gameBackground.setImage( tm.graphics.TextureManager.get("gameBackground") );
     gameBackground.position.set(240, 360);
-    mainScene.addChild(gameBackground);
+    //mainScene.addChild(gameBackground);
 
     // リザルトのバックグラウンド画像
     var resultBackground = tm.app.Sprite(640, 960);
     resultBackground.scaleX = resultBackground.scaleY = 0.75;
     resultBackground.setImage( tm.graphics.TextureManager.get("resultBackground") );
     resultBackground.position.set(240, 360);
-    endScene.addChild(resultBackground);
+    //endScene.addChild(resultBackground);
 
     var resultText = tm.app.Sprite(640, 960);
     resultText.scaleX = resultText.scaleY = 0.75;
@@ -96,9 +96,9 @@ tm.main(function(){
     endScene.addChild(touchCountLabel);
 
     // 石の生成
-    stone = new Array();
+    stone = [];
     for(var i = 0; i < MAX_WIDTH; i++){
-        stone[i] = new Array();
+        stone[i] = [];
         for(var j = 0; j < MAX_HEIGHT; j++){
             stone[i][j] = Stone(i, j);
             mainScene.addChild(stone[i][j]);
@@ -135,7 +135,7 @@ tm.main(function(){
             gameOver = false;
 
             levelLabel.size = 48;
-            levelLabel.position.set(380, 180);
+            levelLabel.position.set(380, 170);
             endScene.addChild(levelLabel);
 
             scoreLabel.size = 64;
@@ -179,6 +179,7 @@ function initBoard(){
             else{
                 stone[i][j].visible = false;
             }
+            stone[i][j].alpha = 0;
         }
     }
 
@@ -270,6 +271,8 @@ var Stone = tm.createClass({
         if( this.color == 0 ){ this.sprite.setImage( tm.graphics.TextureManager.get("whiteStone") ); }
         else if( this.color == 1 ){ this.sprite.setImage( tm.graphics.TextureManager.get("blackStone") ); }
 
+        if(this.alpha < 1){ this.alpha += 0.05; }
+
         if(this.sprite.isHitPoint(app.pointing.x, app.pointing.y) == true && app.pointing.getPointingEnd() == true && this.visible == true){
             console.log("Hit! [{0}][{1}]".format(this.iter.i, this.iter.j));
             var reverseTotal = this.reverseStoneManager( this.iter.i, this.iter.j );
@@ -280,21 +283,21 @@ var Stone = tm.createClass({
                 showBoard(0);
 
                 ++touchCount;
+                ++touchCountLabel.text;
 
                 scoreLabel.text += 30*reverseTotal*getScoreFromTouchCount(touchCount);
 
-                console.log(30*reverseTotal*getScoreFromTouchCount(touchCount), getScoreFromTouchCount(touchCount));
+                //console.log(30*reverseTotal*getScoreFromTouchCount(touchCount), getScoreFromTouchCount(touchCount));
 
                 // 波紋
                 var wave = Wave(this.x, this.y, waveImage);
-                wave.timer = 40;
+                wave.timer = 20;
                 app.currentScene.addChild(wave);
 
                 // クリアー判定
                 if(goalStonesLabel.text == whiteStoneLabel.text){
                     scoreLabel.text += 1000;
                     levelLabel.text += 1;
-                    touchCountLabel.text += touchCount;
                     touchCount = 0;
                     initBoard();
                     console.log("Clear! Next Stage{0}".format(levelLabel.text));
@@ -388,7 +391,7 @@ var Stone = tm.createClass({
 
                 // 波紋
                 var wave = Wave(stone[x+(i*vy)][y+(i*vx)].x, stone[x+(i*vy)][y+(i*vx)].y, waveImage2);
-                this.addChild(wave);
+                app.currentScene.addChild(wave);
             }
 
             return count;
@@ -456,7 +459,7 @@ var Timer = tm.createClass({
     init: function(){
         this.superInit();
         this.timer = 1;
-        this.limit = 100;
+        this.limit = 300;
         this.x = 0;
         this.y = 320;
         this.width = 480;
@@ -505,11 +508,10 @@ var Wave = tm.createClass({
         this.superInit();
         this.x = x;
         this.y = y;
-        this.timer = 120;
+        this.timer = 20;
 
         var self = this;
         var particle = tm.app.Sprite(64,64);
-        particle.scaleX = particle.scaleY = 1;
         particle.setImage(img);
         particle.blendMode = "lighter";
         particle.update = function(){
