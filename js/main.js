@@ -163,10 +163,10 @@ tm.main(function(){
 
     scoreLabel = StatusLabel(0, 24);
 
-    whiteStoneLabel = StatusLabel(350, 60, 32);
+    whiteStoneLabel = StatusLabel(340, 60, 32);
     mainScene.addChild(whiteStoneLabel);
 
-    goalStonesLabel = StatusLabel(440, 60, 32);
+    goalStonesLabel = StatusLabel(430, 60, 32);
     mainScene.addChild(goalStonesLabel);
 
     touchCountLabel = StatusLabel(380, 240, 48);
@@ -192,7 +192,7 @@ tm.main(function(){
 	    else if(app.frame % 240 == 0 && titleFlashing == 1){
     		titleFlashing = 0;
 	    }
-	    // ロゴのアルファを変更
+	    // ロゴの透過度を変更
 	    var alphaPlus = 0.04;
 	    var alphaMinus = 0.02;
    		if(titleFlashing == 0){ 
@@ -222,11 +222,12 @@ tm.main(function(){
 	
 	        levelLabel.text = 1;
 	        levelLabel.size = 32;
-	        levelLabel.position.set(260, 30);
+	        levelLabel.position.set(255, 30);
 	        mainScene.addChild(levelLabel);
 	
 	        scoreLabel.text = 0;
 	        scoreLabel.size = 24;
+            scoreLabel.align = "end";
 	        scoreLabel.position.set(260, 72);
 	        mainScene.addChild(scoreLabel);
 	
@@ -250,6 +251,7 @@ tm.main(function(){
             endScene.addChild(levelLabel);
 
             scoreLabel.size = 128;
+            scoreLabel.align = "center";
             scoreLabel.position.set(240, 480);
             endScene.addChild(scoreLabel);
 
@@ -406,7 +408,7 @@ var Stone = tm.createClass({
 
                 // クリアー判定
                 if(goalStonesLabel.text == whiteStoneLabel.text){
-                    scoreLabel.text += 1000 * (currentSize.width+currentSize.height);
+                    scoreLabel.text += 1000 * (currentSize.width+currentSize.height-touchCount);
                     levelLabel.text += 1;
                     touchCount = 0;
                     initBoard();
@@ -555,7 +557,7 @@ var Timer = tm.createClass({
     init: function(){
         this.superInit();
         this.timer = 1;
-        this.limit = 100;
+        this.limit = 1000;
         this.x = 0;
         this.y = 320;
         this.width = 480;
