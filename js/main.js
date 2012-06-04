@@ -330,7 +330,7 @@ function showBoard(all){
         debugStr += "\n";
     }
 
-    console.log(debugStr, "\n");
+    //console.log(debugStr, "\n");
 }
 
 /**
@@ -381,8 +381,6 @@ var Stone = tm.createClass({
         this.sprite = tm.app.Sprite(this.width, this.height);
         this.sprite.scaleX = this.sprite.scaleY = 0.5;
         this.addChild(this.sprite);
-
-        //console.log("W:H{0}:{1}, iter[{2}][{3}]".format(this.width, this.height, this.iter.i, this.iter.j));
     },
 
     update: function(){
@@ -392,20 +390,15 @@ var Stone = tm.createClass({
         if(this.alpha < 1){ this.alpha += 0.05; }
 
         if(this.sprite.isHitPoint(app.pointing.x, app.pointing.y) == true && app.pointing.getPointingEnd() == true && this.visible == true){
-            console.log("Hit! [{0}][{1}]".format(this.iter.i, this.iter.j));
             var reverseTotal = this.reverseStoneManager( this.iter.i, this.iter.j );
             if(reverseTotal){
                 setTotalWhiteStone();
-                //console.log("w{0},h{1}, pos{2},{3}:{4}, White{5}, Goal{6}".format(currentSize.width, currentSize.height, this.iter.i, this.iter.j, this.color, whiteStoneLabel.text, goalStonesLabel.text));
-                //console.log("Total:", reverseTotal);
                 showBoard(0);
 
                 ++touchCount;
                 ++touchCountLabel.text;
 
                 scoreLabel.text += 30*reverseTotal*getScoreFromTouchCount(touchCount);
-
-                //console.log(30*reverseTotal*getScoreFromTouchCount(touchCount), getScoreFromTouchCount(touchCount));
 
                 // 波紋
                 var wave = Wave(this.x, this.y, circleWave);
@@ -417,7 +410,6 @@ var Stone = tm.createClass({
                     levelLabel.text += 1;
                     touchCount = 0;
                     initBoard();
-                    //console.log("Clear! Next Stage{0}".format(levelLabel.text));
                 }
             }
         }
@@ -463,7 +455,6 @@ var Stone = tm.createClass({
     checkReverseDirection: function(x, y, vx, vy){
         // 壁までの距離
         var range = this.getToRange(x, y, vx, vy);
-        //console.log("vec{0},{1}, range{2},{3}".format(vx, vy, range[0], range[1]));
 
         //!< 裏返す
         if( !(range[1] == 0 && range[0] == 0) ){ return this.reverseStone(x, y, vx, vy, range); }
@@ -504,7 +495,6 @@ var Stone = tm.createClass({
             for(var i = 1; i < wall+1; i++){
                 if( stone[x+(i*vy)][y+(i*vx)].color == anotherColor ){ break; }
                 stone[x+(i*vy)][y+(i*vx)].color = anotherColor;
-                console.log("["+ (x+(i*vy)) + "]" + "[" + (y+(i*vx)) + "], ");
 
                 // 波紋
                 var wave = Wave(stone[x+(i*vy)][y+(i*vx)].x, stone[x+(i*vy)][y+(i*vx)].y, circleWave2);
@@ -537,18 +527,7 @@ var Stone = tm.createClass({
         var count = 0;
         var sameColor = false;
 
-        var debugStr = "";
-
         for(var i = 1; i < wall+1; i++){
-            // 盤面端の場合は離脱
-/*
-            if( (x+(i*vy)) < 0 ){ console.log("1端:"+(x+(i*vy))+"\n"); break;}
-            else if( (y+(i*vx)) < 0 ){ console.log("2端:"+(y+(i*vx))+"\n"); break;}
-            else if( (x+(i*vy)) > currentSize.height ){ console.log("3端:"+(x+(i*vy))+"\n"); break;}
-            else if( (y+(i*vx)) > currentSize.width ){ console.log("4端:"+(y+(i*vx))+"\n"); break;}
-*/
-
-            //debugStr += "["+ (x+(i*vy)) + "]" + "[" + (y+(i*vx)) + "]"/* + ":" + stone[x+(i*vy)][y+(i*vx)].color*/+", ";
             if( stone[x+(i*vy)][y+(i*vx)].color == color ){
                 ++count;
             }
@@ -556,13 +535,11 @@ var Stone = tm.createClass({
                 sameColor = true;
                 break;
             }
-            //debugStr += "\n";
         }
 
         var col = this.color;
         if( col == 0){ col = "■"; }
         else if( col == 1 ){ col = "□"; }
-        console.log("v{0},{1}, range{2},{3}, wall:{4}, {5}:{6}, {7}".format(vx, vy, range[0], range[1], wall, col, count, "\n"+debugStr));
 
         if(sameColor == false || count == 0){ return 0; }
         else{ return count; }
