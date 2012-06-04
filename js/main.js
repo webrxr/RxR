@@ -555,7 +555,7 @@ var Timer = tm.createClass({
     init: function(){
         this.superInit();
         this.timer = 1;
-        this.limit = 100;
+        this.limit = 1000;
         this.x = 0;
         this.y = 320;
         this.width = 480;
@@ -615,6 +615,7 @@ var Wave = tm.createClass({
             this.scaleY += 0.05;
             this.alpha = (self.timer/30.0);
         }
+        this.addChild(particle);
     },
 
     update: function(){
