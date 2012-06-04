@@ -238,7 +238,7 @@ function initBoard(){
 
     getMargin();
 
-    goalStonesLabel.text = Math.rand(0, currentSize.width * currentSize.height);    // 目標の白石数
+    //goalStonesLabel.text = Math.rand(0, currentSize.width * currentSize.height);    // 目標の白石数
     goalStonesLabel.text = 0;
 
     var margin = getMargin();
@@ -366,9 +366,15 @@ var Stone = tm.createClass({
                 app.currentScene.addChild( wave );
 
                 // クリアー判定
-                if(goalStonesLabel.text == whiteStoneLabel.text){
+                if( whiteStoneLabel.text == goalStonesLabel.text ){
                     scoreLabel.text += 1000 * (currentSize.width+currentSize.height-touchCount);
                     levelLabel.text += 1;
+                    touchCount = 0;
+                    initBoard();
+                }
+                else if( whiteStoneLabel.text == ((currentSize.width-1)*(currentSize.height-1)) ){
+                    scoreLabel.text -= 1000 * (currentSize.width+currentSize.height);
+                    if(scoreLabel.text < 0){ scoreLabel.text = 0; }
                     touchCount = 0;
                     initBoard();
                 }
@@ -526,10 +532,10 @@ var Timer = tm.createClass({
     init: function(){
         this.superInit();
         this.timer = 1;
-        this.limit = 100;
+        this.limit = 1000;
         this.x = 0;
         this.y = 320;
-        this.width = 480;
+        this.width = app.width;
         this.color = "hsla(200, 75%, 50%, 0.90)";
         this.timerSpeed = this.width / this.limit;
     },
