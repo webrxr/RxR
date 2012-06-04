@@ -1,32 +1,48 @@
 // リソースの読み込み
 tm.preload(function() {
+	// ゲームシーン中
     tm.graphics.TextureManager.add("whiteStone", "img/whiteStone.png");
     tm.graphics.TextureManager.add("blackStone", "img/blackStone.png");
-    tm.graphics.TextureManager.add("statusImage", "img/status.png");
-    tm.graphics.TextureManager.add("gameBackground", "img/game_bg.png");
-    tm.graphics.TextureManager.add("resultBackground", "img/result_bg.png");
-    tm.graphics.TextureManager.add("resultText", "img/result_text.png");
+    tm.graphics.TextureManager.add("stoneFrame", "img/stoneFrame.png");
+    tm.graphics.TextureManager.add("gameStatus", "img/gameStatus.png");
+    tm.graphics.TextureManager.add("gameBackground", "img/gameBackground.png");
+
+    // タイトル
+    tm.graphics.TextureManager.add("titleBackground", "img/titleBackground.png");
+    tm.graphics.TextureManager.add("logoCircle", "img/logo/logo_circle.png");
+    tm.graphics.TextureManager.add("logoCircle2", "img/logo/logo_circle2.png");
+    tm.graphics.TextureManager.add("logoTile", "img/logo/logo_tile.png");
+    tm.graphics.TextureManager.add("logoText", "img/logo/logo1.png");
+    tm.graphics.TextureManager.add("logoText2", "img/logo/logo1-2.png");
+    tm.graphics.TextureManager.add("logoTextReverse", "img/logo/logo2.png");
+    tm.graphics.TextureManager.add("logoTextReverse2", "img/logo/logo2-2.png");
+    tm.graphics.TextureManager.add("startButton", "img/startButton.png");
+
+    // リザルト
+    tm.graphics.TextureManager.add("resultBackground", "img/resultBackground.png");
+    tm.graphics.TextureManager.add("resultText", "img/resultText.png");
 });
 
-var waveImage = (function(){
+var circleWave = (function(){
     var c = tm.graphics.Canvas();
-    c.width = c.height = 128;
+    c.width = c.height = 256;
     c.setTransformCenter();
-    c.setColorStyle("white", "rgb(30, 80, 150)");
-    c.fillCircle(0, 0, 100);
+    c.setColorStyle("white", "rgb(30, 80, 255)");
+    c.strokeCircle(0, 0, 32);
 
     return c;
 })();
 
-var waveImage2 = (function(){
+var circleWave2 = (function(){
     var c = tm.graphics.Canvas();
-    c.width = c.height = 128;
+    c.width = c.height = 256;
     c.setTransformCenter();
-    c.setColorStyle("white", "rgb(30, 30, 30)");
-    c.fillCircle(0, 0, 100);
+    c.setColorStyle("white", "rgb(255, 255, 255)");
+    c.strokeCircle(0, 0, 32);
 
     return c;
 })();
+
 
 var MAX_WIDTH = 8;
 var MAX_HEIGHT = 8;
@@ -34,38 +50,99 @@ var currentSize = {
     "width": 0,
     "height": 0
 };
+var currentScale = 0.75;
 
 tm.main(function(){
     app = tm.app.CanvasApp("#world");
     app.background = "black";
+    app.enableStats();
+    //app.fitWindow();
 
     var gameOver = false;
     touchCount = 0;
+    var titleFlashing = 1;
 
     // シーンの生成
-    var startScene = tm.app.StartScene();
+    var startScene = tm.app.Scene();
     var mainScene = tm.app.Scene();
     var endScene = tm.app.Scene();
     startScene.onmousedown = null;
 
     app.replaceScene(startScene);
 
+    // タイトルバックグラウンド画像
+    var titleBackground = tm.app.Sprite(640, 960);
+    titleBackground.scaleX = titleBackground.scaleY = currentScale;
+    titleBackground.setImage( tm.graphics.TextureManager.get("titleBackground") );
+    titleBackground.position.set(240, 360);
+    startScene.addChild(titleBackground);
+    
+    // タイトルロゴ
+    var logoBackground = tm.app.Sprite(640, 310);
+    logoBackground.scaleX = logoBackground.scaleY = currentScale;
+    logoBackground.setImage( tm.graphics.TextureManager.get("logoTile") );
+    logoBackground.position.set(240, 195);
+    startScene.addChild(logoBackground);
+    
+    var logoCircle2 = tm.app.Sprite(640, 310);
+    logoCircle2.scaleX = logoCircle2.scaleY = currentScale;
+    logoCircle2.setImage( tm.graphics.TextureManager.get("logoCircle2") );
+    logoCircle2.position.set(240, 195);
+    startScene.addChild(logoCircle2);
+    
+    var logoCircle = tm.app.Sprite(640, 310);
+    logoCircle.scaleX = logoCircle.scaleY = currentScale;
+    logoCircle.setImage( tm.graphics.TextureManager.get("logoCircle") );
+    logoCircle.position.set(240, 195);
+    startScene.addChild(logoCircle);
+    
+    var logoText2 = tm.app.Sprite(640, 310);
+    logoText2.scaleX = logoText2.scaleY = currentScale;
+    logoText2.setImage( tm.graphics.TextureManager.get("logoText2") );
+    logoText2.position.set(240, 195);
+    startScene.addChild(logoText2);
+    
+    var logoText = tm.app.Sprite(640, 310);
+    logoText.scaleX = logoText.scaleY = currentScale;
+    logoText.setImage( tm.graphics.TextureManager.get("logoText") );
+    logoText.position.set(240, 195);
+    startScene.addChild(logoText);
+    
+    var logoTextReverse2 = tm.app.Sprite(640, 310);
+    logoTextReverse2.scaleX = logoTextReverse2.scaleY = currentScale;
+    logoTextReverse2.setImage( tm.graphics.TextureManager.get("logoTextReverse2") );
+    logoTextReverse2.position.set(240, 195);
+    startScene.addChild(logoTextReverse2);
+    
+    var logoTextReverse = tm.app.Sprite(640, 310);
+    logoTextReverse.scaleX = logoTextReverse.scaleY = currentScale;
+    logoTextReverse.setImage( tm.graphics.TextureManager.get("logoTextReverse") );
+    logoTextReverse.position.set(240, 195);
+    startScene.addChild(logoTextReverse);
+    
+    // ゲームスタートボタン
+    var startButton = tm.app.Sprite(640, 112);
+    startButton.scaleX = startButton.scaleY = currentScale;
+    startButton.setImage( tm.graphics.TextureManager.get("startButton") );
+    startButton.position.set(240, 460);
+    startScene.addChild(startButton);
+    
     // バックグラウンド画像
     var gameBackground = tm.app.Sprite(640, 960);
-    gameBackground.scaleX = gameBackground.scaleY = 0.75;
+    gameBackground.scaleX = gameBackground.scaleY = currentScale;
     gameBackground.setImage( tm.graphics.TextureManager.get("gameBackground") );
     gameBackground.position.set(240, 360);
-    //mainScene.addChild(gameBackground);
+    mainScene.addChild(gameBackground);
 
     // リザルトのバックグラウンド画像
     var resultBackground = tm.app.Sprite(640, 960);
-    resultBackground.scaleX = resultBackground.scaleY = 0.75;
+    resultBackground.scaleX = resultBackground.scaleY = currentScale;
     resultBackground.setImage( tm.graphics.TextureManager.get("resultBackground") );
     resultBackground.position.set(240, 360);
-    //endScene.addChild(resultBackground);
+    endScene.addChild(resultBackground);
 
     var resultText = tm.app.Sprite(640, 960);
-    resultText.scaleX = resultText.scaleY = 0.75;
+    resultText.scaleX = resultText.scaleY = currentScale;
     resultText.setImage( tm.graphics.TextureManager.get("resultText") );
     resultText.position.set(240, 360);
     endScene.addChild(resultText);
@@ -75,25 +152,28 @@ tm.main(function(){
     mainScene.addChild(timer);
 
     // ステータス
-    var statusImage = tm.app.Sprite(640, 120);
-    statusImage.scaleX = statusImage.scaleY = 0.75;
-    statusImage.setImage(tm.graphics.TextureManager.get("statusImage"));
-    statusImage.position.set(240,60);
-    mainScene.addChild(statusImage);
+    var gameStatus = tm.app.Sprite(640, 120);
+    gameStatus.scaleX = gameStatus.scaleY = currentScale;
+    gameStatus.setImage(tm.graphics.TextureManager.get("gameStatus"));
+    gameStatus.position.set(240,60);
+    mainScene.addChild(gameStatus);
 
     // ステータスのラベル
-    levelLabel = StatusLabel(260, 35, 32);
+    levelLabel = StatusLabel(0, 32);
 
-    scoreLabel = StatusLabel(260, 70, 24);
+    scoreLabel = StatusLabel(0, 24);
 
-    whiteStoneLabel = StatusLabel(360, 60, 32);
+    whiteStoneLabel = StatusLabel(360, 55, 32);
     mainScene.addChild(whiteStoneLabel);
 
-    goalStonesLabel = StatusLabel(450, 60, 32);
+    goalStonesLabel = StatusLabel(450, 55, 32);
     mainScene.addChild(goalStonesLabel);
 
-    touchCountLabel = StatusLabel(380, 240, 48);
+    touchCountLabel = StatusLabel(380, 235, 48);
     endScene.addChild(touchCountLabel);
+    
+    timeLabel = StatusLabel(380, 300, 48);
+    endScene.addChild(timeLabel);
 
     // 石の生成
     stone = [];
@@ -105,29 +185,60 @@ tm.main(function(){
         }
     }
 
-    startScene.update = function(){
-        // 色々リセット
-        timer.width = 480;
-        touchCountLabel.text = 0;
-
-        levelLabel.text = 1;
-        levelLabel.size = 32;
-        levelLabel.position.set(260, 30);
-        mainScene.addChild(levelLabel);
-
-        scoreLabel.text = 0;
-        scoreLabel.size = 24;
-        scoreLabel.position.set(260, 70);
-        mainScene.addChild(scoreLabel);
-
-        // 石の初期化
-        initBoard();
-
-        app.replaceScene(mainScene);
+    startScene.update = function(app){
+    	if(app.frame % 120 == 0 && titleFlashing == 0){
+	    	titleFlashing = 1;
+	    }
+	    else if(app.frame % 240 == 0 && titleFlashing == 1){
+    		titleFlashing = 0;
+	    }
+	    // ロゴのアルファを変更
+	    var alphaPlus = 0.04;
+	    var alphaMinus = 0.02;
+   		if(titleFlashing == 0){ 
+			logoCircle2.alpha -= alphaMinus;
+			logoTextReverse2.alpha -= alphaMinus;
+			logoText2.alpha -= alphaMinus;
+			if(logoCircle2.alpha < 0){ logoCircle2.alpha = 0; }
+			if(logoTextReverse2.alpha < 0){ logoTextReverse2.alpha = 0; }
+			if(logoText2.alpha < 0){ logoText2.alpha = 0; }
+		}
+		else if( titleFlashing == 1){
+			logoCircle2.alpha += alphaPlus;
+			logoTextReverse2.alpha += alphaPlus;
+			logoText2.alpha += alphaPlus;
+			if(logoCircle2.alpha > 1){ logoCircle2.alpha = 1; }
+			if(logoTextReverse2.alpha > 1){ logoTextReverse2.alpha = 1; }
+			if(logoText2.alpha > 1){ logoText2.alpha = 1; }
+		}
+		
+		// スタート
+		
+        if(startButton.isHitPoint(app.pointing.x, app.pointing.y) == true && app.pointing.getPointingEnd() == true){
+	        // 色々リセット
+	        timer.width = 480;
+	        touchCountLabel.text = 0;
+	        timeLabel.text = 1;
+	
+	        levelLabel.text = 1;
+	        levelLabel.size = 32;
+	        levelLabel.position.set(260, 25);
+	        mainScene.addChild(levelLabel);
+	
+	        scoreLabel.text = 0;
+	        scoreLabel.size = 24;
+	        scoreLabel.position.set(260, 67);
+	        mainScene.addChild(scoreLabel);
+	
+	        // 石の初期化
+	        initBoard();
+	
+	        app.replaceScene(mainScene);
+	    }
     };
 
     mainScene.update = function(app) {
-
+	    ++timeLabel.text;
         if(timer.timer % timer.limit == 0){
             gameOver = true;
         }
@@ -138,10 +249,11 @@ tm.main(function(){
             levelLabel.position.set(380, 170);
             endScene.addChild(levelLabel);
 
-            scoreLabel.size = 64;
+            scoreLabel.size = 128;
             scoreLabel.position.set(260, 480);
             endScene.addChild(scoreLabel);
 
+ //           timeLabel.text = Math.floor(timeLabel.text/60);
             app.replaceScene(endScene);
         }
     };
@@ -165,6 +277,7 @@ function initBoard(){
     getMargin();
 
     goalStonesLabel.text = Math.rand(0, currentSize.width * currentSize.height);    // 目標の白石数
+    goalStonesLabel.text = 0;
 
     var margin = getMargin();
 
@@ -260,6 +373,11 @@ var Stone = tm.createClass({
 
         this.color = Math.rand(0,1);
 
+        this.frameSprite = tm.app.Sprite(120,120);
+        this.frameSprite.scaleX = this.frameSprite.scaleY = 0.5;
+        this.frameSprite.setImage( tm.graphics.TextureManager.get("stoneFrame") );
+        this.addChild(this.frameSprite);
+
         this.sprite = tm.app.Sprite(this.width, this.height);
         this.sprite.scaleX = this.sprite.scaleY = 0.5;
         this.addChild(this.sprite);
@@ -278,8 +396,8 @@ var Stone = tm.createClass({
             var reverseTotal = this.reverseStoneManager( this.iter.i, this.iter.j );
             if(reverseTotal){
                 setTotalWhiteStone();
-                console.log("w{0},h{1}, pos{2},{3}:{4}, White{5}, Goal{6}".format(currentSize.width, currentSize.height, this.iter.i, this.iter.j, this.color, whiteStoneLabel.text, goalStonesLabel.text));
-                console.log("Total:", reverseTotal);
+                //console.log("w{0},h{1}, pos{2},{3}:{4}, White{5}, Goal{6}".format(currentSize.width, currentSize.height, this.iter.i, this.iter.j, this.color, whiteStoneLabel.text, goalStonesLabel.text));
+                //console.log("Total:", reverseTotal);
                 showBoard(0);
 
                 ++touchCount;
@@ -290,17 +408,16 @@ var Stone = tm.createClass({
                 //console.log(30*reverseTotal*getScoreFromTouchCount(touchCount), getScoreFromTouchCount(touchCount));
 
                 // 波紋
-                var wave = Wave(this.x, this.y, waveImage);
-                wave.timer = 20;
-                app.currentScene.addChild(wave);
+                var wave = Wave(this.x, this.y, circleWave);
+                app.currentScene.addChild( wave );
 
                 // クリアー判定
                 if(goalStonesLabel.text == whiteStoneLabel.text){
-                    scoreLabel.text += 1000;
+                    scoreLabel.text += 1000 * (currentSize.width+currentSize.height);
                     levelLabel.text += 1;
                     touchCount = 0;
                     initBoard();
-                    console.log("Clear! Next Stage{0}".format(levelLabel.text));
+                    //console.log("Clear! Next Stage{0}".format(levelLabel.text));
                 }
             }
         }
@@ -390,7 +507,7 @@ var Stone = tm.createClass({
                 console.log("["+ (x+(i*vy)) + "]" + "[" + (y+(i*vx)) + "], ");
 
                 // 波紋
-                var wave = Wave(stone[x+(i*vy)][y+(i*vx)].x, stone[x+(i*vy)][y+(i*vx)].y, waveImage2);
+                var wave = Wave(stone[x+(i*vy)][y+(i*vx)].x, stone[x+(i*vy)][y+(i*vx)].y, circleWave2);
                 app.currentScene.addChild(wave);
             }
 
@@ -424,10 +541,12 @@ var Stone = tm.createClass({
 
         for(var i = 1; i < wall+1; i++){
             // 盤面端の場合は離脱
-            if( (x+(i*vy)) < 0 ){ break;}
-            else if( (y+(i*vx)) < 0 ){ break;}
-            else if( (x+(i*vy)) > currentSize.height ){ break;}
-            else if( (y+(i*vx)) > currentSize.width ){ break;}
+/*
+            if( (x+(i*vy)) < 0 ){ console.log("1端:"+(x+(i*vy))+"\n"); break;}
+            else if( (y+(i*vx)) < 0 ){ console.log("2端:"+(y+(i*vx))+"\n"); break;}
+            else if( (x+(i*vy)) > currentSize.height ){ console.log("3端:"+(x+(i*vy))+"\n"); break;}
+            else if( (y+(i*vx)) > currentSize.width ){ console.log("4端:"+(y+(i*vx))+"\n"); break;}
+*/
 
             //debugStr += "["+ (x+(i*vy)) + "]" + "[" + (y+(i*vx)) + "]"/* + ":" + stone[x+(i*vy)][y+(i*vx)].color*/+", ";
             if( stone[x+(i*vy)][y+(i*vx)].color == color ){
@@ -459,7 +578,7 @@ var Timer = tm.createClass({
     init: function(){
         this.superInit();
         this.timer = 1;
-        this.limit = 300;
+        this.limit = 100;
         this.x = 0;
         this.y = 320;
         this.width = 480;
@@ -511,7 +630,7 @@ var Wave = tm.createClass({
         this.timer = 20;
 
         var self = this;
-        var particle = tm.app.Sprite(64,64);
+        var particle = tm.app.Sprite(256,256);
         particle.setImage(img);
         particle.blendMode = "lighter";
         particle.update = function(){
@@ -519,7 +638,6 @@ var Wave = tm.createClass({
             this.scaleY += 0.05;
             this.alpha = (self.timer/30.0);
         }
-        this.addChild(particle);
     },
 
     update: function(){
