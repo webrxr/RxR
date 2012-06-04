@@ -66,97 +66,57 @@ tm.main(function(){
     var startScene = tm.app.Scene();
     var mainScene = tm.app.Scene();
     var endScene = tm.app.Scene();
-    startScene.onmousedown = null;
 
     app.replaceScene(startScene);
 
     // タイトルバックグラウンド画像
-    var titleBackground = tm.app.Sprite(640, 960);
-    titleBackground.scaleX = titleBackground.scaleY = currentScale;
-    titleBackground.setImage( tm.graphics.TextureManager.get("titleBackground") );
-    titleBackground.position.set(240, 360);
+    var titleBackground = generalSprite(240, 360, 640, 960, tm.graphics.TextureManager.get("titleBackground"));
     startScene.addChild(titleBackground);
     
     // タイトルロゴ
-    var logoBackground = tm.app.Sprite(640, 310);
-    logoBackground.scaleX = logoBackground.scaleY = currentScale;
-    logoBackground.setImage( tm.graphics.TextureManager.get("logoTile") );
-    logoBackground.position.set(240, 195);
+    var logoBackground = generalSprite(240, 195, 640, 310, tm.graphics.TextureManager.get("logoTile"));
     startScene.addChild(logoBackground);
-    
-    var logoCircle2 = tm.app.Sprite(640, 310);
-    logoCircle2.scaleX = logoCircle2.scaleY = currentScale;
-    logoCircle2.setImage( tm.graphics.TextureManager.get("logoCircle2") );
-    logoCircle2.position.set(240, 195);
+
+    var logoCircle2 = generalSprite(240, 195, 640, 310, tm.graphics.TextureManager.get("logoCircle2"));
     startScene.addChild(logoCircle2);
-    
-    var logoCircle = tm.app.Sprite(640, 310);
-    logoCircle.scaleX = logoCircle.scaleY = currentScale;
-    logoCircle.setImage( tm.graphics.TextureManager.get("logoCircle") );
-    logoCircle.position.set(240, 195);
+
+    var logoCircle = generalSprite(240, 195, 640, 310, tm.graphics.TextureManager.get("logoCircle"));
     startScene.addChild(logoCircle);
-    
-    var logoText2 = tm.app.Sprite(640, 310);
-    logoText2.scaleX = logoText2.scaleY = currentScale;
-    logoText2.setImage( tm.graphics.TextureManager.get("logoText2") );
-    logoText2.position.set(240, 195);
+
+    var logoText2 = generalSprite(240, 195, 640, 310, tm.graphics.TextureManager.get("logoText2"));
     startScene.addChild(logoText2);
-    
-    var logoText = tm.app.Sprite(640, 310);
-    logoText.scaleX = logoText.scaleY = currentScale;
-    logoText.setImage( tm.graphics.TextureManager.get("logoText") );
-    logoText.position.set(240, 195);
+
+    var logoText = generalSprite(240, 195, 640, 310, tm.graphics.TextureManager.get("logoText"));
     startScene.addChild(logoText);
-    
-    var logoTextReverse2 = tm.app.Sprite(640, 310);
-    logoTextReverse2.scaleX = logoTextReverse2.scaleY = currentScale;
-    logoTextReverse2.setImage( tm.graphics.TextureManager.get("logoTextReverse2") );
-    logoTextReverse2.position.set(240, 195);
+
+    var logoTextReverse2 = generalSprite(240, 195, 640, 310, tm.graphics.TextureManager.get("logoTextReverse2"));
     startScene.addChild(logoTextReverse2);
-    
-    var logoTextReverse = tm.app.Sprite(640, 310);
-    logoTextReverse.scaleX = logoTextReverse.scaleY = currentScale;
-    logoTextReverse.setImage( tm.graphics.TextureManager.get("logoTextReverse") );
-    logoTextReverse.position.set(240, 195);
+
+    var logoTextReverse = generalSprite(240, 195, 640, 310, tm.graphics.TextureManager.get("logoTextReverse"));
     startScene.addChild(logoTextReverse);
-    
+
     // ゲームスタートボタン
-    var startButton = tm.app.Sprite(640, 112);
-    startButton.scaleX = startButton.scaleY = currentScale;
-    startButton.setImage( tm.graphics.TextureManager.get("startButton") );
-    startButton.position.set(240, 460);
+    var startButton = generalSprite(240, 460, 640, 112, tm.graphics.TextureManager.get("startButton"));
     startScene.addChild(startButton);
     
     // バックグラウンド画像
-    var gameBackground = tm.app.Sprite(640, 960);
-    gameBackground.scaleX = gameBackground.scaleY = currentScale;
-    gameBackground.setImage( tm.graphics.TextureManager.get("gameBackground") );
-    gameBackground.position.set(240, 360);
+    var gameBackground = generalSprite(240, 360, 640, 960, tm.graphics.TextureManager.get("gameBackground"));
     mainScene.addChild(gameBackground);
-
-    // リザルトのバックグラウンド画像
-    var resultBackground = tm.app.Sprite(640, 960);
-    resultBackground.scaleX = resultBackground.scaleY = currentScale;
-    resultBackground.setImage( tm.graphics.TextureManager.get("resultBackground") );
-    resultBackground.position.set(240, 360);
-    endScene.addChild(resultBackground);
-
-    var resultText = tm.app.Sprite(640, 960);
-    resultText.scaleX = resultText.scaleY = currentScale;
-    resultText.setImage( tm.graphics.TextureManager.get("resultText") );
-    resultText.position.set(240, 360);
-    endScene.addChild(resultText);
 
     // タイマーの生成
     var timer = Timer();
     mainScene.addChild(timer);
 
     // ステータス
-    var gameStatus = tm.app.Sprite(640, 120);
-    gameStatus.scaleX = gameStatus.scaleY = currentScale;
-    gameStatus.setImage(tm.graphics.TextureManager.get("gameStatus"));
-    gameStatus.position.set(240,60);
+    var gameStatus = generalSprite(240, 60, 640, 120, tm.graphics.TextureManager.get("gameStatus"));
     mainScene.addChild(gameStatus);
+
+    // リザルトのバックグラウンド画像
+    var resultBackground = generalSprite(240, 360, 640, 960, tm.graphics.TextureManager.get("resultBackground"));
+    endScene.addChild(resultBackground);
+
+    var resultText = generalSprite(240, 360, 640, 960, tm.graphics.TextureManager.get("resultText"));
+    endScene.addChild(resultText);
 
     // ステータスのラベル
     levelLabel = StatusLabel(0, 32);
@@ -261,7 +221,7 @@ tm.main(function(){
     };
 
     endScene.update = function(){
-        if(app.pointing.getPointingStart()){
+        if(app.pointing.getPointingEnd()){
             app.replaceScene(startScene);
         }
     };
@@ -383,11 +343,10 @@ var Stone = tm.createClass({
         this.sprite = tm.app.Sprite(this.width, this.height);
         this.sprite.scaleX = this.sprite.scaleY = 0.5;
         this.addChild(this.sprite);
+        this.changeColor();
     },
 
     update: function(){
-        if( this.color == 0 ){ this.sprite.setImage( tm.graphics.TextureManager.get("whiteStone") ); }
-        else if( this.color == 1 ){ this.sprite.setImage( tm.graphics.TextureManager.get("blackStone") ); }
 
         if(this.alpha < 1){ this.alpha += 0.05; }
 
@@ -415,6 +374,14 @@ var Stone = tm.createClass({
                 }
             }
         }
+    },
+
+    /**
+     * 石の色をリセット
+     */
+    changeColor: function(){
+        if( this.color == 0 ){ this.sprite.setImage( tm.graphics.TextureManager.get("whiteStone") ); }
+        else if( this.color == 1 ){ this.sprite.setImage( tm.graphics.TextureManager.get("blackStone") ); }
     },
 
     /**
@@ -446,6 +413,7 @@ var Stone = tm.createClass({
             if(color == 0) { anotherColor = 1; }
 
             this.color = anotherColor;
+            this.changeColor();
         }
 
         return reverseTotal;
@@ -497,6 +465,7 @@ var Stone = tm.createClass({
             for(var i = 1; i < wall+1; i++){
                 if( stone[x+(i*vy)][y+(i*vx)].color == anotherColor ){ break; }
                 stone[x+(i*vy)][y+(i*vx)].color = anotherColor;
+                stone[x+(i*vy)][y+(i*vx)].changeColor();
 
                 // 波紋
                 var wave = Wave(stone[x+(i*vy)][y+(i*vx)].x, stone[x+(i*vy)][y+(i*vx)].y, circleWave2);
@@ -557,7 +526,7 @@ var Timer = tm.createClass({
     init: function(){
         this.superInit();
         this.timer = 1;
-        this.limit = 1000;
+        this.limit = 100;
         this.x = 0;
         this.y = 320;
         this.width = 480;
@@ -577,7 +546,7 @@ var Timer = tm.createClass({
 });
 
 /**
- * ステータス
+ * ステータスのラベル
  */
 var StatusLabel = tm.createClass({
     superClass: tm.app.Label,
@@ -588,9 +557,27 @@ var StatusLabel = tm.createClass({
         this.y = y;
         this.size = size;
         this.text = 0;
-        this.align     = "center";
-        this.baseline  = "top";
+        this.align = "center";
+        this.baseline = "top";
         this.width = app.width;
+    },
+
+    update: function(){
+    }
+});
+
+
+/**
+ * ベタ張り画像
+ */
+var generalSprite = tm.createClass({
+    superClass: tm.app.Sprite,
+
+    init: function(x,y,w,h,img){
+        this.superInit(w, h);
+        this.position.set(x, y);
+        this.scaleX = this.scaleY = currentScale;
+        this.setImage(img);
     },
 
     update: function(){
