@@ -163,16 +163,16 @@ tm.main(function(){
 
     scoreLabel = StatusLabel(0, 24);
 
-    whiteStoneLabel = StatusLabel(360, 55, 32);
+    whiteStoneLabel = StatusLabel(350, 60, 32);
     mainScene.addChild(whiteStoneLabel);
 
-    goalStonesLabel = StatusLabel(450, 55, 32);
+    goalStonesLabel = StatusLabel(440, 60, 32);
     mainScene.addChild(goalStonesLabel);
 
-    touchCountLabel = StatusLabel(380, 235, 48);
+    touchCountLabel = StatusLabel(380, 240, 48);
     endScene.addChild(touchCountLabel);
     
-    timeLabel = StatusLabel(380, 300, 48);
+    timeLabel = StatusLabel(380, 310, 48);
     endScene.addChild(timeLabel);
 
     // 石の生成
@@ -222,12 +222,12 @@ tm.main(function(){
 	
 	        levelLabel.text = 1;
 	        levelLabel.size = 32;
-	        levelLabel.position.set(260, 25);
+	        levelLabel.position.set(260, 30);
 	        mainScene.addChild(levelLabel);
 	
 	        scoreLabel.text = 0;
 	        scoreLabel.size = 24;
-	        scoreLabel.position.set(260, 67);
+	        scoreLabel.position.set(260, 72);
 	        mainScene.addChild(scoreLabel);
 	
 	        // 石の初期化
@@ -250,7 +250,7 @@ tm.main(function(){
             endScene.addChild(levelLabel);
 
             scoreLabel.size = 128;
-            scoreLabel.position.set(260, 480);
+            scoreLabel.position.set(240, 480);
             endScene.addChild(scoreLabel);
 
  //           timeLabel.text = Math.floor(timeLabel.text/60);
@@ -555,7 +555,7 @@ var Timer = tm.createClass({
     init: function(){
         this.superInit();
         this.timer = 1;
-        this.limit = 1000;
+        this.limit = 100;
         this.x = 0;
         this.y = 320;
         this.width = 480;
@@ -586,8 +586,9 @@ var StatusLabel = tm.createClass({
         this.y = y;
         this.size = size;
         this.text = 0;
-        this.align     = "end";
+        this.align     = "center";
         this.baseline  = "top";
+        this.width = app.width;
     },
 
     update: function(){
