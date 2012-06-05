@@ -60,7 +60,7 @@ var nextStageBackground = (function(){
     var c = tm.graphics.Canvas();
     c.width = 640;
     c.height = 188;
-    c.fillStyle = "hsla(240, 20%, 20%, 1.00)";
+    c.fillStyle = "hsla(210, 10%, 10%, 0.75)";
     c.fillRect(0, 0, c.width, c.height);
 
     return c;
@@ -93,37 +93,37 @@ tm.main(function(){
     app.replaceScene(startScene);
 
     // タイトルバックグラウンド画像
-    var titleBackground = generalSprite(240, 360, 640, 960, tm.graphics.TextureManager.get("titleBackground"));
+    var titleBackground = GeneralSprite(240, 360, 640, 960, tm.graphics.TextureManager.get("titleBackground"));
     startScene.addChild(titleBackground);
     
     // タイトルロゴ
-    var logoBackground = generalSprite(240, 195, 640, 310, tm.graphics.TextureManager.get("logoTile"));
+    var logoBackground = GeneralSprite(240, 195, 640, 310, tm.graphics.TextureManager.get("logoTile"));
     startScene.addChild(logoBackground);
 
-    var logoCircle2 = generalSprite(240, 195, 640, 310, tm.graphics.TextureManager.get("logoCircle2"));
+    var logoCircle2 = GeneralSprite(240, 195, 640, 310, tm.graphics.TextureManager.get("logoCircle2"));
     startScene.addChild(logoCircle2);
 
-    var logoCircle = generalSprite(240, 195, 640, 310, tm.graphics.TextureManager.get("logoCircle"));
+    var logoCircle = GeneralSprite(240, 195, 640, 310, tm.graphics.TextureManager.get("logoCircle"));
     startScene.addChild(logoCircle);
 
-    var logoText2 = generalSprite(240, 195, 640, 310, tm.graphics.TextureManager.get("logoText2"));
+    var logoText2 = GeneralSprite(240, 195, 640, 310, tm.graphics.TextureManager.get("logoText2"));
     startScene.addChild(logoText2);
 
-    var logoText = generalSprite(240, 195, 640, 310, tm.graphics.TextureManager.get("logoText"));
+    var logoText = GeneralSprite(240, 195, 640, 310, tm.graphics.TextureManager.get("logoText"));
     startScene.addChild(logoText);
 
-    var logoTextReverse2 = generalSprite(240, 195, 640, 310, tm.graphics.TextureManager.get("logoTextReverse2"));
+    var logoTextReverse2 = GeneralSprite(240, 195, 640, 310, tm.graphics.TextureManager.get("logoTextReverse2"));
     startScene.addChild(logoTextReverse2);
 
-    var logoTextReverse = generalSprite(240, 195, 640, 310, tm.graphics.TextureManager.get("logoTextReverse"));
+    var logoTextReverse = GeneralSprite(240, 195, 640, 310, tm.graphics.TextureManager.get("logoTextReverse"));
     startScene.addChild(logoTextReverse);
 
     // ゲームスタートボタン
-    var startButton = generalSprite(240, 460, 640, 112, tm.graphics.TextureManager.get("startButton"));
+    var startButton = GeneralSprite(240, 460, 640, 112, tm.graphics.TextureManager.get("startButton"));
     startScene.addChild(startButton);
     
     // バックグラウンド画像
-    var gameBackground = generalSprite(240, 360, 640, 960, tm.graphics.TextureManager.get("gameBackground"));
+    var gameBackground = GeneralSprite(240, 360, 640, 960, tm.graphics.TextureManager.get("gameBackground"));
     mainScene.addChild(gameBackground);
 
     // タイマーの生成
@@ -131,14 +131,14 @@ tm.main(function(){
     mainScene.addChild(timer);
 
     // ステータス
-    var gameStatus = generalSprite(240, 60, 640, 120, tm.graphics.TextureManager.get("gameStatus"));
+    var gameStatus = GeneralSprite(240, 60, 640, 120, tm.graphics.TextureManager.get("gameStatus"));
     mainScene.addChild(gameStatus);
 
     // リザルトのバックグラウンド画像
-    var resultBackground = generalSprite(240, 360, 640, 960, tm.graphics.TextureManager.get("resultBackground"));
+    var resultBackground = GeneralSprite(240, 360, 640, 960, tm.graphics.TextureManager.get("resultBackground"));
     endScene.addChild(resultBackground);
 
-    var resultText = generalSprite(240, 360, 640, 960, tm.graphics.TextureManager.get("resultText"));
+    var resultText = GeneralSprite(240, 360, 640, 960, tm.graphics.TextureManager.get("resultText"));
     endScene.addChild(resultText);
 
     // ステータスのラベル
@@ -235,10 +235,13 @@ tm.main(function(){
         if(timer.timer % timer.limit == 0 && timeUp == 0){
             timeUp = 1;
 
-            var sprite = generalSprite(240, 360, 640, 188, tm.graphics.TextureManager.get("timeUp"));
+            var bg = GeneralSprite(240, 360, 640, 188, nextStageBackground);
+            mainScene.addChild( bg );
+
+            var sprite = GeneralSprite(240, 360, 640, 188, tm.graphics.TextureManager.get("timeUp"));
             mainScene.addChild(sprite);
             sprite.update = function(){
-                if(timeUp > 80){ gameOver = true; this.remove(); }
+                if(timeUp > 80){ gameOver = true; this.remove(); bg.remove(); }
                 else if(timeUp > 50){
                     mainScene.alpha -= 0.04;
                     if(mainScene.alpha < 0){ mainScene.alpha = 0; }
@@ -414,22 +417,22 @@ var Stone = tm.createClass({
                 if( whiteStoneLabel.text == goalStonesLabel.text ){
                     scoreLabel.text += 1000 * (currentSize.width+currentSize.height-touchCount);
 
-                    var bg = clearEffect(240, 320, 640, 188, nextStageBackground);
+                    var bg = ClearEffect(240, 360, 640, 188, nextStageBackground);
                     app.currentScene.addChild( bg );
 
-                    var next = clearEffect(240, 320, 640, 188, tm.graphics.TextureManager.get("nextStage"));
+                    var next = ClearEffect(240, 360, 640, 188, tm.graphics.TextureManager.get("nextStage"));
                     app.currentScene.addChild( next );
 
-	                var wave = Wave(240, 320, circleWave3);
+	                var wave = Wave(240, 360, circleWave3);
 	                app.currentScene.addChild( wave );
                 }
                 else if( whiteStoneLabel.text == (currentSize.width*currentSize.height) ){
                     scoreLabel.text -= 1000 * (currentSize.width+currentSize.height);
 
-                    var bg = clearEffect(240, 320, 640, 188, nextStageBackground);
+                    var bg = ClearEffect(240, 360, 640, 188, nextStageBackground);
                     app.currentScene.addChild( bg );
 
-                    var miss = clearEffect(240, 320, 640, 188, tm.graphics.TextureManager.get("missTake"));
+                    var miss = ClearEffect(240, 360, 640, 188, tm.graphics.TextureManager.get("missTake"));
                     app.currentScene.addChild( miss );
                 }
             }
@@ -630,7 +633,7 @@ var StatusLabel = tm.createClass({
 /**
  * ベタ張り画像
  */
-var generalSprite = tm.createClass({
+var GeneralSprite = tm.createClass({
     superClass: tm.app.Sprite,
 
     init: function(x,y,w,h,img){
@@ -659,7 +662,6 @@ var Wave = tm.createClass({
         var self = this;
         var particle = tm.app.Sprite(256,256);
         particle.setImage(img);
-        particle.blendMode = "lighter";
         particle.update = function(){
             this.scaleX += 0.05;
             this.scaleY += 0.05;
@@ -677,7 +679,7 @@ var Wave = tm.createClass({
 /**
  * クリアーエフェクト
  */
-var clearEffect = tm.createClass({
+var ClearEffect = tm.createClass({
     superClass:tm.app.CanvasElement,
 
     init: function(x,y,w,h,img){
@@ -686,7 +688,6 @@ var clearEffect = tm.createClass({
         this.scaleX = this.scaleY = currentScale;
 
         var particle = tm.app.Sprite(640, 188);
-        particle.blendMode = "lighter";
         particle.setImage(img);
         this.addChild(particle);
 
