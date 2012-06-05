@@ -6,6 +6,9 @@ tm.preload(function() {
     tm.graphics.TextureManager.add("stoneFrame", "img/stoneFrame.png");
     tm.graphics.TextureManager.add("gameStatus", "img/gameStatus.png");
     tm.graphics.TextureManager.add("gameBackground", "img/gameBackground.png");
+    tm.graphics.TextureManager.add("nextStage", "img/nextStage.png");
+    tm.graphics.TextureManager.add("missTake", "img/missTake.png");
+    tm.graphics.TextureManager.add("timeUp", "img/timeUp.png");
 
     // タイトル
     tm.graphics.TextureManager.add("titleBackground", "img/titleBackground.png");
@@ -43,6 +46,25 @@ var circleWave2 = (function(){
     return c;
 })();
 
+var circleWave3 = (function(){
+    var c = tm.graphics.Canvas();
+    c.width = c.height = 256;
+    c.setTransformCenter();
+    c.setColorStyle("white", "rgb(255, 255, 255)");
+    c.strokeCircle(0, 0, 64);
+
+    return c;
+})();
+
+var nextStageBackground = (function(){
+    var c = tm.graphics.Canvas();
+    c.width = 640;
+    c.height = 188;
+    c.fillStyle = "hsla(240, 20%, 20%, 1.00)";
+    c.fillRect(0, 0, c.width, c.height);
+
+    return c;
+})();
 
 var MAX_WIDTH = 8;
 var MAX_HEIGHT = 8;
@@ -58,9 +80,10 @@ tm.main(function(){
     app.enableStats();
     //app.fitWindow();
 
-    var gameOver = false;
-    touchCount = 0;
     var titleFlashing = 1;
+    gameOver = false;       // ゲームオーバー
+    timeUp = 0;             // タイムアップ
+    touchCount = 0;         // タッチ数
 
     // シーンの生成
     var startScene = tm.app.Scene();
@@ -123,16 +146,16 @@ tm.main(function(){
 
     scoreLabel = StatusLabel(0, 24);
 
-    whiteStoneLabel = StatusLabel(340, 60, 32);
+    whiteStoneLabel = StatusLabel(350, 55, 32);
     mainScene.addChild(whiteStoneLabel);
 
-    goalStonesLabel = StatusLabel(430, 60, 32);
+    goalStonesLabel = StatusLabel(440, 55, 32);
     mainScene.addChild(goalStonesLabel);
 
-    touchCountLabel = StatusLabel(380, 240, 48);
+    touchCountLabel = StatusLabel(380, 235, 48);
     endScene.addChild(touchCountLabel);
     
-    timeLabel = StatusLabel(380, 310, 48);
+    timeLabel = StatusLabel(380, 305, 48);
     endScene.addChild(timeLabel);
 
     // 石の生成
@@ -182,29 +205,49 @@ tm.main(function(){
 	
 	        levelLabel.text = 1;
 	        levelLabel.size = 32;
-	        levelLabel.position.set(255, 30);
+	        levelLabel.position.set(255, 25);
 	        mainScene.addChild(levelLabel);
 	
 	        scoreLabel.text = 0;
 	        scoreLabel.size = 24;
             scoreLabel.align = "end";
-	        scoreLabel.position.set(260, 72);
+	        scoreLabel.position.set(252, 67);
 	        mainScene.addChild(scoreLabel);
+
+            gameOver = false;
 	
 	        // 石の初期化
 	        initBoard();
-	
+
+            mainScene.alpha = 1.0;
+            timer.timer = 1;
 	        app.replaceScene(mainScene);
 	    }
     };
 
     mainScene.update = function(app) {
 	    ++timeLabel.text;
-        if(timer.timer % timer.limit == 0){
-            gameOver = true;
+
+        if(timeUp != 0){
+            ++timeUp;
+        }
+
+        if(timer.timer % timer.limit == 0 && timeUp == 0){
+            timeUp = 1;
+
+            var sprite = generalSprite(240, 360, 640, 188, tm.graphics.TextureManager.get("timeUp"));
+            mainScene.addChild(sprite);
+            sprite.update = function(){
+                if(timeUp > 80){ gameOver = true; this.remove(); }
+                else if(timeUp > 50){
+                    mainScene.alpha -= 0.04;
+                    if(mainScene.alpha < 0){ mainScene.alpha = 0; }
+                }
+            }
         }
         else if(gameOver == true){
             gameOver = false;
+            timeUp = 0;
 
             levelLabel.size = 48;
             levelLabel.position.set(380, 170);
@@ -215,7 +258,7 @@ tm.main(function(){
             scoreLabel.position.set(240, 480);
             endScene.addChild(scoreLabel);
 
- //           timeLabel.text = Math.floor(timeLabel.text/60);
+            timeLabel.text = Math.floor(timeLabel.text/30);
             app.replaceScene(endScene);
         }
     };
@@ -250,6 +293,7 @@ function initBoard(){
                 stone[i][j].color = Math.rand(0,1);
                 stone[i][j].visible = true;
                 stone[i][j].setPosition(i, j, margin);
+                stone[i][j].changeColor();
             }
             else{
                 stone[i][j].visible = false;
@@ -257,6 +301,7 @@ function initBoard(){
             stone[i][j].alpha = 0;
         }
     }
+
 
     setTotalWhiteStone();
     showBoard(0);
@@ -292,7 +337,7 @@ function showBoard(all){
         debugStr += "\n";
     }
 
-    //console.log(debugStr, "\n");
+    console.log(debugStr, "\n");
 }
 
 /**
@@ -350,7 +395,7 @@ var Stone = tm.createClass({
 
         if(this.alpha < 1){ this.alpha += 0.05; }
 
-        if(this.sprite.isHitPoint(app.pointing.x, app.pointing.y) == true && app.pointing.getPointingEnd() == true && this.visible == true){
+        if(this.sprite.isHitPoint(app.pointing.x, app.pointing.y) == true && app.pointing.getPointingEnd() == true && this.visible == true && timeUp == 0){
             var reverseTotal = this.reverseStoneManager( this.iter.i, this.iter.j );
             if(reverseTotal){
                 setTotalWhiteStone();
@@ -368,15 +413,24 @@ var Stone = tm.createClass({
                 // クリアー判定
                 if( whiteStoneLabel.text == goalStonesLabel.text ){
                     scoreLabel.text += 1000 * (currentSize.width+currentSize.height-touchCount);
-                    levelLabel.text += 1;
-                    touchCount = 0;
-                    initBoard();
+
+                    var bg = clearEffect(240, 320, 640, 188, nextStageBackground);
+                    app.currentScene.addChild( bg );
+
+                    var next = clearEffect(240, 320, 640, 188, tm.graphics.TextureManager.get("nextStage"));
+                    app.currentScene.addChild( next );
+
+	                var wave = Wave(240, 320, circleWave3);
+	                app.currentScene.addChild( wave );
                 }
-                else if( whiteStoneLabel.text == ((currentSize.width-1)*(currentSize.height-1)) ){
+                else if( whiteStoneLabel.text == (currentSize.width*currentSize.height) ){
                     scoreLabel.text -= 1000 * (currentSize.width+currentSize.height);
-                    if(scoreLabel.text < 0){ scoreLabel.text = 0; }
-                    touchCount = 0;
-                    initBoard();
+
+                    var bg = clearEffect(240, 320, 640, 188, nextStageBackground);
+                    app.currentScene.addChild( bg );
+
+                    var miss = clearEffect(240, 320, 640, 188, tm.graphics.TextureManager.get("missTake"));
+                    app.currentScene.addChild( miss );
                 }
             }
         }
@@ -532,7 +586,7 @@ var Timer = tm.createClass({
     init: function(){
         this.superInit();
         this.timer = 1;
-        this.limit = 1000;
+        this.limit = 60*30;
         this.x = 0;
         this.y = 320;
         this.width = app.width;
@@ -563,7 +617,7 @@ var StatusLabel = tm.createClass({
         this.y = y;
         this.size = size;
         this.text = 0;
-        this.align = "center";
+        this.align = "end";
         this.baseline = "top";
         this.width = app.width;
     },
@@ -617,5 +671,46 @@ var Wave = tm.createClass({
     update: function(){
         this.timer -= 1;
         if(this.timer <= 0){ this.remove(); }
+    }
+});
+
+/**
+ * クリアーエフェクト
+ */
+var clearEffect = tm.createClass({
+    superClass:tm.app.CanvasElement,
+
+    init: function(x,y,w,h,img){
+        this.superInit(w, h);
+        this.position.set(x, y);
+        this.scaleX = this.scaleY = currentScale;
+
+        var particle = tm.app.Sprite(640, 188);
+        particle.blendMode = "lighter";
+        particle.setImage(img);
+        this.addChild(particle);
+
+        this.timer = 100;
+    },
+
+    update: function(){
+        this.timer -= 1;
+        if(this.timer <= 0){
+            levelLabel.text += 1;
+            touchCount = 0;
+            initBoard();
+
+            this.remove();
+        }
+        else if(this.timer <= 30){
+            this.alpha -= 0.04;
+            if(this.alpha < 0){ this.alpha = 0; }
+        }
+
+        if(timeUp != 0){
+            levelLabel.text += 1;
+            touchCount = 0;
+            this.remove();
+        }
     }
 });
