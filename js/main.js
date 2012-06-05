@@ -24,6 +24,12 @@ tm.preload(function() {
     // リザルト
     tm.graphics.TextureManager.add("resultBackground", "img/resultBackground.png");
     tm.graphics.TextureManager.add("resultText", "img/resultText.png");
+
+    // サウンド
+    tm.sound.SoundManager.add("bgm", "sound/bgm/bgm.mp3", 1);
+    tm.sound.SoundManager.add("op", "sound/bgm/op.mp3", 1);
+    tm.sound.SoundManager.add("decide", "sound/se/decide.wav");
+    tm.sound.SoundManager.add("touch", "sound/se/touch.wav");
 });
 
 var circleWave = (function(){
@@ -141,6 +147,14 @@ tm.main(function(){
     var resultText = GeneralSprite(240, 360, 640, 960, tm.graphics.TextureManager.get("resultText"));
     endScene.addChild(resultText);
 
+    // BGM
+    var op = tm.sound.SoundManager.get("op");
+    op.loop = true;
+    op.play();
+
+    var bgm = tm.sound.SoundManager.get("bgm");
+    bgm.loop = true;
+
     // ステータスのラベル
     levelLabel = StatusLabel(0, 32);
 
@@ -165,6 +179,7 @@ tm.main(function(){
         for(var j = 0; j < MAX_HEIGHT; j++){
             stone[i][j] = Stone(i, j);
             mainScene.addChild(stone[i][j]);
+
         }
     }
 
@@ -198,6 +213,10 @@ tm.main(function(){
 		// スタート
 		
         if(startButton.isHitPoint(app.pointing.x, app.pointing.y) == true && app.pointing.getPointingEnd() == true){
+            tm.sound.SoundManager.get("decide").play();
+            op.stop();
+            bgm.play();
+
 	        // 色々リセット
 	        timer.width = 480;
 	        touchCountLabel.text = 0;
@@ -268,6 +287,8 @@ tm.main(function(){
 
     endScene.update = function(){
         if(app.pointing.getPointingEnd()){
+            op.play();
+            bgm.stop();
             app.replaceScene(startScene);
         }
     };
@@ -401,6 +422,7 @@ var Stone = tm.createClass({
         if(this.sprite.isHitPoint(app.pointing.x, app.pointing.y) == true && app.pointing.getPointingEnd() == true && this.visible == true && timeUp == 0){
             var reverseTotal = this.reverseStoneManager( this.iter.i, this.iter.j );
             if(reverseTotal){
+                tm.sound.SoundManager.get("touch").play();
                 setTotalWhiteStone();
                 showBoard(0);
 
