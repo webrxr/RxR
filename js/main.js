@@ -430,6 +430,7 @@ var Stone = tm.createClass({
                 ++touchCountLabel.text;
 
                 scoreLabel.text += 30*reverseTotal*getScoreFromTouchCount(touchCount);
+                if(scoreLabel.text < 0){ scoreLabel.text = 0; }
 
                 // 波紋
                 var wave = Wave(this.x, this.y, circleWave);
@@ -438,6 +439,7 @@ var Stone = tm.createClass({
                 // クリアー判定
                 if( whiteStoneLabel.text == goalStonesLabel.text ){
                     scoreLabel.text += 1000 * (currentSize.width+currentSize.height-touchCount);
+                    if(scoreLabel.text < 0){ scoreLabel.text = 0; }
 
                     var bg = ClearEffect(240, 360, 640, 188, nextStageBackground, false);
                     app.currentScene.addChild( bg );
@@ -450,6 +452,7 @@ var Stone = tm.createClass({
                 }
                 else if( whiteStoneLabel.text == (currentSize.width*currentSize.height) ){
                     scoreLabel.text -= 1000 * (currentSize.width+currentSize.height);
+                    if(scoreLabel.text < 0){ scoreLabel.text = 0; }
 
                     var bg = ClearEffect(240, 360, 640, 188, nextStageBackground, false);
                     app.currentScene.addChild( bg );
