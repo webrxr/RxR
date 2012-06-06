@@ -84,7 +84,7 @@ tm.main(function(){
     app = tm.app.CanvasApp("#world");
     app.background = "black";
     app.enableStats();
-    //app.fitWindow();
+    app.fitWindow();
 
     var titleFlashing = 1;
     gameOver = false;       // ゲームオーバー
