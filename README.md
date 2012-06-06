@@ -1,6 +1,6 @@
 # Web Reverse Reverse
 
-phi氏が開発したTMLib.jsを使用してReverse ReverseというiPhoneのゲームをウェブ上で動かしてみました。
+phi氏が制作したTMLib.jsを使用してReverse ReverseというiPhoneのゲームをウェブ上で動かしてみました。
 
 - [tmlib.js](https://github.com/phi1618/tmlib.js)
 

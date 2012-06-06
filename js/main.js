@@ -26,8 +26,8 @@ tm.preload(function() {
     tm.graphics.TextureManager.add("resultText", "img/resultText.png");
 
     // サウンド
-    tm.sound.SoundManager.add("bgm", "sound/bgm/bgm.mp3", 1);
-    tm.sound.SoundManager.add("op", "sound/bgm/op.mp3", 1);
+    tm.sound.SoundManager.add("bgm", "sound/bgm/bgm", 1);
+    tm.sound.SoundManager.add("op", "sound/bgm/op", 1);
     tm.sound.SoundManager.add("decide", "sound/se/decide.wav");
     tm.sound.SoundManager.add("touch", "sound/se/touch.wav");
 });
