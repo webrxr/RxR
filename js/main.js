@@ -190,7 +190,7 @@ tm.main(function(){
 		}
 		
 		// スタート
-        if(startButton.isHitPoint(app.pointing.x, app.pointing.y) == true && app.pointing.getPointingEnd() == true){
+        if( app.pointing.getPointingEnd() == true && startButton.isHitPoint(app.pointing.x, app.pointing.y) == true ){
             tm.sound.SoundManager.get("decide").play();
             op.stop();
             bgm.play();
@@ -227,7 +227,7 @@ tm.main(function(){
 
         if(timeUp != 0){ ++timeUp; }
 
-        if(timer.timer % timer.limit == 0 && timeUp == 0){
+        if( timeUp == 0 && timer.timer % timer.limit == 0 ){
             timeUp = 1;
 
             var bg = GeneralSprite(240, 360, 640, 188, nextStageBackground);
@@ -399,7 +399,11 @@ var Stone = tm.createClass({
 
         if(this.alpha < 1){ this.alpha += 0.05; }
 
-        if(this.sprite.isHitPoint(app.pointing.x, app.pointing.y) == true && app.pointing.getPointingEnd() == true && this.visible == true && timeUp == 0){
+        if (app.pointing.getPointingEnd() == false ) return;
+        if (this.visible == false) return;
+        if (timeUp != 0) return;
+
+        if(this.sprite.isHitPoint(app.pointing.x, app.pointing.y) == true){
             var reverseTotal = this.reverseStoneManager( this.iter.i, this.iter.j );
             if(reverseTotal){
                 tm.sound.SoundManager.get("touch").play();
