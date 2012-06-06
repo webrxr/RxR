@@ -179,15 +179,14 @@ tm.main(function(){
         for(var j = 0; j < MAX_HEIGHT; j++){
             stone[i][j] = Stone(i, j);
             mainScene.addChild(stone[i][j]);
-
         }
     }
 
     startScene.update = function(app){
-    	if(app.frame % 120 == 0 && titleFlashing == 0){
+    	if(app.frame % 80 == 0 && titleFlashing == 0){
 	    	titleFlashing = 1;
 	    }
-	    else if(app.frame % 240 == 0 && titleFlashing == 1){
+	    else if(app.frame % 120 == 0 && titleFlashing == 1){
     		titleFlashing = 0;
 	    }
 	    // ロゴの透過度を変更
@@ -211,7 +210,6 @@ tm.main(function(){
 		}
 		
 		// スタート
-		
         if(startButton.isHitPoint(app.pointing.x, app.pointing.y) == true && app.pointing.getPointingEnd() == true){
             tm.sound.SoundManager.get("decide").play();
             op.stop();
@@ -247,9 +245,7 @@ tm.main(function(){
     mainScene.update = function(app) {
 	    ++timeLabel.text;
 
-        if(timeUp != 0){
-            ++timeUp;
-        }
+        if(timeUp != 0){ ++timeUp; }
 
         if(timer.timer % timer.limit == 0 && timeUp == 0){
             timeUp = 1;
@@ -260,7 +256,11 @@ tm.main(function(){
             var sprite = GeneralSprite(240, 360, 640, 188, tm.graphics.TextureManager.get("timeUp"));
             mainScene.addChild(sprite);
             sprite.update = function(){
-                if(timeUp > 80){ gameOver = true; this.remove(); bg.remove(); }
+                if(timeUp > 80){
+                    gameOver = true;
+                    this.remove();
+                    bg.remove();
+                }
                 else if(timeUp > 50){
                     mainScene.alpha -= 0.04;
                     if(mainScene.alpha < 0){ mainScene.alpha = 0; }
@@ -439,10 +439,10 @@ var Stone = tm.createClass({
                 if( whiteStoneLabel.text == goalStonesLabel.text ){
                     scoreLabel.text += 1000 * (currentSize.width+currentSize.height-touchCount);
 
-                    var bg = ClearEffect(240, 360, 640, 188, nextStageBackground);
+                    var bg = ClearEffect(240, 360, 640, 188, nextStageBackground, false);
                     app.currentScene.addChild( bg );
 
-                    var next = ClearEffect(240, 360, 640, 188, tm.graphics.TextureManager.get("nextStage"));
+                    var next = ClearEffect(240, 360, 640, 188, tm.graphics.TextureManager.get("nextStage"), true);
                     app.currentScene.addChild( next );
 
 	                var wave = Wave(240, 360, circleWave3);
@@ -451,10 +451,10 @@ var Stone = tm.createClass({
                 else if( whiteStoneLabel.text == (currentSize.width*currentSize.height) ){
                     scoreLabel.text -= 1000 * (currentSize.width+currentSize.height);
 
-                    var bg = ClearEffect(240, 360, 640, 188, nextStageBackground);
+                    var bg = ClearEffect(240, 360, 640, 188, nextStageBackground, false);
                     app.currentScene.addChild( bg );
 
-                    var miss = ClearEffect(240, 360, 640, 188, tm.graphics.TextureManager.get("missTake"));
+                    var miss = ClearEffect(240, 360, 640, 188, tm.graphics.TextureManager.get("missTake"), true);
                     app.currentScene.addChild( miss );
                 }
             }
@@ -704,7 +704,7 @@ var Wave = tm.createClass({
 var ClearEffect = tm.createClass({
     superClass:tm.app.CanvasElement,
 
-    init: function(x,y,w,h,img){
+    init: function(x,y,w,h,img,reset){
         this.superInit(w, h);
         this.position.set(x, y);
         this.scaleX = this.scaleY = currentScale;
@@ -714,14 +714,18 @@ var ClearEffect = tm.createClass({
         this.addChild(particle);
 
         this.timer = 100;
+
+        this.reset = reset;
     },
 
     update: function(){
         this.timer -= 1;
         if(this.timer <= 0){
-            levelLabel.text += 1;
-            touchCount = 0;
-            initBoard();
+            if(this.reset){
+                levelLabel.text += 1;
+                touchCount = 0;
+                initBoard();
+            }
 
             this.remove();
         }
@@ -731,7 +735,6 @@ var ClearEffect = tm.createClass({
         }
 
         if(timeUp != 0){
-            levelLabel.text += 1;
             touchCount = 0;
             this.remove();
         }
