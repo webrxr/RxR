@@ -32,35 +32,15 @@ tm.preload(function() {
     tm.sound.SoundManager.add("touch", "sound/se/touch.wav");
 });
 
-var circleWave = (function(){
-    var c = tm.graphics.Canvas();
-    c.width = c.height = 256;
-    c.setTransformCenter();
-    c.setColorStyle("white", "rgb(30, 80, 255)");
-    c.strokeCircle(0, 0, 32);
-
-    return c;
-})();
-
-var circleWave2 = (function(){
+var circleWave = function(rad){
     var c = tm.graphics.Canvas();
     c.width = c.height = 256;
     c.setTransformCenter();
     c.setColorStyle("white", "rgb(255, 255, 255)");
-    c.strokeCircle(0, 0, 32);
+    c.strokeCircle(0, 0, rad);
 
     return c;
-})();
-
-var circleWave3 = (function(){
-    var c = tm.graphics.Canvas();
-    c.width = c.height = 256;
-    c.setTransformCenter();
-    c.setColorStyle("white", "rgb(255, 255, 255)");
-    c.strokeCircle(0, 0, 64);
-
-    return c;
-})();
+}
 
 var nextStageBackground = (function(){
     var c = tm.graphics.Canvas();
@@ -433,7 +413,7 @@ var Stone = tm.createClass({
                 if(scoreLabel.text < 0){ scoreLabel.text = 0; }
 
                 // 波紋
-                var wave = Wave(this.x, this.y, circleWave);
+                var wave = Wave(this.x, this.y, circleWave(32));
                 app.currentScene.addChild( wave );
 
                 // クリアー判定
@@ -447,7 +427,7 @@ var Stone = tm.createClass({
                     var next = ClearEffect(240, 360, 640, 188, tm.graphics.TextureManager.get("nextStage"), true);
                     app.currentScene.addChild( next );
 
-	                var wave = Wave(240, 360, circleWave3);
+	                var wave = Wave(240, 360, circleWave(128));
 	                app.currentScene.addChild( wave );
                 }
                 else if( whiteStoneLabel.text == (currentSize.width*currentSize.height) ){
@@ -556,7 +536,7 @@ var Stone = tm.createClass({
                 stone[x+(i*vy)][y+(i*vx)].changeColor();
 
                 // 波紋
-                var wave = Wave(stone[x+(i*vy)][y+(i*vx)].x, stone[x+(i*vy)][y+(i*vx)].y, circleWave2);
+                var wave = Wave(stone[x+(i*vy)][y+(i*vx)].x, stone[x+(i*vy)][y+(i*vx)].y, circleWave(32));
                 app.currentScene.addChild(wave);
             }
 
