@@ -66,7 +66,7 @@ tm.main(function(){
     app.enableStats();
     app.fitWindow();
 
-    var titleFlashing = 1;
+    var titleFlashing = 1;  // タイトルロゴの点滅
     gameOver = false;       // ゲームオーバー
     timeUp = 0;             // タイムアップ
     touchCount = 0;         // タッチ数
