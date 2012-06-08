@@ -17,12 +17,10 @@ var Stone = tm.createClass({
 
         this.color = Math.rand(0,1);
 
-        //if(!tm.isMobile){
         this.frameSprite = tm.app.Sprite(120,120);
         this.frameSprite.scaleX = this.frameSprite.scaleY = 0.5;
         this.frameSprite.setImage( tm.graphics.TextureManager.get("stoneFrame") );
         this.addChild(this.frameSprite);
-        //}
 
         this.sprite = tm.app.Sprite(this.width, this.height);
         this.sprite.scaleX = this.sprite.scaleY = 0.5;
