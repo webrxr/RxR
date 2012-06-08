@@ -7,8 +7,8 @@ function initBoard(){
 
     getMargin();
 
-    //goalStonesLabel.text = Math.rand(0, currentSize.width * currentSize.height);    // 目標の白石数
-    goalStonesLabel.text = 0;
+    //gameData.goalStone = Math.rand(0, currentSize.width * currentSize.height);    // 目標の白石数
+    gameData.goalStone = 0;
 
     var margin = getMargin();
 
@@ -36,10 +36,10 @@ function initBoard(){
  * 白石の総数をセット
  */
 function setTotalWhiteStone(){
-    whiteStoneLabel.text = 0;
+    gameData.whiteStone = 0;
     for(var i = 0; i < currentSize.width; i++){
         for(var j = 0; j < currentSize.height; j++){
-            if(stone[i][j].color == 0){ ++whiteStoneLabel.text; }
+            if(stone[i][j].color == 0){ ++gameData.whiteStone; }
         }
     }
 }

@@ -36,7 +36,7 @@ var Stone = tm.createClass({
 
         if (app.pointing.getPointingEnd() == false ) return;
         if (this.visible == false) return;
-        if (timeUp != 0) return;
+        if (gameData.timeUp != 0) return;
 
         if(this.sprite.isHitPoint(app.pointing.x, app.pointing.y) == true){
             var reverseTotal = this.reverseStoneManager( this.iter.i, this.iter.j );
@@ -45,20 +45,20 @@ var Stone = tm.createClass({
                 setTotalWhiteStone();
                 showBoard(0);
 
-                ++touchCount;
-                ++touchCountLabel.text;
+                ++userData.touchCount;
+                ++userData.touchTotalCount;
 
-                scoreLabel.text += 30*reverseTotal*getScoreFromTouchCount(touchCount);
-                if(scoreLabel.text < 0){ scoreLabel.text = 0; }
+                userData.score += 30*reverseTotal*getScoreFromTouchCount(userData.touchCount);
+                if(userData.score < 0){ userData.score = 0; }
 
                 // 波紋
                 var wave = Wave(this.x, this.y, circleWave(32));
                 app.currentScene.addChild( wave );
 
                 // クリアー判定
-                if( whiteStoneLabel.text == goalStonesLabel.text ){
-                    scoreLabel.text += 1000 * (currentSize.width+currentSize.height-touchCount);
-                    if(scoreLabel.text < 0){ scoreLabel.text = 0; }
+                if( gameData.whiteStone == gameData.goalStone ){
+                    userData.score += 1000 * (currentSize.width+currentSize.height-userData.touchCount);
+                    if(userData.score < 0){ userData.score = 0; }
 
                     var bg = ClearEffect(240, 360, 640, 188, nextStageBackground, false);
                     app.currentScene.addChild( bg );
@@ -69,9 +69,9 @@ var Stone = tm.createClass({
                     var wave = Wave(240, 360, circleWave(128));
                     app.currentScene.addChild( wave );
                 }
-                else if( whiteStoneLabel.text == (currentSize.width*currentSize.height) ){
-                    scoreLabel.text -= 1000 * (currentSize.width+currentSize.height);
-                    if(scoreLabel.text < 0){ scoreLabel.text = 0; }
+                else if( gameData.whiteStone == (currentSize.width*currentSize.height) ){
+                    userData.score -= 1000 * (currentSize.width+currentSize.height);
+                    if(userData.score < 0){ userData.score = 0; }
 
                     var bg = ClearEffect(240, 360, 640, 188, nextStageBackground, false);
                     app.currentScene.addChild( bg );

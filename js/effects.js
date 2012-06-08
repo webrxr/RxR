@@ -79,8 +79,8 @@ var ClearEffect = tm.createClass({
         this.timer -= 1;
         if(this.timer <= 0){
             if(this.reset){
-                levelLabel.text += 1;
-                touchCount = 0;
+                userData.level += 1;
+                userData.touchCount = 0;
                 initBoard();
             }
 
@@ -91,8 +91,8 @@ var ClearEffect = tm.createClass({
             if(this.alpha < 0){ this.alpha = 0; }
         }
 
-        if(timeUp != 0){
-            touchCount = 0;
+        if(gameData.timeUp != 0){
+            userData.touchCount = 0;
             this.remove();
         }
     }
