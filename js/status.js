@@ -17,5 +17,27 @@ tm.util.DataManager.set("game-data", {
     whiteStone: 0,
     goalStone:0,
     timeUp: 0,
-    gameOver: false
+    gameOver: false,
+    mode: "titleReady"
+});
+
+/**
+ * ステータスのラベル
+ */
+var StatusLabel = tm.createClass({
+    superClass: tm.app.Label,
+ 
+    init: function(x, y, size){
+        this.superInit(128, 128);
+        this.x = x;
+        this.y = y;
+        this.size = size;
+        this.text = 0;
+        this.align = "end";
+        this.baseline = "top";
+        this.width = app.width;
+    },
+ 
+    update: function(){
+    }
 });

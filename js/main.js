@@ -13,11 +13,9 @@ tm.main(function(){
     app.enableStats();
     app.fitWindow();
 
-    //gameOver = false;
-    //timeUp = 0;             // タイムアップ
-
-    gameData = tm.util.DataManager.get("user-data");
     userData = tm.util.DataManager.get("user-data");
+    gameData = tm.util.DataManager.get("game-data");
+    gameData.mode = "titleReady";
 
     // シーンの生成
     titleScene = TitleScene();
@@ -25,38 +23,6 @@ tm.main(function(){
     endScene = EndScene();
 
     app.replaceScene(titleScene);
-
-    // タイマーの生成
-    timer = Timer();
-    mainScene.addChild(timer);
-
-    // BGM
-    op = tm.sound.SoundManager.get("op");
-    op.loop = true;
-    op.play();
-
-    bgm = tm.sound.SoundManager.get("bgm");
-    bgm.loop = true;
-
-
-//    touchCount = 0;         // タッチ数
-
-//    levelLabel = StatusLabel(0, 32);
-//
-//    scoreLabel = StatusLabel(0, 24);
-
-//    whiteStoneLabel = StatusLabel(350, 55, 32);
-//    mainScene.addChild(whiteStoneLabel);
-
-//    goalStonesLabel = StatusLabel(440, 55, 32);
-//    mainScene.addChild(goalStonesLabel);
-
-//    touchCountLabel = StatusLabel(380, 235, 48);
-//    endScene.addChild(touchCountLabel);
-
-//    timeLabel = StatusLabel(380, 305, 48);
-//    endScene.addChild(timeLabel);
-
 
     // 石の生成
     stone = [];

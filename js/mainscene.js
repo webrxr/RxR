@@ -11,14 +11,61 @@ var MainScene = tm.createClass({
         // ステータス
         this.gameStatus = GeneralSprite(240, 60, 640, 120, tm.graphics.TextureManager.get("gameStatus"), currentScale);
         this.addChild(this.gameStatus);
+        
+        this.levelLabel = StatusLabel(255, 25, 32);
+        this.addChild(this.levelLabel);
+                
+        this.scoreLabel = StatusLabel(252, 67, 24);
+        this.addChild(this.scoreLabel);
+
+        this.whiteStoneLabel = StatusLabel(350, 55, 32);
+        this.addChild(this.whiteStoneLabel);
+        
+        this.goalStonesLabel = StatusLabel(440, 55, 32);
+        this.addChild(this.goalStonesLabel);
+        
+        // タイマーの生成
+        this.timer = Timer();
+        this.addChild(this.timer);
+        
+        // BGM    
+        this.bgm = tm.sound.SoundManager.get("bgm");
+        this.bgm.loop = true;
     },
 
     update: function(){
+        if(gameData.mode == "mainReady"){
+            this.bgm.play();
+
+            // ステータスリセット
+            userData.gameOver = false;
+            gameData.timeUp = 0;
+            
+            userData.touchTotalCount = 0;
+            userData.time = 1;
+            userData.level = 1;
+            userData.score = 0;
+            userData.gameOver = false;
+            mainScene.alpha = 1.0;
+            this.timer.width = 480;
+
+            // 石の初期化
+            initBoard();
+
+            gameData.mode = "mainScene";
+        }
+        
         ++userData.time;
+        
+        this.levelLabel.text = userData.level;
+        this.scoreLabel.text = userData.score;
+        
+        this.whiteStoneLabel.text = gameData.whiteStone;
+        this.goalStonesLabel.text = gameData.goalStone;
 
         if(gameData.timeUp != 0){ ++gameData.timeUp; }
 
-        if( gameData.timeUp == 0 && timer.timer % timer.limit == 0 ){
+        if( gameData.timeUp == 0 && userData.time % this.timer.limit == 0 ){
             gameData.timeUp = 1;
 
             var bg = GeneralSprite(240, 360, 640, 188, nextStageBackground, currentScale);
@@ -39,19 +86,8 @@ var MainScene = tm.createClass({
             }
         }
         else if(userData.gameOver == true){
-            userData.gameOver = false;
-            gameData.timeUp = 0;
-
-//            levelLabel.size = 48;
-//            levelLabel.position.set(380, 170);
-//            endScene.addChild(levelLabel);
-
-//            scoreLabel.size = 128;
-//            scoreLabel.align = "center";
-//            scoreLabel.position.set(240, 480);
-//            endScene.addChild(scoreLabel);
-
-            userData.time = Math.floor(userData.time / 30);
+            this.bgm.stop();
+            gameData.mode = "endReady";
             app.replaceScene(endScene);
         }
     }

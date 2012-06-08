@@ -6,7 +6,6 @@ var Timer = tm.createClass({
 
     init: function(){
         this.superInit();
-        this.timer = 1;
         this.limit = 60*30;
         this.x = 0;
         this.y = 320;
@@ -16,7 +15,6 @@ var Timer = tm.createClass({
     },
 
     update: function(){
-        ++this.timer;
         this.width -= this.timerSpeed;
     },
 

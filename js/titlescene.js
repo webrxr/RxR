@@ -34,9 +34,18 @@ var TitleScene = tm.createClass({
         // ゲームスタートボタン
         this.startButton = GeneralSprite(240, 460, 640, 112, tm.graphics.TextureManager.get("startButton"), currentScale);
         this.addChild(this.startButton);
+
+        // BGM
+        this.op = tm.sound.SoundManager.get("op");
+        this.op.loop = true;
     },
 
     update: function(){
+        if(gameData.mode == "titleReady"){
+            this.op.play();
+            gameData.mode = "titleScene";
+        }
+        
         if(app.frame % 80 == 0 && this.titleFlashing == 0){
             this.titleFlashing = 1;
         }
@@ -66,36 +75,9 @@ var TitleScene = tm.createClass({
         // スタート
         if( app.pointing.getPointingEnd() == true && this.startButton.isHitPoint(app.pointing.x, app.pointing.y) == true ){
             tm.sound.SoundManager.get("decide").play();
-            op.stop();
-
-            // mainへ
-            bgm.play();
-
-            // 色々リセット
-            timer.width = 480;
-            userData.touchTotalCount = 0;
-            userData.time = 1;
-
-            userData.level = 1;
-//            levelLabel.size = 32;
-//            levelLabel.position.set(255, 25);
-//            mainScene.addChild(levelLabel);
-
-            userData.score = 0;
-//            scoreLabel.size = 24;
-//            scoreLabel.align = "end";
-//            scoreLabel.position.set(252, 67);
-//            mainScene.addChild(scoreLabel);
-
-            userData.gameOver = false;
-
-            // 石の初期化
-            initBoard();
-
-            mainScene.alpha = 1.0;
-            //mainへ
-
-            timer.timer = 1;
+            this.op.stop();
+            
+            gameData.mode = "mainReady";
             app.replaceScene(mainScene);
         }
     }
