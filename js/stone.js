@@ -64,6 +64,7 @@ var Stone = tm.createClass({
             // クリアー判定
             if( gameData.whiteStone == gameData.goalStone ){
                 userData.score += 1000 * (currentSize.width+currentSize.height-userData.touchCount);
+                
                 if(userData.score < 0){ userData.score = 0; }
 
                 userData.level += 1;
