@@ -120,14 +120,17 @@ var MainScene = tm.createClass({
             for(var j = 0; j < MAX_HEIGHT; j++){
                 if( i < currentSize.width && j < currentSize.height ){
                     this.stone[i][j].color = Math.rand(0,1);
+                    this.stone[i][j].wakeUp();
                     this.stone[i][j].visible = true;
                     this.stone[i][j].setPosition(i, j, margin);
                     this.stone[i][j].changeColor();
                 }
                 else{
+                    this.stone[i][j].sleep();
                     this.stone[i][j].visible = false;
                 }
                 this.stone[i][j].alpha = 0;
+                this.stone[i][j].fadein();
             }
         }
 

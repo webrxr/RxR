@@ -11,7 +11,8 @@ var Stone = tm.createClass({
             "j":y
         };
         this.width = this.height = 94;
-
+        this.interaction.enabled = false;   // 自身では判定しない
+        
         this.x = 0;
         this.y = 0;
 
@@ -26,63 +27,69 @@ var Stone = tm.createClass({
         this.sprite.scaleX = this.sprite.scaleY = 0.5;
         this.addChild(this.sprite);
         this.changeColor();
+        this.sprite.interaction.setBoundingType("rect");
+        this.sprite.onmousedown = function(e) { this.parent.dispatchEvent(e); };
+        // this.sprite.draw = function(canvas) { this.drawBoundingRect(canvas); }
     },
-
-    update: function(){
-
-        if(this.alpha < 1){ this.alpha += 0.05; }
-
-        if (app.pointing.getPointingEnd() == false ) return;
-        if (this.visible == false) return;
+    
+    fadein: function() {
+        // アルファアニメ
+        this.animation.addTween({
+            prop: "alpha",
+            begin: 0,
+            finish: 1,
+            duration: 1000
+        });
+    },
+    
+    onmousedown: function(e) {
         if (gameData.timeUp != 0) return;
+        
+        var reverseTotal = this.reverseStoneManager( this.iter.i, this.iter.j );
+        if(reverseTotal){
+            tm.sound.SoundManager.get("touch").play();
+            mainScene.setTotalWhiteStone()
+            mainScene.showBoard(0);
 
-        if(this.sprite.isHitPoint(app.pointing.x, app.pointing.y) == true){
-            var reverseTotal = this.reverseStoneManager( this.iter.i, this.iter.j );
-            if(reverseTotal){
-                tm.sound.SoundManager.get("touch").play();
-                mainScene.setTotalWhiteStone()
-                mainScene.showBoard(0);
+            ++userData.touchCount;
+            ++userData.touchTotalCount;
 
-                ++userData.touchCount;
-                ++userData.touchTotalCount;
+            userData.score += 30 * reverseTotal * this.getScoreFromTouchCount(userData.touchCount);
+            if(userData.score < 0){ userData.score = 0; }
 
-                userData.score += 30 * reverseTotal * this.getScoreFromTouchCount(userData.touchCount);
+            // 波紋
+            var wave = Wave(this.x, this.y, circleWave(32));
+            app.currentScene.addChild( wave );
+
+            // クリアー判定
+            if( gameData.whiteStone == gameData.goalStone ){
+                userData.score += 1000 * (currentSize.width+currentSize.height-userData.touchCount);
                 if(userData.score < 0){ userData.score = 0; }
 
-                // 波紋
-                var wave = Wave(this.x, this.y, circleWave(32));
+                userData.level += 1;
+                mainScene.timer.plusTime( 3 * (currentSize.width+currentSize.height) );
+
+                var bg = ClearEffect(240, 360, 640, 188, nextStageBackground, false);
+                app.currentScene.addChild( bg );
+
+                var next = ClearEffect(240, 360, 640, 188, tm.graphics.TextureManager.get("nextStage"), true);
+                app.currentScene.addChild( next );
+
+                var wave = Wave(240, 360, circleWave(128));
                 app.currentScene.addChild( wave );
+            }
+            else if( gameData.whiteStone == (currentSize.width*currentSize.height) ){
+                userData.score -= 1000 * (currentSize.width+currentSize.height);
+                if(userData.score < 0){ userData.score = 0; }
 
-                // クリアー判定
-                if( gameData.whiteStone == gameData.goalStone ){
-                    userData.score += 1000 * (currentSize.width+currentSize.height-userData.touchCount);
-                    if(userData.score < 0){ userData.score = 0; }
+                userData.level -= 1;
+                if(userData.level < 1){ userData.level = 1; }
 
-                    userData.level += 1;
-                    mainScene.timer.plusTime( 3 * (currentSize.width+currentSize.height) );
+                var bg = ClearEffect(240, 360, 640, 188, nextStageBackground, false);
+                app.currentScene.addChild( bg );
 
-                    var bg = ClearEffect(240, 360, 640, 188, nextStageBackground, false);
-                    app.currentScene.addChild( bg );
-
-                    var next = ClearEffect(240, 360, 640, 188, tm.graphics.TextureManager.get("nextStage"), true);
-                    app.currentScene.addChild( next );
-
-                    var wave = Wave(240, 360, circleWave(128));
-                    app.currentScene.addChild( wave );
-                }
-                else if( gameData.whiteStone == (currentSize.width*currentSize.height) ){
-                    userData.score -= 1000 * (currentSize.width+currentSize.height);
-                    if(userData.score < 0){ userData.score = 0; }
-
-                    userData.level -= 1;
-                    if(userData.level < 1){ userData.level = 1; }
-
-                    var bg = ClearEffect(240, 360, 640, 188, nextStageBackground, false);
-                    app.currentScene.addChild( bg );
-
-                    var miss = ClearEffect(240, 360, 640, 188, tm.graphics.TextureManager.get("missTake"), true);
-                    app.currentScene.addChild( miss );
-                }
+                var miss = ClearEffect(240, 360, 640, 188, tm.graphics.TextureManager.get("missTake"), true);
+                app.currentScene.addChild( miss );
             }
         }
     },
