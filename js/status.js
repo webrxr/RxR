@@ -1,10 +1,3 @@
-var Status = tm.createClass({
-    init: function(){
-
-
-    }
-});
-
 tm.util.DataManager.set("user-data", {
     time: 0,
     score: 0,

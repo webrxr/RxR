@@ -20,7 +20,6 @@ var Timer = tm.createClass({
         if(this.plus > 0){
             this.plus -= this.plusTmp;
             this.width += this.plusTmp;
-            //gameData.time += this.plusTmp;
             if(this.width >= app.width){ this.width = app.width; }
         }
         else{

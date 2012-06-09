@@ -40,7 +40,7 @@ var Stone = tm.createClass({
             var reverseTotal = this.reverseStoneManager( this.iter.i, this.iter.j );
             if(reverseTotal){
                 tm.sound.SoundManager.get("touch").play();
-                mainScene.setTotalWhiteStone()
+                mainScene.setTotalWhiteStone();
                 mainScene.showBoard(0);
 
                 ++userData.touchCount;
