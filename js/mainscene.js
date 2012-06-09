@@ -130,7 +130,7 @@ var MainScene = tm.createClass({
                     this.stone[i][j].visible = false;
                 }
                 this.stone[i][j].alpha = 0;
-                this.stone[i][j].fadein();
+                this.stone[i][j].fadeIn();
             }
         }
 

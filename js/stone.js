@@ -32,7 +32,7 @@ var Stone = tm.createClass({
         // this.sprite.draw = function(canvas) { this.drawBoundingRect(canvas); }
     },
     
-    fadein: function() {
+    fadeIn: function() {
         // アルファアニメ
         this.animation.addTween({
             prop: "alpha",
