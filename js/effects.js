@@ -1,26 +1,45 @@
+var effetcTime = 100;
 /**
  * タイマー
  */
 var Timer = tm.createClass({
     superClass: tm.app.CanvasElement,
 
-    init: function(){
+    init: function(limit){
         this.superInit();
-        this.limit = 60*30;
         this.x = 0;
         this.y = 320;
+        this.plus = 0;
+        this.plusTmp = 0;
         this.width = app.width;
         this.color = "hsla(200, 75%, 50%, 0.90)";
-        this.timerSpeed = this.width / this.limit;
+        this.timerSpeed = this.width / limit;
     },
 
     update: function(){
-        this.width -= this.timerSpeed;
+        if(this.plus > 0){
+            this.plus -= this.plusTmp;
+            this.width += this.plusTmp;
+            //gameData.time += this.plusTmp;
+            if(this.width >= app.width){ this.width = app.width; }
+        }
+        else{
+            this.width -= this.timerSpeed;
+            ++userData.time;
+            --gameData.time;
+        }
     },
 
     draw: function(canvas) {
         canvas.fillStyle = this.color;
         canvas.fillRect(this.x, this.y, this.width, 30);
+    },
+
+    plusTime: function(plus){
+        this.plus = plus * this.timerSpeed;
+        this.plusTmp = this.plus / effetcTime;
+        gameData.time += plus;
+        if(gameData.time >= gameData.maxTime){ gameData.time = gameData.maxTime; }
     }
 });
 
@@ -68,7 +87,7 @@ var ClearEffect = tm.createClass({
         particle.setImage(img);
         this.addChild(particle);
 
-        this.timer = 100;
+        this.timer = effetcTime;
 
         this.reset = reset;
     },
@@ -77,9 +96,8 @@ var ClearEffect = tm.createClass({
         this.timer -= 1;
         if(this.timer <= 0){
             if(this.reset){
-                userData.level += 1;
                 userData.touchCount = 0;
-                initBoard();
+                mainScene.initBoard();
             }
 
             this.remove();

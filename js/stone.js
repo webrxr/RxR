@@ -40,13 +40,13 @@ var Stone = tm.createClass({
             var reverseTotal = this.reverseStoneManager( this.iter.i, this.iter.j );
             if(reverseTotal){
                 tm.sound.SoundManager.get("touch").play();
-                setTotalWhiteStone();
-                showBoard(0);
+                mainScene.setTotalWhiteStone()
+                mainScene.showBoard(0);
 
                 ++userData.touchCount;
                 ++userData.touchTotalCount;
 
-                userData.score += 30*reverseTotal*getScoreFromTouchCount(userData.touchCount);
+                userData.score += 30 * reverseTotal * this.getScoreFromTouchCount(userData.touchCount);
                 if(userData.score < 0){ userData.score = 0; }
 
                 // 波紋
@@ -57,6 +57,9 @@ var Stone = tm.createClass({
                 if( gameData.whiteStone == gameData.goalStone ){
                     userData.score += 1000 * (currentSize.width+currentSize.height-userData.touchCount);
                     if(userData.score < 0){ userData.score = 0; }
+
+                    userData.level += 1;
+                    mainScene.timer.plusTime( 3 * (currentSize.width+currentSize.height) );
 
                     var bg = ClearEffect(240, 360, 640, 188, nextStageBackground, false);
                     app.currentScene.addChild( bg );
@@ -70,6 +73,9 @@ var Stone = tm.createClass({
                 else if( gameData.whiteStone == (currentSize.width*currentSize.height) ){
                     userData.score -= 1000 * (currentSize.width+currentSize.height);
                     if(userData.score < 0){ userData.score = 0; }
+
+                    userData.level -= 1;
+                    if(userData.level < 1){ userData.level = 1; }
 
                     var bg = ClearEffect(240, 360, 640, 188, nextStageBackground, false);
                     app.currentScene.addChild( bg );
@@ -168,12 +174,12 @@ var Stone = tm.createClass({
         if( count == 0 ){ return 0; }
         else{
             for(var i = 1; i < wall+1; i++){
-                if( stone[x+(i*vy)][y+(i*vx)].color == anotherColor ){ break; }
-                stone[x+(i*vy)][y+(i*vx)].color = anotherColor;
-                stone[x+(i*vy)][y+(i*vx)].changeColor();
+                if( mainScene.stone[x+(i*vy)][y+(i*vx)].color == anotherColor ){ break; }
+                mainScene.stone[x+(i*vy)][y+(i*vx)].color = anotherColor;
+                mainScene.stone[x+(i*vy)][y+(i*vx)].changeColor();
 
                 // 波紋
-                var wave = Wave(stone[x+(i*vy)][y+(i*vx)].x, stone[x+(i*vy)][y+(i*vx)].y, circleWave(32));
+                var wave = Wave(mainScene.stone[x+(i*vy)][y+(i*vx)].x, mainScene.stone[x+(i*vy)][y+(i*vx)].y, circleWave(32));
                 app.currentScene.addChild(wave);
             }
 
@@ -204,10 +210,10 @@ var Stone = tm.createClass({
         var sameColor = false;
 
         for(var i = 1; i < wall+1; i++){
-            if( stone[x+(i*vy)][y+(i*vx)].color == color ){
+            if( mainScene.stone[x+(i*vy)][y+(i*vx)].color == color ){
                 ++count;
             }
-            else if( stone[x+(i*vy)][y+(i*vx)].color == anotherColor ){
+            else if( mainScene.stone[x+(i*vy)][y+(i*vx)].color == anotherColor ){
                 sameColor = true;
                 break;
             }
@@ -219,6 +225,18 @@ var Stone = tm.createClass({
 
         if(sameColor == false || count == 0){ return 0; }
         else{ return count; }
+    },
+
+    /**
+     * タッチ数からスコアの倍率を取得
+     */
+    getScoreFromTouchCount: function(tc){
+        var iter = tc-1;
+        if(tc-1 > 10){ iter = 10; }
+
+        var magnification = new Array(10,10,9,9,9,8,8,7,7,6,5);
+
+        return magnification[iter];
     }
 });
 /**

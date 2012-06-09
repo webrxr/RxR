@@ -14,6 +14,8 @@ tm.util.DataManager.set("user-data", {
 });
 
 tm.util.DataManager.set("game-data", {
+    time: 30*30,
+    maxTime: 0,
     whiteStone: 0,
     goalStone:0,
     timeUp: 0,
