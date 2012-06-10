@@ -58,7 +58,7 @@ var Stone = tm.createClass({
             if(userData.score < 0){ userData.score = 0; }
 
             // 波紋
-            var wave = Wave(this.x, this.y, circleWave(32));
+            var wave = Wave(this.x, this.y, REVERSE_CIRCLE_WAVE_IMAGE);
             app.currentScene.addChild( wave );
 
             // クリアー判定
@@ -70,13 +70,13 @@ var Stone = tm.createClass({
                 userData.level += 1;
                 mainScene.timer.plusTime( 3 * (currentSize.width+currentSize.height) );
 
-                var bg = ClearEffect(240, 360, 640, 188, nextStageBackground, false);
+                var bg = ClearEffect(240, 360, 640, 188, CLEAR_STAGE_BACKGROUND_IMAGE, false);
                 app.currentScene.addChild( bg );
 
                 var next = ClearEffect(240, 360, 640, 188, tm.graphics.TextureManager.get("nextStage"), true);
                 app.currentScene.addChild( next );
 
-                var wave = Wave(240, 360, circleWave(128));
+                var wave = Wave(240, 360, CLEAR_CIRCLE_WAVE_IMAGE);
                 app.currentScene.addChild( wave );
             }
             else if( gameData.whiteStone == (currentSize.width*currentSize.height) ){
@@ -86,7 +86,7 @@ var Stone = tm.createClass({
                 userData.level -= 1;
                 if(userData.level < 1){ userData.level = 1; }
 
-                var bg = ClearEffect(240, 360, 640, 188, nextStageBackground, false);
+                var bg = ClearEffect(240, 360, 640, 188, CLEAR_STAGE_BACKGROUND_IMAGE, false);
                 app.currentScene.addChild( bg );
 
                 var miss = ClearEffect(240, 360, 640, 188, tm.graphics.TextureManager.get("missTake"), true);
@@ -187,7 +187,7 @@ var Stone = tm.createClass({
                 mainScene.stone[x+(i*vy)][y+(i*vx)].changeColor();
 
                 // 波紋
-                var wave = Wave(mainScene.stone[x+(i*vy)][y+(i*vx)].x, mainScene.stone[x+(i*vy)][y+(i*vx)].y, circleWave(32));
+                var wave = Wave(mainScene.stone[x+(i*vy)][y+(i*vx)].x, mainScene.stone[x+(i*vy)][y+(i*vx)].y, REVERSE_CIRCLE_WAVE_IMAGE);
                 app.currentScene.addChild(wave);
             }
 

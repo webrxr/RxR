@@ -32,17 +32,27 @@ tm.preload(function() {
     tm.sound.SoundManager.add("touch", "sound/se/touch.wav");
 });
 
-var circleWave = function(rad){
+var REVERSE_CIRCLE_WAVE_IMAGE = (function(){
     var c = tm.graphics.Canvas();
     c.width = c.height = 256;
     c.setTransformCenter();
     c.setColorStyle("white", "rgb(255, 255, 255)");
-    c.strokeCircle(0, 0, rad);
+    c.strokeCircle(0, 0, 32);
 
     return c;
-}
+})();
 
-var nextStageBackground = (function(){
+var CLEAR_CIRCLE_WAVE_IMAGE = (function(){
+    var c = tm.graphics.Canvas();
+    c.width = c.height = 256;
+    c.setTransformCenter();
+    c.setColorStyle("white", "rgb(255, 255, 255)");
+    c.strokeCircle(0, 0, 128);
+
+    return c;
+})();
+
+    var CLEAR_STAGE_BACKGROUND_IMAGE = (function(){
     var c = tm.graphics.Canvas();
     c.width = 640;
     c.height = 188;
