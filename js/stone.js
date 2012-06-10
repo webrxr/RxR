@@ -85,9 +85,6 @@ var Stone = tm.createClass({
                 userData.score -= 1000 * (currentSize.width+currentSize.height);
                 if(userData.score < 0){ userData.score = 0; }
 
-                userData.level -= 1;
-                if(userData.level < 1){ userData.level = 1; }
-
                 var bg = ClearEffect(240, 360, 640, 188, CLEAR_STAGE_BACKGROUND_IMAGE, false);
                 app.currentScene.addChild( bg );
 
