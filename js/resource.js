@@ -52,7 +52,7 @@ var CLEAR_CIRCLE_WAVE_IMAGE = (function(){
     return c;
 })();
 
-    var CLEAR_STAGE_BACKGROUND_IMAGE = (function(){
+var CLEAR_STAGE_BACKGROUND_IMAGE = (function(){
     var c = tm.graphics.Canvas();
     c.width = 640;
     c.height = 188;

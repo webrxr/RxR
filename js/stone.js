@@ -17,6 +17,8 @@ var Stone = tm.createClass({
         this.y = 0;
 
         this.color = Math.rand(0,1);
+        this.WHITE_COLOR = 0;
+        this.BLACK_COLOR = 1;
 
         this.frameSprite = tm.app.Sprite(120,120);
         this.frameSprite.scaleX = this.frameSprite.scaleY = 0.5;
@@ -99,8 +101,8 @@ var Stone = tm.createClass({
      * 石の色をリセット
      */
     changeColor: function(){
-        if( this.color == 0 ){ this.sprite.setImage( tm.graphics.TextureManager.get("whiteStone") ); }
-        else if( this.color == 1 ){ this.sprite.setImage( tm.graphics.TextureManager.get("blackStone") ); }
+        if( this.color == this.WHITE_COLOR ){ this.sprite.setImage( tm.graphics.TextureManager.get("whiteStone") ); }
+        else if( this.color == this.BLACK_COLOR ){ this.sprite.setImage( tm.graphics.TextureManager.get("blackStone") ); }
     },
 
     /**
@@ -128,8 +130,8 @@ var Stone = tm.createClass({
 
         if( reverseTotal > 0){
             var color = this.color;
-            var anotherColor = 0;
-            if(color == 0) { anotherColor = 1; }
+            var anotherColor = this.WHITE_COLOR;
+            if(color == this.WHITE_COLOR) { anotherColor = this.BLACK_COLOR; }
 
             this.color = anotherColor;
             this.changeColor();
@@ -172,9 +174,9 @@ var Stone = tm.createClass({
      */
     reverseStone: function(x, y, vx, vy, range){
         var count = 0;
-        var anotherColor = 0;
+        var anotherColor = this.WHITE_COLOR;
         var color = this.color;
-        if(color == 0) { anotherColor = 1; }
+        if(color == this.WHITE_COLOR) { anotherColor = this.BLACK_COLOR; }
 
         var wall = this.getOptimumRange(vx, vy, range[0], range[1]);
         count = this.getReverseCount(x, y, vx, vy, range, wall, color, anotherColor);

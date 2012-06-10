@@ -77,7 +77,7 @@ var MainScene = tm.createClass({
         if( gameData.timeUp == 0 && gameData.time < 0 ){
             gameData.timeUp = 1;
 
-            var bg = GeneralSprite(240, 360, 640, 188, nextStageBackground, currentScale);
+            var bg = GeneralSprite(240, 360, 640, 188, CLEAR_STAGE_BACKGROUND_IMAGE, currentScale);
             this.addChild( bg );
 
             var sprite = GeneralSprite(240, 360, 640, 188, tm.graphics.TextureManager.get("timeUp"), currentScale);
