@@ -12,7 +12,7 @@ var Stone = tm.createClass({
         };
         this.width = this.height = 94;
         this.interaction.enabled = false;   // 自身では判定しない
-        
+
         this.x = 0;
         this.y = 0;
 
@@ -31,7 +31,7 @@ var Stone = tm.createClass({
         this.sprite.onmousedown = function(e) { this.parent.dispatchEvent(e); };
         // this.sprite.draw = function(canvas) { this.drawBoundingRect(canvas); }
     },
-    
+
     fadeIn: function() {
         // アルファアニメ
         this.animation.addTween({
@@ -41,10 +41,10 @@ var Stone = tm.createClass({
             duration: 1000
         });
     },
-    
+
     onmousedown: function(e) {
         if (gameData.timeUp != 0) return;
-        
+
         var reverseTotal = this.reverseStoneManager( this.iter.i, this.iter.j );
         if(reverseTotal){
             tm.sound.SoundManager.get("touch").play();
@@ -64,7 +64,7 @@ var Stone = tm.createClass({
             // クリアー判定
             if( gameData.whiteStone == gameData.goalStone ){
                 userData.score += 1000 * (currentSize.width+currentSize.height-userData.touchCount);
-                
+
                 if(userData.score < 0){ userData.score = 0; }
 
                 userData.level += 1;
@@ -245,25 +245,5 @@ var Stone = tm.createClass({
         var magnification = new Array(10,10,9,9,9,8,8,7,7,6,5);
 
         return magnification[iter];
-    }
-});
-/**
- * ステータスのラベル
- */
-var StatusLabel = tm.createClass({
-    superClass: tm.app.Label,
-
-    init: function(x, y, size){
-        this.superInit(128, 128);
-        this.x = x;
-        this.y = y;
-        this.size = size;
-        this.text = 0;
-        this.align = "end";
-        this.baseline = "top";
-        this.width = app.width;
-    },
-
-    update: function(){
     }
 });
