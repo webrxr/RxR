@@ -9,10 +9,11 @@ var PauseScene = tm.createClass({
         filter.setPosition(app.width/2, app.height/2);
         filter.canvas.clearColor("rgba(0, 0, 0, 0.75)");
         this.addChild(filter);
-        
+            
         app.stop();
-        this.audio = audio;
-        this.audio.pause();
+        
+        this.audio = audio; 
+        if(audio){ this.audio.pause(); }
     },
     
     onfocus: function() {
@@ -24,7 +25,7 @@ var PauseScene = tm.createClass({
     },
     
     onmousedown: function() {
-        this.audio.play();
+        if(this.audio){ this.audio.play(); }
         app.popScene();
     },
 });
