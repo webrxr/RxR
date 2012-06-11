@@ -263,7 +263,7 @@
                 if(userData.score < 0){ userData.score = 0; }
     
                 // 波紋
-                var wave = Wave(this.stone[e.target.iter.i][e.target.iter.j].x, this.stone[e.target.iter.i][e.target.iter.j].y, REVERSE_CIRCLE_WAVE_IMAGE);
+                var wave = Wave(this.stone[e.target.iter.i][e.target.iter.j].x, this.stone[e.target.iter.i][e.target.iter.j].y, REVERSE_WAVE_IMAGE);
                 app.currentScene.addChild( wave );
     
                 console.log(gameData.whiteStone, gameData.goalStone );
@@ -276,7 +276,7 @@
                     
                     this.nextStage( (1000*(this.currentSize.width+this.currentSize.height-userData.touchCount)), "nextStage");
     
-                    var wave = Wave(240, 360, CLEAR_CIRCLE_WAVE_IMAGE);
+                    var wave = Wave(240, 360, CLEAR_WAVE_IMAGE);
                     app.currentScene.addChild( wave );
                 }
                 else if( gameData.whiteStone == (this.currentSize.width*this.currentSize.height) ){
@@ -359,7 +359,7 @@
                     this.stone[x+(i*vy)][y+(i*vx)].changeColor(anotherColor);
     
                     // 波紋
-                    var wave = Wave(this.stone[x+(i*vy)][y+(i*vx)].x, this.stone[x+(i*vy)][y+(i*vx)].y, REVERSE_CIRCLE_WAVE_IMAGE);
+                    var wave = Wave(this.stone[x+(i*vy)][y+(i*vx)].x, this.stone[x+(i*vy)][y+(i*vx)].y, REVERSE_WAVE_IMAGE);
                     app.currentScene.addChild(wave);
                 }
     

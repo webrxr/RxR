@@ -32,7 +32,7 @@ tm.preload(function() {
     tm.sound.SoundManager.add("touch", "sound/se/touch.wav");
 });
 
-var REVERSE_CIRCLE_WAVE_IMAGE = (function(){
+var REVERSE_WAVE_IMAGE = (function(){
     var c = tm.graphics.Canvas();
     c.width = c.height = 256;
     c.setTransformCenter();
@@ -42,7 +42,7 @@ var REVERSE_CIRCLE_WAVE_IMAGE = (function(){
     return c;
 })();
 
-var CLEAR_CIRCLE_WAVE_IMAGE = (function(){
+var CLEAR_WAVE_IMAGE = (function(){
     var c = tm.graphics.Canvas();
     c.width = c.height = 256;
     c.setTransformCenter();
