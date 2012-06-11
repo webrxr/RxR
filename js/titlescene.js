@@ -109,7 +109,7 @@
     
         // ポーズ画面 : 別タブへ切り替わった時 / Ttbキーを押した時
         onblur: function() {
-            app.pushScene(PauseScene());
+            app.pushScene(PauseScene(this.op));
         }
     });
     
