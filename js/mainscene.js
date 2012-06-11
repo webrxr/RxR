@@ -269,6 +269,7 @@
     
                 // クリアー判定
                 if( gameData.whiteStone == gameData.goalStone ){
+                    tm.sound.SoundManager.get("clear").play();
                     userData.level += 1;
                     this.timer.plusTime( 3 * (this.currentSize.width+this.currentSize.height) );
                     console.log( 3 * (this.currentSize.width+this.currentSize.height));
