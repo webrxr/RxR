@@ -3,7 +3,6 @@ var MainScene = tm.createClass({
 
     init: function(){
         this.superInit();
-        
 
         // バックグラウンド画像
         this.gameBackground = GeneralSprite(240, 360, 640, 960, tm.graphics.TextureManager.get("gameBackground"), currentScale);
@@ -47,31 +46,27 @@ var MainScene = tm.createClass({
                 }.bind(this));
             }
         }
+        
+        // BGM
+        this.bgm.play();
+
+        // ステータスリセット
+        userData.gameOver = false;
+        gameData.timeUp = 0;
+        userData.touchTotalCount = 0;
+        userData.time = 1;
+        userData.level = 1;
+        userData.score = 0;
+        userData.gameOver = false;
+        this.alpha = 1.0;
+        this.timer.width = app.width;
+        gameData.time = gameData.maxTime;
+
+        // 石の初期化
+        this.initBoard();
     },
 
     update: function(){
-        if(gameData.mode == "mainReady"){
-            this.bgm.play();
-
-            // ステータスリセット
-            userData.gameOver = false;
-            gameData.timeUp = 0;
-
-            userData.touchTotalCount = 0;
-            userData.time = 1;
-            userData.level = 1;
-            userData.score = 0;
-            userData.gameOver = false;
-            this.alpha = 1.0;
-            this.timer.width = app.width;
-            gameData.time = gameData.maxTime;
-
-            // 石の初期化
-            this.initBoard();
-
-            gameData.mode = "mainScene";
-        }
-
         this.levelLabel.text = userData.level;
         this.scoreLabel.text = userData.score;
 
@@ -111,7 +106,6 @@ var MainScene = tm.createClass({
         }
         else if(userData.gameOver == true){
             this.bgm.stop();
-            gameData.mode = "endReady";
             app.replaceScene(EndScene());
         }
     },

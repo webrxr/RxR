@@ -72,13 +72,10 @@
             // BGM
             this.op = tm.sound.SoundManager.get("op");
             this.op.loop = true;
+            this.op.play();
         },
     
         update: function(){
-            if(gameData.mode == "titleReady"){
-                this.op.play();
-                gameData.mode = "titleScene";
-            }
             
             if(app.frame % 80 == 0 && this.titleFlashing == 0){
                 this.titleFlashing = 1;
@@ -108,8 +105,6 @@
             if( app.pointing.getPointingEnd() == true && this.startButton.isHitPoint(app.pointing.x, app.pointing.y) == true ){
                 tm.sound.SoundManager.get("decide").play();
                 this.op.stop();
-                
-                gameData.mode = "mainReady";
                 app.replaceScene(MainScene());
             }
         }

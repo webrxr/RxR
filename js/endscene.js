@@ -35,17 +35,12 @@ var EndScene = tm.createClass({
     },
 
     update: function(){
-        if(gameData.mode == "endReady"){
-            gameData.mode = "endScene";
-        }
-        
         this.touchCountLabel.text = userData.touchTotalCount;
         this.timeLabel.text = userData.time;
         this.levelLabel.text = userData.level;
         this.scoreLabel.text = userData.score;
         
         if(app.pointing.getPointingEnd()){
-            gameData.mode = "titleReady";
             app.replaceScene(TitleScene());
         }
     }
