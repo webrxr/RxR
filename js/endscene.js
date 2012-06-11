@@ -47,9 +47,12 @@
             
             console.log(userData.time);
     
-            userData.time = Math.floor(userData.time / 30);
-            
-            var tweetButton = tm.twitter.TweetButton("Reverse Reverseったよ！スコア:{0} 生存時間{1}秒".format(userData.score, userData.time));
+            userData.time = Math.floor(userData.time / 30) - 2;
+
+            var tweetMessage = this.getTweetMessage(userData.score);
+            var tweetButton = tm.twitter.TweetButton(
+                "Score : {0}\nTime : {1}秒生存\n{2}\nhttps://github.com/webrxr/RxR #RxR #tmlibjs".format(userData.score, userData.time, tweetMessage)
+            );
             tweetButton.x = app.width/2;
             tweetButton.y = 650;
             this.addChild(tweetButton);
@@ -65,7 +68,22 @@
                 app.replaceScene(TitleScene());
             }
         },
-        
+
+        /*
+         **
+         */
+        getTweetMessage: function(score){
+            if(score > 200000){ return "ヤムチャしやがって…"; }
+            if(score > 150000){ return "お前がナンバー1だ"; }
+            else if(score > 100000){ return "神現る！"; }
+            else if(score > 80000){ return "マスタークラス！"; }
+            else if(score > 60000){ return "やりこみ名人！"; }
+            else if(score > 40000){ return "立派なゲーマー！"; }
+            else if(score > 20000){ return "まだまだ伸びるよ！頑張れ！"; }
+            else if(score > 10000){ return "生まれたてのひよこレベル :-) "; }
+            else if(score >= 0){ return "卵の中のひよこ"; }
+
+        },
         // ポーズ画面 : 別タブへ切り替わった時 / Ttbキーを押した時
         onblur: function() {
             app.pushScene(PauseScene());
