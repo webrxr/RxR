@@ -43,7 +43,7 @@
         "startButton": {
             "image": "startButton",
             "rect": [240, 460, 640, 112],
-        },
+        }
     };
     // ロゴの透過度
     var ALPHA_PLUS  = 0.04;
@@ -66,6 +66,13 @@
                 this[key] = sprite;
                 this.addChild(sprite);
             }
+            
+            // github
+            this.rxrGithub = GeneralSprite(280, 650, 128, 128, tm.graphics.TextureManager.get("octodex"), CURRENT_SCALE);
+            this.addChild(this.rxrGithub);
+            
+            this.engineGithub = GeneralSprite(380, 650, 128, 128, tm.graphics.TextureManager.get("octodex"), CURRENT_SCALE);
+            this.addChild(this.engineGithub);
             
             // BGM
             this.op = tm.sound.SoundManager.get("op");
@@ -100,10 +107,18 @@
             }
             
             // スタート
-            if( app.pointing.getPointingEnd() == true && this.startButton.isHitPoint(app.pointing.x, app.pointing.y) == true ){
-                tm.sound.SoundManager.get("decide").play();
-                this.op.stop();
-                app.replaceScene(MainScene());
+            if( app.pointing.getPointingEnd() == true ){
+                if(this.startButton.isHitPoint(app.pointing.x, app.pointing.y) == true){
+                    tm.sound.SoundManager.get("decide").play();
+                    this.op.stop();
+                    app.replaceScene(MainScene());
+                }
+                else if(this.rxrGithub.isHitPoint(app.pointing.x, app.pointing.y) == true){
+                    window.open("https://github.com/webrxr/RxR", "_self");
+                }
+                else if(this.engineGithub.isHitPoint(app.pointing.x, app.pointing.y) == true){
+                    window.open("https://github.com/phi1618/tmlib.js", "_self");
+                }
             }
         },
     
