@@ -82,7 +82,7 @@ var ClearEffect = tm.createClass({
     init: function(x,y,w,h,time,img){
         this.superInit(w, h);
         this.position.set(x, y);
-        this.scaleX = this.scaleY = currentScale;
+        this.scaleX = this.scaleY = CURRENT_SCALE;
 
         var particle = tm.app.Sprite(640, 188);
         particle.setImage(img);

@@ -49,8 +49,6 @@
     var ALPHA_PLUS  = 0.04;
     var ALPHA_MINUS = 0.02;
     
-    
-    
     ns.TitleScene = tm.createClass({
         superClass: tm.app.Scene,
     
@@ -63,7 +61,7 @@
                 var value   = IMAGES[key];
                 var sprite  = tm.app.Sprite(value.rect[2], value.rect[3]);
                 sprite.position.set(value.rect[0], value.rect[1]);
-                sprite.scaleX = sprite.scaleY = currentScale;
+                sprite.scaleX = sprite.scaleY = CURRENT_SCALE;
                 sprite.setImage( tm.graphics.TextureManager.get(value.image) );
                 this[key] = sprite;
                 this.addChild(sprite);

@@ -5,10 +5,10 @@ var EndScene = tm.createClass({
         this.superInit();
 
         // リザルトのバックグラウンド画像
-        var resultBackground = GeneralSprite(240, 360, 640, 960, tm.graphics.TextureManager.get("resultBackground"), currentScale);
+        var resultBackground = GeneralSprite(240, 360, 640, 960, tm.graphics.TextureManager.get("resultBackground"), CURRENT_SCALE);
         this.addChild(resultBackground);
 
-        var resultText = GeneralSprite(240, 360, 640, 960, tm.graphics.TextureManager.get("resultText"), currentScale);
+        var resultText = GeneralSprite(240, 360, 640, 960, tm.graphics.TextureManager.get("resultText"), CURRENT_SCALE);
         this.addChild(resultText);
         
         this.touchCountLabel = StatusLabel(380, 235, 48);

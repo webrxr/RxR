@@ -1,11 +1,5 @@
 // グローバルな設定
-var MAX_WIDTH = 8;
-var MAX_HEIGHT = 8;
-var currentSize = {
-    "width": 0,
-    "height": 0
-};
-var currentScale = 0.75;
+var CURRENT_SCALE = 0.75;
 
 tm.main(function(){
     app = tm.app.CanvasApp("#world");

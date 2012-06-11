@@ -5,13 +5,22 @@ var MainScene = tm.createClass({
         this.superInit();
 
         // バックグラウンド画像
-        this.gameBackground = GeneralSprite(240, 360, 640, 960, tm.graphics.TextureManager.get("gameBackground"), currentScale);
+        this.gameBackground = GeneralSprite(240, 360, 640, 960, tm.graphics.TextureManager.get("gameBackground"), CURRENT_SCALE);
         this.addChild(this.gameBackground);
         
         this.nextTime = 0;
+        
+        // 盤面の最大幅
+        this.MAX_WIDTH = 8;
+        this.MAX_HEIGHT = 8;
+        
+        this.currentSize = {
+            "width": 0,
+            "height": 0
+        };
 
         // ステータス
-        this.gameStatus = GeneralSprite(240, 60, 640, 120, tm.graphics.TextureManager.get("gameStatus"), currentScale);
+        this.gameStatus = GeneralSprite(240, 60, 640, 120, tm.graphics.TextureManager.get("gameStatus"), CURRENT_SCALE);
         this.addChild(this.gameStatus);
 
         this.levelLabel = StatusLabel(255, 25, 32);
@@ -36,9 +45,9 @@ var MainScene = tm.createClass({
 
         // 石の生成
         this.stone = [];
-        for(var i = 0; i < MAX_WIDTH; i++){
+        for(var i = 0; i < this.MAX_WIDTH; i++){
             this.stone[i] = [];
-            for(var j = 0; j < MAX_HEIGHT; j++){
+            for(var j = 0; j < this.MAX_HEIGHT; j++){
                 this.stone[i][j] = Stone(i, j);
                 this.addChild(this.stone[i][j]);
                 this.stone[i][j].addEventListener("mousedown", function(e) {
@@ -87,10 +96,10 @@ var MainScene = tm.createClass({
         if( gameData.timeUp == 0 && gameData.time < 0 ){
             gameData.timeUp = 1;
 
-            var bg = GeneralSprite(240, 360, 640, 188, CLEAR_STAGE_BACKGROUND_IMAGE, currentScale);
+            var bg = GeneralSprite(240, 360, 640, 188, CLEAR_STAGE_BACKGROUND_IMAGE, CURRENT_SCALE);
             this.addChild( bg );
 
-            var sprite = GeneralSprite(240, 360, 640, 188, tm.graphics.TextureManager.get("timeUp"), currentScale);
+            var sprite = GeneralSprite(240, 360, 640, 188, tm.graphics.TextureManager.get("timeUp"), CURRENT_SCALE);
             this.addChild(sprite);
             sprite.update = function(){
                 if(gameData.timeUp > 80){
@@ -114,20 +123,20 @@ var MainScene = tm.createClass({
      * 石の配置初期化
      */
     initBoard: function(){
-        currentSize.width = Math.rand(4, MAX_WIDTH);
-        currentSize.height = Math.rand(4, MAX_HEIGHT);
+        this.currentSize.width = Math.rand(4, this.MAX_WIDTH);
+        this.currentSize.height = Math.rand(4, this.MAX_HEIGHT);
 
         this.getMargin();
 
-        //gameData.goalStone = Math.rand(0, currentSize.width * currentSize.height);    // 目標の白石数
+        //gameData.goalStone = Math.rand(0, this.currentSize.width * this.currentSize.height);    // 目標の白石数
         gameData.goalStone = 0;
 
         var margin = this.getMargin();
 
         // 石の初期化
-        for(var i = 0; i < MAX_WIDTH; i++){
-            for(var j = 0; j < MAX_HEIGHT; j++){
-                if( i < currentSize.width && j < currentSize.height ){
+        for(var i = 0; i < this.MAX_WIDTH; i++){
+            for(var j = 0; j < this.MAX_HEIGHT; j++){
+                if( i < this.currentSize.width && j < this.currentSize.height ){
                     this.stone[i][j].changeColor(Math.rand(0,1));
                     this.stone[i][j].wakeUp();
                     this.stone[i][j].visible = true;
@@ -151,8 +160,8 @@ var MainScene = tm.createClass({
      */
     setTotalWhiteStone: function(){
         gameData.whiteStone = 0;
-        for(var i = 0; i < currentSize.width; i++){
-            for(var j = 0; j < currentSize.height; j++){
+        for(var i = 0; i < this.currentSize.width; i++){
+            for(var j = 0; j < this.currentSize.height; j++){
                 if(this.stone[i][j].color == 0){ ++gameData.whiteStone; }
             }
         }
@@ -163,8 +172,8 @@ var MainScene = tm.createClass({
      */
     showBoard: function(all){
         var w = 0, h = 0;
-        if(all == 0){ w = currentSize.width; h = currentSize.height; }
-        else{ w = MAX_WIDTH; h = MAX_HEIGHT; }
+        if(all == 0){ w = this.currentSize.width; h = this.currentSize.height; }
+        else{ w = this.MAX_WIDTH; h = this.MAX_HEIGHT; }
 
         var debugStr = "";
         for(var i = 0; i < h; i++){
@@ -183,7 +192,7 @@ var MainScene = tm.createClass({
      * 中央揃えのためのマージンを取得
      */
     getMargin: function(){
-        var marginW = (app.width - (this.stone[0][0].width / 2) * currentSize.width) / 2;
+        var marginW = (app.width - (this.stone[0][0].width / 2) * this.currentSize.width) / 2;
 
         return marginW;
     },
@@ -241,16 +250,16 @@ var MainScene = tm.createClass({
             // クリアー判定
             if( gameData.whiteStone == gameData.goalStone ){
                 userData.level += 1;
-                this.timer.plusTime( 3 * (currentSize.width+currentSize.height) );
-                console.log( 3 * (currentSize.width+currentSize.height));
+                this.timer.plusTime( 3 * (this.currentSize.width+this.currentSize.height) );
+                console.log( 3 * (this.currentSize.width+this.currentSize.height));
                 
-                this.nextStage( (1000*(currentSize.width+currentSize.height-userData.touchCount)), "nextStage");
+                this.nextStage( (1000*(this.currentSize.width+this.currentSize.height-userData.touchCount)), "nextStage");
 
                 var wave = Wave(240, 360, CLEAR_CIRCLE_WAVE_IMAGE);
                 app.currentScene.addChild( wave );
             }
-            else if( gameData.whiteStone == (currentSize.width*currentSize.height) ){
-                this.nextStage( (-1000*(currentSize.width+currentSize.height)), "missTake");
+            else if( gameData.whiteStone == (this.currentSize.width*this.currentSize.height) ){
+                this.nextStage( (-1000*(this.currentSize.width+this.currentSize.height)), "missTake");
             }
         }
     },
@@ -300,9 +309,9 @@ var MainScene = tm.createClass({
         var rangeW = 0;
         var rangeH = 0;
 
-        if(vx == 1) { rangeW = currentSize.height-y-1; }
+        if(vx == 1) { rangeW = this.currentSize.height-y-1; }
         else if(vx == -1) { rangeW = y; }
-        if(vy == 1) { rangeH = currentSize.width-x-1; }
+        if(vy == 1) { rangeH = this.currentSize.width-x-1; }
         else if(vy == -1) { rangeH = x; }
 
         var range = new Array(rangeW, rangeH);
