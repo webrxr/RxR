@@ -47,7 +47,8 @@ var Stone = tm.createClass({
     /**
      * 石の色をリセット
      */
-    changeColor: function(){
+    changeColor: function(color){
+        this.color = color;
         if( this.color == this.WHITE_COLOR ){ this.sprite.setImage( tm.graphics.TextureManager.get("whiteStone") ); }
         else if( this.color == this.BLACK_COLOR ){ this.sprite.setImage( tm.graphics.TextureManager.get("blackStone") ); }
     }

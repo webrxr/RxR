@@ -122,11 +122,10 @@ var MainScene = tm.createClass({
         for(var i = 0; i < MAX_WIDTH; i++){
             for(var j = 0; j < MAX_HEIGHT; j++){
                 if( i < currentSize.width && j < currentSize.height ){
-                    this.stone[i][j].color = Math.rand(0,1);
+                    this.stone[i][j].changeColor(Math.rand(0,1));
                     this.stone[i][j].wakeUp();
                     this.stone[i][j].visible = true;
                     this.setPosition(i, j, margin);
-                    this.stone[i][j].changeColor();
                 }
                 else{
                     this.stone[i][j].sleep();
@@ -267,8 +266,7 @@ var MainScene = tm.createClass({
             var anotherColor = this.stone[x][y].WHITE_COLOR;
             if(color == this.stone[x][y].WHITE_COLOR) { anotherColor = this.stone[x][y].BLACK_COLOR; }
 
-            this.stone[x][y].color = anotherColor;
-            this.stone[x][y].changeColor();
+            this.stone[x][y].changeColor(anotherColor);
         }
 
         return reverseTotal;
@@ -319,8 +317,7 @@ var MainScene = tm.createClass({
         else{
             for(var i = 1; i < wall+1; i++){
                 if( this.stone[x+(i*vy)][y+(i*vx)].color == anotherColor ){ break; }
-                this.stone[x+(i*vy)][y+(i*vx)].color = anotherColor;
-                this.stone[x+(i*vy)][y+(i*vx)].changeColor();
+                this.stone[x+(i*vy)][y+(i*vx)].changeColor(anotherColor);
 
                 // 波紋
                 var wave = Wave(this.stone[x+(i*vy)][y+(i*vx)].x, this.stone[x+(i*vy)][y+(i*vx)].y, REVERSE_CIRCLE_WAVE_IMAGE);
