@@ -51,10 +51,16 @@ Web版への許可や素材の使用など許可を頂きました。
 - [Reverse Reverse](http://itunes.apple.com/jp/app/reverse-reverse/id412804019?mt=8)
 - [Reverse Reverse Lite](http://itunes.apple.com/jp/app/reverse-reverse-lite/id412804420?mt=8)
 
-## その他ブログのリンクなど
-phi氏 ブログ
+## ライブラリ/素材製作者様やブログのリンクなど
+tmlib.js開発者のphi氏 ブログ
 
 - [TM Life](http://tmlife.net/)
+
+ゲーム中の効果音は全て
+
+- [ザ・マッチメイカァズ2nd 【フリー効果音素材】](http://osabisi.sakura.ne.jp/m2/)様
+
+の物を使用させて頂きました。
 
 私(Halt)のブログ
 
