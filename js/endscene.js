@@ -40,7 +40,7 @@ var EndScene = tm.createClass({
         
         if(app.pointing.getPointingEnd()){
             gameData.mode = "titleReady";
-            app.replaceScene(titleScene);
+            app.replaceScene(TitleScene());
         }
     }
 });

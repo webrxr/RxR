@@ -110,7 +110,7 @@
                 this.op.stop();
                 
                 gameData.mode = "mainReady";
-                app.replaceScene(mainScene);
+                app.replaceScene(MainScene());
             }
         }
     });

@@ -3,10 +3,13 @@ var MainScene = tm.createClass({
 
     init: function(){
         this.superInit();
+        
 
         // バックグラウンド画像
         this.gameBackground = GeneralSprite(240, 360, 640, 960, tm.graphics.TextureManager.get("gameBackground"), currentScale);
         this.addChild(this.gameBackground);
+        
+        this.nextTime = 0;
 
         // ステータス
         this.gameStatus = GeneralSprite(240, 60, 640, 120, tm.graphics.TextureManager.get("gameStatus"), currentScale);
@@ -74,7 +77,16 @@ var MainScene = tm.createClass({
 
         this.whiteStoneLabel.text = gameData.whiteStone;
         this.goalStonesLabel.text = gameData.goalStone;
-
+        
+        // ステージクリア時の演出
+        if(this.nextTime > 0){
+            --this.nextTime;
+            if(this.nextTime == 1){ this.initBoard(); }
+            //console.log(this.nextTime);
+        }
+        
+        
+        // タイムアップ時の演出
         if(gameData.timeUp != 0){ ++gameData.timeUp; }
 
         if( gameData.timeUp == 0 && gameData.time < 0 ){
@@ -100,7 +112,7 @@ var MainScene = tm.createClass({
         else if(userData.gameOver == true){
             this.bgm.stop();
             gameData.mode = "endReady";
-            app.replaceScene(endScene);
+            app.replaceScene(EndScene());
         }
     },
 
@@ -189,12 +201,29 @@ var MainScene = tm.createClass({
         this.stone[x][y].x = this.stone[x][y].width/2 * x + margin + this.stone[x][y].width/4;
         this.stone[x][y].y = this.stone[x][y].height/2 * (y+1) + 160;
     },
+    
+    /**
+     * 各方向の裏返し処理を呼び出し、裏返した総数を返す
+     */
+    nextStage: function(score, label){
+    
+        userData.score += score;
+        if(userData.score < 0){ userData.score = 0; }
+        
+        var bg = ClearEffect(240, 360, 640, 188, 3000, CLEAR_STAGE_BACKGROUND_IMAGE);
+        app.currentScene.addChild( bg );
+        
+        var label = ClearEffect(240, 360, 640, 188, 3000, tm.graphics.TextureManager.get(label));
+        app.currentScene.addChild( label );
+        
+        this.nextTime = 90;
+        userData.touchCount = 0;
+    },
 
     /**
      * 石とのタッチ判定
      */
     touchStone: function(e){
-
         if (gameData.timeUp != 0) return;
 
         var reverseTotal = this.reverseStoneManager( e.target.iter.i, e.target.iter.j );
@@ -217,31 +246,17 @@ var MainScene = tm.createClass({
 
             // クリアー判定
             if( gameData.whiteStone == gameData.goalStone ){
-                userData.score += 1000 * (currentSize.width+currentSize.height-userData.touchCount);
-
-                if(userData.score < 0){ userData.score = 0; }
-
                 userData.level += 1;
                 this.timer.plusTime( 3 * (currentSize.width+currentSize.height) );
-
-                var bg = ClearEffect(240, 360, 640, 188, CLEAR_STAGE_BACKGROUND_IMAGE, false);
-                app.currentScene.addChild( bg );
-
-                var next = ClearEffect(240, 360, 640, 188, tm.graphics.TextureManager.get("nextStage"), true);
-                app.currentScene.addChild( next );
+                console.log( 3 * (currentSize.width+currentSize.height));
+                
+                this.nextStage( (1000*(currentSize.width+currentSize.height-userData.touchCount)), "nextStage");
 
                 var wave = Wave(240, 360, CLEAR_CIRCLE_WAVE_IMAGE);
                 app.currentScene.addChild( wave );
             }
             else if( gameData.whiteStone == (currentSize.width*currentSize.height) ){
-                userData.score -= 1000 * (currentSize.width+currentSize.height);
-                if(userData.score < 0){ userData.score = 0; }
-
-                var bg = ClearEffect(240, 360, 640, 188, CLEAR_STAGE_BACKGROUND_IMAGE, false);
-                app.currentScene.addChild( bg );
-
-                var miss = ClearEffect(240, 360, 640, 188, tm.graphics.TextureManager.get("missTake"), true);
-                app.currentScene.addChild( miss );
+                this.nextStage( (-1000*(currentSize.width+currentSize.height)), "missTake");
             }
         }
     },

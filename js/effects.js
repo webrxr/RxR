@@ -1,4 +1,4 @@
-var effetcTime = 100;
+var effetcTime = 90;
 /**
  * タイマー
  */
@@ -21,6 +21,7 @@ var Timer = tm.createClass({
             this.plus -= this.plusTmp;
             this.width += this.plusTmp;
             if(this.width >= app.width){ this.width = app.width; }
+            console.log("plus: "+this.plus);
         }
         else{
             this.width -= this.timerSpeed;
@@ -39,6 +40,7 @@ var Timer = tm.createClass({
         this.plusTmp = this.plus / effetcTime;
         gameData.time += plus;
         if(gameData.time >= gameData.maxTime){ gameData.time = gameData.maxTime; }
+        console.log("plus: "+this.plus);
     }
 });
 
@@ -77,7 +79,7 @@ var Wave = tm.createClass({
 var ClearEffect = tm.createClass({
     superClass:tm.app.CanvasElement,
 
-    init: function(x,y,w,h,img,reset){
+    init: function(x,y,w,h,time,img){
         this.superInit(w, h);
         this.position.set(x, y);
         this.scaleX = this.scaleY = currentScale;
@@ -85,30 +87,29 @@ var ClearEffect = tm.createClass({
         var particle = tm.app.Sprite(640, 188);
         particle.setImage(img);
         this.addChild(particle);
-
-        this.timer = effetcTime;
-
-        this.reset = reset;
+        this.fadeOut(time);
+        
+        this.life = 0;
     },
 
     update: function(){
-        this.timer -= 1;
-        if(this.timer <= 0){
-            if(this.reset){
-                userData.touchCount = 0;
-                mainScene.initBoard();
-            }
-
-            this.remove();
-        }
-        else if(this.timer <= 30){
-            this.alpha -= 0.04;
-            if(this.alpha < 0){ this.alpha = 0; }
-        }
-
         if(gameData.timeUp != 0){
-            userData.touchCount = 0;
             this.remove();
         }
+        this.life++;
+        //console.log("aaa: "+this.life);
+    },
+
+    fadeOut: function(time) {
+        this.animation.addTween({
+            prop: "alpha",
+            begin: 1,
+            finish: 0,
+            duration: time
+        });
+    },
+    
+    onanimationend: function() {
+        this.remove();
     }
 });

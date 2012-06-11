@@ -10,7 +10,7 @@ var currentScale = 0.75;
 tm.main(function(){
     app = tm.app.CanvasApp("#world");
     app.background = "black";
-    app.enableStats();
+    //app.enableStats();
     app.fitWindow();
 
     userData = tm.util.DataManager.get("user-data");
@@ -18,12 +18,7 @@ tm.main(function(){
     gameData.mode = "titleReady";
     gameData.maxTime = gameData.time;
 
-    // シーンの生成
-    titleScene = TitleScene();
-    mainScene = MainScene();
-    endScene = EndScene();
-
-    app.replaceScene(titleScene);
+    app.replaceScene(TitleScene());
 
     app.run();
 });
