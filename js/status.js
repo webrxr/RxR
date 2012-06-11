@@ -12,8 +12,7 @@ tm.util.DataManager.set("game-data", {
     whiteStone: 0,
     goalStone:0,
     timeUp: 0,
-    gameOver: false,
-    mode: "titleReady"
+    gameOver: false
 });
 
 /**

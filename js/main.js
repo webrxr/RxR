@@ -15,7 +15,6 @@ tm.main(function(){
 
     userData = tm.util.DataManager.get("user-data");
     gameData = tm.util.DataManager.get("game-data");
-    gameData.mode = "titleReady";
     gameData.maxTime = gameData.time;
 
     app.replaceScene(TitleScene());
