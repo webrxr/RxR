@@ -71,7 +71,7 @@
             this.rxrGithub = GeneralSprite(280, 650, 128, 128, tm.graphics.TextureManager.get("octodex"), CURRENT_SCALE);
             this.addChild(this.rxrGithub);
             
-            this.engineGithub = GeneralSprite(380, 650, 128, 128, tm.graphics.TextureManager.get("octodex"), CURRENT_SCALE);
+            this.engineGithub = GeneralSprite(400, 650, 128, 128, tm.graphics.TextureManager.get("octodex"), CURRENT_SCALE);
             this.addChild(this.engineGithub);
             
             // BGM
