@@ -233,7 +233,7 @@ var MainScene = tm.createClass({
             if(userData.score < 0){ userData.score = 0; }
 
             // 波紋
-            var wave = Wave(e.target.iter.i, e.target.iter.j, REVERSE_CIRCLE_WAVE_IMAGE);
+            var wave = Wave(this.stone[e.target.iter.i][e.target.iter.j].x, this.stone[e.target.iter.i][e.target.iter.j].y, REVERSE_CIRCLE_WAVE_IMAGE);
             app.currentScene.addChild( wave );
 
             console.log(gameData.whiteStone, gameData.goalStone );
