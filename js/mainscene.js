@@ -265,14 +265,11 @@
                 var wave = Wave(this.stone[e.target.iter.i][e.target.iter.j].x, this.stone[e.target.iter.i][e.target.iter.j].y, REVERSE_WAVE_IMAGE);
                 app.currentScene.addChild( wave );
     
-                console.log(gameData.whiteStone, gameData.goalStone );
-    
                 // クリアー判定
                 if( gameData.whiteStone == gameData.goalStone ){
                     tm.sound.SoundManager.get("clear").play();
                     userData.level += 1;
-                    this.timer.plusTime( 3 * (this.currentSize.width+this.currentSize.height) );
-                    console.log( 3 * (this.currentSize.width+this.currentSize.height));
+                    this.timer.plusTime( 8 * (this.currentSize.width+this.currentSize.height) );
                     
                     this.nextStage( (1000*(this.currentSize.width+this.currentSize.height-userData.touchCount)), "nextStage");
     
