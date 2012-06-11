@@ -19,6 +19,17 @@
     
         init: function(){
             this.superInit();
+            
+            // ステータスリセット
+            userData.gameOver = false;
+            gameData.timeUp = 0;
+            userData.touchTotalCount = 0;
+            userData.time = 1;
+            userData.level = 1;
+            userData.score = 0;
+            userData.gameOver = false;
+            this.alpha = 1.0;
+            gameData.time = gameData.maxTime;
     
             // 画像
             for (var key in IMAGES) {
@@ -42,8 +53,7 @@
                 "height": 0
             };
     
-            // ステータス
-    
+            // ラベル
             this.levelLabel = StatusLabel(255, 25, 32);
             this.addChild(this.levelLabel);
     
@@ -58,6 +68,7 @@
     
             // タイマーの生成
             this.timer = Timer(gameData.time);
+            this.timer.width = app.width;
             this.addChild(this.timer);
     
             // BGM
@@ -79,18 +90,6 @@
             
             // BGM
             this.bgm.play();
-    
-            // ステータスリセット
-            userData.gameOver = false;
-            gameData.timeUp = 0;
-            userData.touchTotalCount = 0;
-            userData.time = 1;
-            userData.level = 1;
-            userData.score = 0;
-            userData.gameOver = false;
-            this.alpha = 1.0;
-            this.timer.width = app.width;
-            gameData.time = gameData.maxTime;
     
             // 石の初期化
             this.initBoard();
