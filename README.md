@@ -12,6 +12,8 @@ iPhone版とのReverse Reverseの差は
 
 となっています。
 
+ゲームはこちらからどうぞ - [Reverse Reverse](http://webrxr.github.com/RxR/)
+
 ## ルール
 
 オセロを元にしたゲームです。
@@ -61,6 +63,7 @@ tmlib.js開発者のphi氏 ブログ
 - [ザ・マッチメイカァズ2nd 【フリー効果音素材】](http://osabisi.sakura.ne.jp/m2/)様
 
 の物を使用させて頂きました。
+素晴らしい素材ありがとうございます。
 
 私(Halt)のブログ
 
