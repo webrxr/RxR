@@ -387,5 +387,10 @@ var MainScene = tm.createClass({
         var magnification = new Array(10,10,9,9,9,8,8,7,7,6,5);
 
         return magnification[iter];
+    },
+    
+    // ポーズ画面 : 別タブへ切り替わった時 / Ttbキーを押した時
+    onblur: function() {
+        app.pushScene(PauseScene());
     }
 });

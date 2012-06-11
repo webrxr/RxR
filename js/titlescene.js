@@ -107,6 +107,11 @@
                 this.op.stop();
                 app.replaceScene(MainScene());
             }
+        },
+    
+        // ポーズ画面 : 別タブへ切り替わった時 / Ttbキーを押した時
+        onblur: function() {
+            app.pushScene(PauseScene());
         }
     });
     
