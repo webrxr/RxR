@@ -25,12 +25,18 @@ var EndScene = tm.createClass({
         this.addChild(this.scoreLabel);
         
         console.log(userData.time);
+
+        userData.time = Math.floor(userData.time / 30);
+        
+        var tweetButton = tm.twitter.TweetButton("Reverse Reverseったよ！スコア:{0} 生存時間{1}秒".format(userData.score, userData.time));
+        tweetButton.x = app.width/2;
+        tweetButton.y = 650;
+        this.addChild(tweetButton);
     },
 
     update: function(){
         if(gameData.mode == "endReady"){
             gameData.mode = "endScene";
-            userData.time = Math.floor(userData.time / 30);
         }
         
         this.touchCountLabel.text = userData.touchTotalCount;
