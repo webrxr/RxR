@@ -27,7 +27,8 @@ tm.preload(function() {
     
     // github
     tm.graphics.TextureManager.add("octodex", "img/github/octodex.png");
-
+    tm.graphics.TextureManager.add("tmlib", "img/github/tmlib.png");
+    
     // サウンド
     tm.sound.SoundManager.add("bgm", "sound/bgm/bgm", 1);
     tm.sound.SoundManager.add("op", "sound/bgm/op", 1);
@@ -81,3 +82,17 @@ var GeneralSprite = tm.createClass({
     update: function(){
     }
 });
+
+
+var IconButton = tm.createClass({
+    superClass: tm.app.Sprite,
+    
+    init: function(img) {
+        this.superInit(img.width, img.height, img);
+        this.alpha = 0.75;
+        this.interaction.setBoundingType("rect");
+        this.onmouseover = function() { this.animation.fade(1.0, 250); };
+        this.onmouseout  = function() { this.animation.fade(0.75, 250); };
+    }
+});
+

@@ -68,10 +68,15 @@
             }
             
             // github
-            this.rxrGithub = GeneralSprite(280, 650, 128, 128, tm.graphics.TextureManager.get("octodex"), CURRENT_SCALE);
+            this.rxrGithub = IconButton(tm.graphics.TextureManager.get("octodex"));
+            this.rxrGithub.setPosition(280, 650).setSize(128, 128);
+            this.rxrGithub.scaleX = this.rxrGithub.scaleY = 0.75;
             this.addChild(this.rxrGithub);
             
-            this.engineGithub = GeneralSprite(400, 650, 128, 128, tm.graphics.TextureManager.get("octodex"), CURRENT_SCALE);
+            // tmlib.js
+            this.engineGithub = IconButton(tm.graphics.TextureManager.get("tmlib"));
+            this.engineGithub.setPosition(400, 650).setSize(128, 128);
+            this.engineGithub.scaleX = this.engineGithub.scaleY = 0.75;
             this.addChild(this.engineGithub);
             
             // BGM
@@ -114,9 +119,11 @@
                     app.replaceScene(MainScene());
                 }
                 else if(this.rxrGithub.isHitPoint(app.pointing.x, app.pointing.y) == true){
+                    tm.sound.SoundManager.get("touch").play();
                     window.open("https://github.com/webrxr/RxR", "_self");
                 }
                 else if(this.engineGithub.isHitPoint(app.pointing.x, app.pointing.y) == true){
+                    tm.sound.SoundManager.get("touch").play();
                     window.open("https://github.com/phi1618/tmlib.js", "_self");
                 }
             }
