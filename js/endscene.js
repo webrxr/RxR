@@ -8,7 +8,7 @@
             "rect": [240, 360, 640, 960],
         },
         
-        // タイトルロゴ
+        // リザルトのテキスト
         "resultText": {
             "image": "resultText",
             "rect": [240, 360, 640, 960],
@@ -47,15 +47,21 @@
             
             console.log(userData.time);
     
-            userData.time = Math.floor(userData.time / 30) - 2;
+            userData.time = Math.floor(userData.time / 30);
 
             var tweetMessage = this.getTweetMessage(userData.score);
             var tweetButton = tm.twitter.TweetButton(
                 "Score : {0}\nTime : {1}秒生存\n{2}\nhttps://github.com/webrxr/RxR #RxR #tmlibjs".format(userData.score, userData.time, tweetMessage)
             );
-            tweetButton.x = app.width/2;
+            tweetButton.x = 360;
             tweetButton.y = 650;
             this.addChild(tweetButton);
+            
+            // タイトルボタン
+            this.returnTitle = IconButton(tm.graphics.TextureManager.get("returnTitle"));
+            this.returnTitle.setPosition(160, 647).setSize(237, 50);
+            this.returnTitle.scaleX = this.returnTitle.scaleY = CURRENT_SCALE;
+            this.addChild(this.returnTitle);
         },
     
         update: function(){
@@ -63,9 +69,12 @@
             this.timeLabel.text = userData.time;
             this.levelLabel.text = userData.level;
             this.scoreLabel.text = userData.score;
-            
-            if(app.pointing.getPointingEnd()){
-                app.replaceScene(TitleScene());
+
+            if( app.pointing.getPointingEnd() == true ){
+                if(this.returnTitle.isHitPoint(app.pointing.x, app.pointing.y) == true){
+                    tm.sound.SoundManager.get("decide").play();
+                    app.replaceScene(TitleScene());
+                }
             }
         },
 

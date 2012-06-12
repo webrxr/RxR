@@ -24,6 +24,7 @@ tm.preload(function() {
     // リザルト
     tm.graphics.TextureManager.add("resultBackground", "img/resultBackground.png");
     tm.graphics.TextureManager.add("resultText", "img/resultText.png");
+    tm.graphics.TextureManager.add("returnTitle", "img/returnTitle.png");
     
     // github
     tm.graphics.TextureManager.add("octodex", "img/github/octodex.png");
