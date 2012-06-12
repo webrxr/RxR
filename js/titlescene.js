@@ -70,13 +70,13 @@
             // github
             this.rxrGithub = IconButton(tm.graphics.TextureManager.get("octodex"));
             this.rxrGithub.setPosition(280, 650).setSize(128, 128);
-            this.rxrGithub.scaleX = this.rxrGithub.scaleY = 0.75;
+            this.rxrGithub.scaleX = this.rxrGithub.scaleY = CURRENT_SCALE;
             this.addChild(this.rxrGithub);
             
             // tmlib.js
             this.engineGithub = IconButton(tm.graphics.TextureManager.get("tmlib"));
             this.engineGithub.setPosition(400, 650).setSize(128, 128);
-            this.engineGithub.scaleX = this.engineGithub.scaleY = 0.75;
+            this.engineGithub.scaleX = this.engineGithub.scaleY = CURRENT_SCALE;
             this.addChild(this.engineGithub);
             
             // BGM
