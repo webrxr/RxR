@@ -40,7 +40,6 @@ var Timer = tm.createClass({
         this.plusTmp = this.plus / effetcTime;
         gameData.time += plus;
         if(gameData.time >= gameData.maxTime){ gameData.time = gameData.maxTime; }
-        console.log("plus: "+this.plus);
     }
 });
 
