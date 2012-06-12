@@ -42,6 +42,8 @@
                 this.addChild(sprite);
             }
             
+            // クリア時の演出時間
+            this.NEXT_TIME = 90;
             this.nextTime = 0;
             
             // 盤面の最大幅
@@ -109,7 +111,6 @@
                 //console.log(this.nextTime);
             }
             
-            
             // タイムアップ時の演出
             if(gameData.timeUp != 0){ ++gameData.timeUp; }
     
@@ -135,6 +136,7 @@
             }
             else if(userData.gameOver == true){
                 this.bgm.stop();
+                userData.time -= this.NEXT_TIME;
                 app.replaceScene(EndScene());
             }
         },
@@ -239,7 +241,7 @@
             var label = ClearEffect(240, 360, 640, 188, 3000, tm.graphics.TextureManager.get(label));
             app.currentScene.addChild( label );
             
-            this.nextTime = 90;
+            this.nextTime = this.NEXT_TIME;
             userData.touchCount = 0;
         },
     
