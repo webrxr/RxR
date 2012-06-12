@@ -57,9 +57,9 @@
             this.titleFlashing = 1;  // タイトルロゴの点滅
     
             // タイトルバックグラウンド画像
-            for (var key in IMAGES) {
-                var value   = IMAGES[key];
-                var sprite  = tm.app.Sprite(value.rect[2], value.rect[3]);
+            for(var key in IMAGES){
+                var value = IMAGES[key];
+                var sprite = tm.app.Sprite(value.rect[2], value.rect[3]);
                 sprite.position.set(value.rect[0], value.rect[1]);
                 sprite.scaleX = sprite.scaleY = CURRENT_SCALE;
                 sprite.setImage( tm.graphics.TextureManager.get(value.image) );
@@ -116,7 +116,12 @@
                 if(this.startButton.isHitPoint(app.pointing.x, app.pointing.y) == true){
                     tm.sound.SoundManager.get("decide").play();
                     this.op.stop();
-                    app.replaceScene(MainScene());
+                    
+                    this.addChild( tm.fade.FadeOut(
+                        app.width, app.height, "#000", 1000, function() {
+                            app.replaceScene(MainScene());
+                        })
+                    );
                 }
                 else if(this.rxrGithub.isHitPoint(app.pointing.x, app.pointing.y) == true){
                     tm.sound.SoundManager.get("touch").play();

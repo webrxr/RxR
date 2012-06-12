@@ -32,9 +32,9 @@
             gameData.time = gameData.maxTime;
     
             // 画像
-            for (var key in IMAGES) {
-                var value   = IMAGES[key];
-                var sprite  = tm.app.Sprite(value.rect[2], value.rect[3]);
+            for(var key in IMAGES){
+                var value = IMAGES[key];
+                var sprite = tm.app.Sprite(value.rect[2], value.rect[3]);
                 sprite.position.set(value.rect[0], value.rect[1]);
                 sprite.scaleX = sprite.scaleY = CURRENT_SCALE;
                 sprite.setImage( tm.graphics.TextureManager.get(value.image) );
@@ -135,9 +135,14 @@
                 }
             }
             else if(userData.gameOver == true){
-                this.bgm.stop();
-                userData.time -= this.NEXT_TIME;
-                app.replaceScene(EndScene());
+                var self = this;
+                this.addChild( tm.fade.FadeOut(
+                    app.width, app.height, "#000", 1000, function() {
+                        self.bgm.stop();
+                        userData.time -= self.NEXT_TIME;
+                        app.replaceScene(EndScene());
+                    })
+                );
             }
         },
     
