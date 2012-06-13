@@ -276,7 +276,7 @@
                 if( gameData.whiteStone == gameData.goalStone ){
                     tm.sound.SoundManager.get("clear").play();
                     userData.level += 1;
-                    this.timer.plusTime( 8 * (this.currentSize.width+this.currentSize.height) );
+                    this.timer.plusTime( 5 * (this.currentSize.width+this.currentSize.height) );
                     
                     this.nextStage( (1000*(this.currentSize.width+this.currentSize.height-userData.touchCount)), "nextStage");
     
