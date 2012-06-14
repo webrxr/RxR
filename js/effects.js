@@ -14,6 +14,8 @@ var Timer = tm.createClass({
         this.width = app.width;
         this.color = "hsla(200, 75%, 50%, 0.90)";
         this.timerSpeed = this.width / limit;
+        this.shadowColor = "white";
+        this.shadowBlur = 20;
     },
 
     update: function(){

@@ -46,14 +46,27 @@
             this.addChild(this.scoreLabel);
     
             userData.time = Math.floor(userData.time / 30);
-
+            
             var tweetMessage = this.getTweetMessage(userData.score);
+            /*
             var tweetButton = tm.twitter.TweetButton(
                 "Score : {0}\nTime : {1}秒生存\n{2}\nhttps://github.com/webrxr/RxR #RxR #tmlibjs".format(userData.score, userData.time, tweetMessage)
             );
             tweetButton.x = 360;
             tweetButton.y = 650;
             this.addChild(tweetButton);
+            */
+            var msg = tm.social.Twitter.createURL({
+                type: "tweet",
+                text: "Score : {0}\nTime : {1}秒生存\n{2}".format(userData.score, userData.time, tweetMessage),
+                hashtags: "RxR,tmlibjs",
+                url: "https://github.com/webrxr/RxR",
+            });
+            alert(msg);
+            this.tweetButton = IconButton(tm.graphics.TextureManager.get("returnTitle"));
+            this.tweetButton.setPosition(360, 650);
+            this.tweetButton.scaleX = this.tweetButton.scaleY = CURRENT_SCALE;
+            this.addChild(this.tweetButton);
             
             // タイトルボタン
             this.returnTitle = IconButton(tm.graphics.TextureManager.get("returnTitle"));
@@ -82,7 +95,7 @@
         },
 
         /*
-         **
+         *
          */
         getTweetMessage: function(score){
             if(score > 200000){ return "ヤムチャしやがって…"; }

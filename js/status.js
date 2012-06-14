@@ -25,7 +25,7 @@ var StatusLabel = tm.createClass({
         this.superInit(128, 128);
         this.x = x;
         this.y = y;
-        this.size = size;
+        this.fontSize = size;
         this.text = 0;
         this.align = "end";
         this.baseline = "top";

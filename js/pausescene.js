@@ -24,7 +24,7 @@ var PauseScene = tm.createClass({
         app.stop();
     },
     
-    onmousedown: function() {
+    onpointingstart: function() {
         if(this.audio){ this.audio.play(); }
         app.popScene();
     },

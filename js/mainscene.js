@@ -84,7 +84,7 @@
                 for(var j = 0; j < this.MAX_HEIGHT; j++){
                     this.stone[i][j] = Stone(i, j);
                     this.addChild(this.stone[i][j]);
-                    this.stone[i][j].addEventListener("mousedown", function(e) {
+                    this.stone[i][j].addEventListener("pointingstart", function(e) {
                         this.touchStone(e);
                     }.bind(this));
                 }

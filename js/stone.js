@@ -30,7 +30,7 @@ var Stone = tm.createClass({
         this.addChild(this.sprite);
         this.changeColor();
         this.sprite.interaction.setBoundingType("rect");
-        this.sprite.onmousedown = function(e) { this.parent.dispatchEvent(e); };
+        this.sprite.onpointingstart = function(e) { this.parent.dispatchEvent(e); };
         // this.sprite.draw = function(canvas) { this.drawBoundingRect(canvas); }
     },
 
