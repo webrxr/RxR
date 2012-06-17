@@ -54,20 +54,57 @@
                 "width": 0,
                 "height": 0
             };
-    
+
             // ラベル
-            this.levelLabel = StatusLabel(255, 25, 32);
-            this.addChild(this.levelLabel);
-    
-            this.scoreLabel = StatusLabel(252, 67, 24);
-            this.addChild(this.scoreLabel);
-    
-            this.whiteStoneLabel = StatusLabel(350, 55, 32);
-            this.addChild(this.whiteStoneLabel);
-    
-            this.goalStonesLabel = StatusLabel(440, 55, 32);
-            this.addChild(this.goalStonesLabel);
-    
+            this.fromJSON({
+                children: [
+                    {
+                        type: "Label",
+                        name: "levelLabel",
+                        x   : 255,
+                        y   : 60,
+                        width: 150,
+                        height: 40,
+                        text: userData.level,
+                        align: "end",
+                        fontSize: 32,
+                    },
+                    {
+                        type: "Label",
+                        name: "scoreLabel",
+                        x   : 253,
+                        y   : 90,
+                        width: 150,
+                        height: 40,
+                        text: userData.score,
+                        align: "end",
+                        fontSize: 24,
+                    },
+                    {
+                        type: "Label",
+                        name: "whiteStoneLabel",
+                        x   : 350,
+                        y   : 90,
+                        width: 150,
+                        height: 40,
+                        text: gameData.whiteStone,
+                        align: "end",
+                        fontSize: 32,
+                    },
+                    {
+                        type: "Label",
+                        name: "goalStonesLabel",
+                        x   : 440,
+                        y   : 90,
+                        width: 150,
+                        height: 40,
+                        text: gameData.goalStone,
+                        align: "end",
+                        fontSize: 32,
+                    }
+                ]
+            });
+
             // タイマーの生成
             this.timer = Timer(gameData.time);
             this.timer.width = app.width;
@@ -98,9 +135,10 @@
         },
     
         update: function(){
+            // ラベルの更新
             this.levelLabel.text = userData.level;
             this.scoreLabel.text = userData.score;
-    
+
             this.whiteStoneLabel.text = gameData.whiteStone;
             this.goalStonesLabel.text = gameData.goalStone;
             

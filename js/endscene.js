@@ -31,19 +31,56 @@
                 this[key] = sprite;
                 this.addChild(sprite);
             }
-            
-            this.touchCountLabel = StatusLabel(380, 235, 48);
-            this.addChild(this.touchCountLabel);
-            
-            this.timeLabel = StatusLabel(380, 305, 48);
-            this.addChild(this.timeLabel);
-            
-            this.levelLabel = StatusLabel(380, 170, 48);
-            this.addChild(this.levelLabel);
-                    
-            this.scoreLabel = StatusLabel(240, 460, 128);
-            this.scoreLabel.align = "center";
-            this.addChild(this.scoreLabel);
+
+            // ラベル
+            this.fromJSON({
+                children: [
+                    {
+                        type: "Label",
+                        name: "touchCountLabel",
+                        x   : 380,
+                        y   : 280,
+                        width: 150,
+                        height: 40,
+                        text: userData.touchTotalCount,
+                        align: "end",
+                        fontSize: 48
+                    },
+                    {
+                        type: "Label",
+                        name: "timeLabel",
+                        x   : 380,
+                        y   : 350,
+                        width: 150,
+                        height: 40,
+                        text: userData.time,
+                        align: "end",
+                        fontSize: 48
+                    },
+                    {
+                        type: "Label",
+                        name: "levelLabel",
+                        x   : 380,
+                        y   : 215,
+                        width: 150,
+                        height: 40,
+                        text: userData.level,
+                        align: "end",
+                        fontSize: 48
+                    },
+                    {
+                        type: "Label",
+                        name: "scoreLabel",
+                        x   : 240,
+                        y   : 580,
+                        width: 480,
+                        height: 40,
+                        text: userData.score,
+                        align: "center",
+                        fontSize: 128
+                    }
+                ]
+            });
 
             // タイトルボタン
             var iphoneButton = tm.app.iPhoneButton(120, 60, "black");
@@ -79,13 +116,6 @@
 
                 window.open(msg, "_self");
             };
-        },
-    
-        update: function(){
-            this.touchCountLabel.text = userData.touchTotalCount;
-            this.timeLabel.text = userData.time;
-            this.levelLabel.text = userData.level;
-            this.scoreLabel.text = userData.score;
         },
 
         /*
