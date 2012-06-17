@@ -23,7 +23,6 @@ var Timer = tm.createClass({
             this.plus -= this.plusTmp;
             this.width += this.plusTmp;
             if(this.width >= app.width){ this.width = app.width; }
-            console.log("plus: "+this.plus);
         }
         else{
             this.width -= this.timerSpeed;
@@ -98,7 +97,6 @@ var ClearEffect = tm.createClass({
             this.remove();
         }
         this.life++;
-        //console.log("aaa: "+this.life);
     },
 
     fadeOut: function(time) {

@@ -146,7 +146,6 @@
             if(this.nextTime > 0){
                 --this.nextTime;
                 if(this.nextTime == 1){ this.initBoard(); }
-                //console.log(this.nextTime);
             }
             
             // タイムアップ時の演出
