@@ -72,7 +72,7 @@
                         type: "Label",
                         name: "scoreLabel",
                         x   : 240,
-                        y   : 580,
+                        y   : 585,
                         width: 480,
                         height: 40,
                         text: userData.score,
