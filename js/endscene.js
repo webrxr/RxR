@@ -41,38 +41,44 @@
             this.levelLabel = StatusLabel(380, 170, 48);
             this.addChild(this.levelLabel);
                     
-            this.scoreLabel = StatusLabel(240, 480, 128);
+            this.scoreLabel = StatusLabel(240, 460, 128);
             this.scoreLabel.align = "center";
             this.addChild(this.scoreLabel);
-    
+
+            // タイトルボタン
+            var iphoneButton = tm.app.iPhoneButton(120, 60, "black");
+            iphoneButton.setPosition(120,640);
+            iphoneButton.label.text = "Title";
+            this.addChild(iphoneButton);
+            iphoneButton.onpointingstart = function() {
+                tm.sound.SoundManager.get("decide").play();
+
+                this.addChild( tm.fade.FadeOut(
+                    app.width, app.height, "#000", 1000, function() {
+                        app.replaceScene(TitleScene());
+                    })
+                );
+            };
+
+            // ツイートボタン
             userData.time = Math.floor(userData.time / 30);
-            
+
             var tweetMessage = this.getTweetMessage(userData.score);
-            /*
-            var tweetButton = tm.twitter.TweetButton(
-                "Score : {0}\nTime : {1}秒生存\n{2}\nhttps://github.com/webrxr/RxR #RxR #tmlibjs".format(userData.score, userData.time, tweetMessage)
-            );
-            tweetButton.x = 360;
-            tweetButton.y = 650;
-            this.addChild(tweetButton);
-            */
             var msg = tm.social.Twitter.createURL({
                 type: "tweet",
                 text: "Score : {0}\nTime : {1}秒生存\n{2}".format(userData.score, userData.time, tweetMessage),
                 hashtags: "RxR,tmlibjs",
                 url: "https://github.com/webrxr/RxR",
             });
-            alert(msg);
-            this.tweetButton = IconButton(tm.graphics.TextureManager.get("returnTitle"));
-            this.tweetButton.setPosition(360, 650);
-            this.tweetButton.scaleX = this.tweetButton.scaleY = CURRENT_SCALE;
-            this.addChild(this.tweetButton);
-            
-            // タイトルボタン
-            this.returnTitle = IconButton(tm.graphics.TextureManager.get("returnTitle"));
-            this.returnTitle.setPosition(160, 647).setSize(237, 50);
-            this.returnTitle.scaleX = this.returnTitle.scaleY = CURRENT_SCALE;
-            this.addChild(this.returnTitle);
+            var tweetButton = tm.app.iPhoneButton(120, 60, "black");
+            tweetButton.setPosition(360, 640);
+            tweetButton.label.text = "Tweet";
+            this.addChild(tweetButton);
+            tweetButton.onpointingstart = function() {
+                tm.sound.SoundManager.get("decide").play();
+
+                window.open(msg, "_self");
+            };
         },
     
         update: function(){
@@ -80,22 +86,10 @@
             this.timeLabel.text = userData.time;
             this.levelLabel.text = userData.level;
             this.scoreLabel.text = userData.score;
-
-            if( app.pointing.getPointingEnd() == true ){
-                if(this.returnTitle.isHitPoint(app.pointing.x, app.pointing.y) == true){
-                    tm.sound.SoundManager.get("decide").play();
-                    
-                    this.addChild( tm.fade.FadeOut(
-                        app.width, app.height, "#000", 1000, function() {
-                            app.replaceScene(TitleScene());
-                        })
-                    );
-                }
-            }
         },
 
         /*
-         *
+         * ツイートのメッセージ
          */
         getTweetMessage: function(score){
             if(score > 200000){ return "ヤムチャしやがって…"; }
