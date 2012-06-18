@@ -12,7 +12,7 @@ iPhone版とのReverse Reverseの差は
 
 となっています。
 
-ゲームはこちらからどうぞ - [Reverse Reverse](http://webrxr.github.com/RxR/)
+ゲームはこちらからどうぞ - [Reverse Reverse](http://bit.ly/MsWyHn)
 
 ## ルール
 
@@ -56,7 +56,7 @@ Web版への許可や素材の使用など許可を頂きました。
 ## ライブラリ/素材製作者様やブログのリンクなど
 tmlib.js開発者のphi氏 ブログ
 
-- [TM Life](http://tmlife.net/)
+- [TM Life](http://bit.ly/MsWNlN)
 
 ゲーム中の効果音は全て
 
@@ -67,4 +67,4 @@ tmlib.js開発者のphi氏 ブログ
 
 私(Halt)のブログ
 
-- [なんかもう実験場](http://craft-notes.com/)
+- [なんかもう実験場](http://bit.ly/MsWGXg)
