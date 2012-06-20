@@ -48,7 +48,9 @@
     
         init: function(){
             this.superInit();
-    
+
+            userData.time = Math.floor(userData.time / 30);
+
             // 画像
             for(var key in IMAGES){
                 var value = IMAGES[key];
@@ -66,7 +68,7 @@
             this.levelLabel.text = userData.level;
             this.scoreLabel.text = userData.score;
             this.touchCountLabel.text = userData.touchTotalCount;
-            this.timeLabel.text = userData.time;
+            this.timeLabel.text = userData.time+"秒";
 
             // タイトルボタン
             var iphoneButton = tm.app.iPhoneButton(120, 60, "black");
@@ -84,14 +86,12 @@
             };
 
             // ツイートボタン
-            userData.time = Math.floor(userData.time / 30);
-
             var tweetMessage = this.getTweetMessage(userData.score);
             var msg = tm.social.Twitter.createURL({
                 type: "tweet",
-                text: "Score : {0}\nTime : {1}秒生存\n{2}".format(userData.score, userData.time, tweetMessage),
+                text: "Reverse Reverse\nScore : {0}\nTime : {1}秒生存\n{2}".format(userData.score, userData.time, tweetMessage),
                 hashtags: "RxR,tmlibjs",
-                url: "https://github.com/webrxr/RxR",
+                url: "http://bit.ly/MsWyHn",
             });
             var tweetButton = tm.app.iPhoneButton(120, 60, "black");
             tweetButton.setPosition(360, 640);
