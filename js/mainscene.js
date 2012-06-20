@@ -1,8 +1,7 @@
 (function(ns) {
-        
+
     // 画像のリスト
     var IMAGES = {
-        // バックグラウンド画像
         "gameBackground": {
             "image": "gameBackground",
             "rect": [240, 360, 640, 960],
@@ -15,52 +14,32 @@
     };
 
     // ラベルのリスト
-    var LABELS = {
-        "levelLabel": {
-            "type": "Label",
-            "name": "levelLabel",
-            "x": 255,
-            "y": 60,
-            "width": 150,
-            "height": 40,
-            "text": 0,
-            "align": "end",
-            "fontSize": 32,
-        },
-        "scoreLabel": {
-            "type": "Label",
-            "name": "scoreLabel",
-            "x": 253,
-            "y": 90,
-            "width": 150,
-            "height": 40,
-            "text": 0,
-            "align": "end",
-            "fontSize": 24,
-        },
-        "whiteStoneLabel": {
-            "type": "Label",
-            "name": "whiteStoneLabel",
-            "x": 350,
-            "y": 90,
-            "width": 150,
-            "height": 40,
-            "text": 0,
-            "align": "end",
-            "fontSize": 32,
-        },
-        "goalStonesLabel": {
-            "type": "Label",
-            "name": "goalStonesLabel",
-            "x": 440,
-            "y": 90,
-            "width": 150,
-            "height": 40,
-            "text": 0,
-            "align": "end",
-            "fontSize": 32,
-        },
-    };
+    var UI_DATA = {
+        LABELS: {
+            children: [
+                {
+                    type:"Label",name:"levelLabel",
+                    x:255,y:60,width:150,fillStyle:"white",
+                    text:"dammy",fontSize:32,align:"end"
+                },
+                {
+                    type:"Label",name:"scoreLabel",
+                    x:253,y:90,width:150,fillStyle:"white",
+                    text:"dammy",fontSize:24,align:"end"
+                },
+                {
+                    type:"Label",name:"whiteStoneLabel",
+                    x:350,y:90,width:150,fillStyle:"white",
+                    text:"dammy",fontSize:32,align:"end"
+                },
+                {
+                    type:"Label",name:"goalStonesLabel",
+                    x:440,y:90,width:150,fillStyle:"white",
+                    text:"dammy",fontSize:32,align:"end"
+                },
+            ]
+        }
+    }
     
     ns.MainScene = tm.createClass({
         superClass: tm.app.Scene,
@@ -91,18 +70,7 @@
             }
             
             // ラベル
-            for(var key in LABELS){
-                var value = LABELS[key];
-                var label = tm.app.Label(value.width, value.height);
-                label.width = value.width;
-                label.height = value.height;
-                label.position.set(value.x, value.y);
-                label.text = value.text;
-                label.align = value.align;
-                label.fontSize = value.fontSize;
-                this[key] = label;
-                this.addChild(label);
-            }
+            this.fromJSON(UI_DATA.LABELS);
             
             // クリア時の演出時間
             this.NEXT_TIME = 90;
