@@ -48,7 +48,9 @@
     
         init: function(){
             this.superInit();
-    
+
+            userData.time = Math.floor(userData.time / 30);
+
             // 画像
             for(var key in IMAGES){
                 var value = IMAGES[key];
@@ -66,7 +68,7 @@
             this.levelLabel.text = userData.level;
             this.scoreLabel.text = userData.score;
             this.touchCountLabel.text = userData.touchTotalCount;
-            this.timeLabel.text = userData.time;
+            this.timeLabel.text = userData.time+"秒";
 
             // タイトルボタン
             var iphoneButton = tm.app.iPhoneButton(120, 60, "black");
@@ -84,8 +86,6 @@
             };
 
             // ツイートボタン
-            userData.time = Math.floor(userData.time / 30);
-
             var tweetMessage = this.getTweetMessage(userData.score);
             var msg = tm.social.Twitter.createURL({
                 type: "tweet",
