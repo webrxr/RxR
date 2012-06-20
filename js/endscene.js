@@ -14,6 +14,54 @@
             "rect": [240, 360, 640, 960],
         }
     };
+
+    // ラベルのリスト
+    var LABELS = {
+        "levelLabel": {
+            "type": "Label",
+            "name": "levelLabel",
+            "x": 380,
+            "y": 215,
+            "width": 150,
+            "height": 40,
+            "text": 0,
+            "align": "end",
+            "fontSize": 48,
+        },
+        "scoreLabel": {
+            "type": "Label",
+            "name": "scoreLabel",
+            "x": 240,
+            "y": 585,
+            "width": 480,
+            "height": 40,
+            "text": 0,
+            "align": "center",
+            "fontSize": 128,
+        },
+        "touchCountLabel": {
+            "type": "Label",
+            "name": "touchCountLabel",
+            "x": 380,
+            "y": 280,
+            "width": 150,
+            "height": 40,
+            "text": 0,
+            "align": "end",
+            "fontSize": 48,
+        },
+        "timeLabel": {
+            "type": "Label",
+            "name": "timeLabel",
+            "x": 380,
+            "y": 350,
+            "width": 150,
+            "height": 40,
+            "text": 0,
+            "align": "end",
+            "fontSize": 48,
+        },
+    };
     
     ns.EndScene = tm.createClass({
         superClass: tm.app.Scene,
@@ -31,56 +79,24 @@
                 this[key] = sprite;
                 this.addChild(sprite);
             }
-
+            
             // ラベル
-            this.fromJSON({
-                children: [
-                    {
-                        type: "Label",
-                        name: "touchCountLabel",
-                        x   : 380,
-                        y   : 280,
-                        width: 150,
-                        height: 40,
-                        text: userData.touchTotalCount,
-                        align: "end",
-                        fontSize: 48
-                    },
-                    {
-                        type: "Label",
-                        name: "timeLabel",
-                        x   : 380,
-                        y   : 350,
-                        width: 150,
-                        height: 40,
-                        text: userData.time,
-                        align: "end",
-                        fontSize: 48
-                    },
-                    {
-                        type: "Label",
-                        name: "levelLabel",
-                        x   : 380,
-                        y   : 215,
-                        width: 150,
-                        height: 40,
-                        text: userData.level,
-                        align: "end",
-                        fontSize: 48
-                    },
-                    {
-                        type: "Label",
-                        name: "scoreLabel",
-                        x   : 240,
-                        y   : 585,
-                        width: 480,
-                        height: 40,
-                        text: userData.score,
-                        align: "center",
-                        fontSize: 128
-                    }
-                ]
-            });
+            for(var key in LABELS){
+                var value = LABELS[key];
+                var label = tm.app.Label(value.width, value.height);
+                label.width = value.width;
+                label.height = value.height;
+                label.position.set(value.x, value.y);
+                label.text = value.text;
+                label.align = value.align;
+                label.fontSize = value.fontSize;
+                this[key] = label;
+                this.addChild(label);
+            }
+            this.levelLabel.text = userData.level;
+            this.scoreLabel.text = userData.score;
+            this.touchCountLabel.text = userData.touchTotalCount;
+            this.timeLabel.text = userData.time;
 
             // タイトルボタン
             var iphoneButton = tm.app.iPhoneButton(120, 60, "black");
