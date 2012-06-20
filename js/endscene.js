@@ -149,7 +149,7 @@
             else if(score >= 0){ return "卵の中のひよこ"; }
 
         },
-        // ポーズ画面 : 別タブへ切り替わった時 / Ttbキーを押した時
+        // ポーズ画面 : 別タブへ切り替わった時 / Tabキーを押した時
         onblur: function() {
             app.pushScene(PauseScene());
         }

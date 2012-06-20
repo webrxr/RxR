@@ -53,5 +53,14 @@ var Stone = tm.createClass({
         this.color = color;
         if( this.color == this.WHITE_COLOR ){ this.sprite.setImage( tm.graphics.TextureManager.get("whiteStone") ); }
         else if( this.color == this.BLACK_COLOR ){ this.sprite.setImage( tm.graphics.TextureManager.get("blackStone") ); }
+    },
+
+    /**
+     * スケールを変更
+     */
+    setScale: function(scale){
+        this.currentScale = scale;
+        this.frameSprite.scaleX = this.frameSprite.scaleY = scale;
+        this.sprite.scaleX = this.sprite.scaleY = scale;
     }
 });

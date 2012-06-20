@@ -211,9 +211,9 @@
             // 石の初期化
             for(var i = 0; i < this.MAX_WIDTH; i++){
                 for(var j = 0; j < this.MAX_HEIGHT; j++){
-                    this.stone[i][j].currentScale = scale;
-                    this.stone[i][j].frameSprite.scaleX = this.stone[i][j].frameSprite.scaleY = scale;
-                    this.stone[i][j].sprite.scaleX = this.stone[i][j].sprite.scaleY = scale;
+                
+                    this.stone[i][j].setScale(scale);
+                    
                     if( i < this.currentSize.width && j < this.currentSize.height ){
                         this.stone[i][j].changeColor(Math.rand(0,1));
                         this.stone[i][j].wakeUp();
@@ -501,7 +501,7 @@
             return magnification[iter];
         },
         
-        // ポーズ画面 : 別タブへ切り替わった時 / Ttbキーを押した時
+        // ポーズ画面 : 別タブへ切り替わった時 / Tabキーを押した時
         onblur: function() {
             app.pushScene(PauseScene(this.bgm));
         }
