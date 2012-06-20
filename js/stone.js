@@ -19,14 +19,16 @@ var Stone = tm.createClass({
         this.color = Math.rand(0,1);
         this.WHITE_COLOR = 0;
         this.BLACK_COLOR = 1;
+        
+        this.currentScale = 0.75;
 
         this.frameSprite = tm.app.Sprite(120,120);
-        this.frameSprite.scaleX = this.frameSprite.scaleY = 0.5;
+        this.frameSprite.scaleX = this.frameSprite.scaleY = this.currentScale;
         this.frameSprite.setImage( tm.graphics.TextureManager.get("stoneFrame") );
         this.addChild(this.frameSprite);
 
         this.sprite = tm.app.Sprite(this.width, this.height);
-        this.sprite.scaleX = this.sprite.scaleY = 0.5;
+        this.sprite.scaleX = this.sprite.scaleY = this.currentScale;
         this.addChild(this.sprite);
         this.changeColor();
         this.sprite.interaction.setBoundingType("rect");
