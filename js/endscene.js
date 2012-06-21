@@ -89,7 +89,7 @@
             var tweetMessage = this.getTweetMessage(userData.score);
             var msg = tm.social.Twitter.createURL({
                 type: "tweet",
-                text: "Score : {0}\nTime : {1}秒生存\n{2}".format(userData.score, userData.time, tweetMessage),
+                text: "Score : {0}\nTime : {1}秒生存\n{2} - Reverse Reverse ".format(userData.score, userData.time, tweetMessage),
                 hashtags: "RxR,tmlibjs",
                 url: "https://github.com/webrxr/RxR",
             });
