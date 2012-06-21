@@ -1,4 +1,4 @@
-(function(ns) {
+(function(ns){
         
     // 画像のリスト
     var IMAGES = {
@@ -75,11 +75,11 @@
             iphoneButton.setPosition(120,640);
             iphoneButton.label.text = "Title";
             this.addChild(iphoneButton);
-            iphoneButton.onpointingstart = function() {
+            iphoneButton.onpointingstart = function(){
                 tm.sound.SoundManager.get("decide").play();
 
                 this.addChild( tm.fade.FadeOut(
-                    app.width, app.height, "#000", 1000, function() {
+                    app.width, app.height, "#000", 1000, function(){
                         app.replaceScene(TitleScene());
                     })
                 );
@@ -97,7 +97,7 @@
             tweetButton.setPosition(360, 640);
             tweetButton.label.text = "Tweet";
             this.addChild(tweetButton);
-            tweetButton.onpointingstart = function() {
+            tweetButton.onpointingstart = function(){
                 tm.sound.SoundManager.get("decide").play();
 
                 window.open(msg, "_self");
@@ -120,7 +120,7 @@
 
         },
         // ポーズ画面 : 別タブへ切り替わった時 / Tabキーを押した時
-        onblur: function() {
+        onblur: function(){
             app.pushScene(PauseScene());
         }
     });

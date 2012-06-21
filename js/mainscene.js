@@ -1,4 +1,4 @@
-(function(ns) {
+(function(ns){
 
     // 画像のリスト
     var IMAGES = {
@@ -101,7 +101,7 @@
                 for(var j = 0; j < this.MAX_HEIGHT; j++){
                     this.stone[i][j] = Stone(i, j);
                     this.addChild(this.stone[i][j]);
-                    this.stone[i][j].addEventListener("pointingstart", function(e) {
+                    this.stone[i][j].addEventListener("pointingstart", function(e){
                         this.touchStone(e);
                     }.bind(this));
                 }
@@ -353,7 +353,7 @@
             if( reverseTotal > 0){
                 var color = this.stone[x][y].color;
                 var anotherColor = this.stone[x][y].WHITE_COLOR;
-                if(color == this.stone[x][y].WHITE_COLOR) { anotherColor = this.stone[x][y].BLACK_COLOR; }
+                if(color == this.stone[x][y].WHITE_COLOR){ anotherColor = this.stone[x][y].BLACK_COLOR; }
     
                 this.stone[x][y].changeColor(anotherColor);
             }
@@ -380,10 +380,10 @@
             var rangeW = 0;
             var rangeH = 0;
     
-            if(vx == 1) { rangeW = this.currentSize.height-y-1; }
-            else if(vx == -1) { rangeW = y; }
-            if(vy == 1) { rangeH = this.currentSize.width-x-1; }
-            else if(vy == -1) { rangeH = x; }
+            if(vx == 1){ rangeW = this.currentSize.height-y-1; }
+            else if(vx == -1){ rangeW = y; }
+            if(vy == 1){ rangeH = this.currentSize.width-x-1; }
+            else if(vy == -1){ rangeH = x; }
     
             var range = new Array(rangeW, rangeH);
     
@@ -397,7 +397,7 @@
             var count = 0;
             var anotherColor = this.stone[x][y].WHITE_COLOR;
             var color = this.stone[x][y].color;
-            if(color == this.stone[x][y].WHITE_COLOR) { anotherColor = this.stone[x][y].BLACK_COLOR; }
+            if(color == this.stone[x][y].WHITE_COLOR){ anotherColor = this.stone[x][y].BLACK_COLOR; }
     
             var wall = this.getOptimumRange(vx, vy, range[0], range[1]);
             count = this.getReverseCount(x, y, vx, vy, range, wall, color, anotherColor);
@@ -422,10 +422,10 @@
          */
         getOptimumRange: function(vx, vy, rangeW, rangeH){
             var wall = 0;
-            if(rangeH < rangeW) { wall = rangeW; }
+            if(rangeH < rangeW){ wall = rangeW; }
             else { wall = rangeH; }
             if( vx != 0 && vy != 0 ){
-                if(rangeH < rangeW) { wall = rangeH; }
+                if(rangeH < rangeW){ wall = rangeH; }
                 else { wall = rangeW; }
             }
     
@@ -470,7 +470,7 @@
         },
         
         // ポーズ画面 : 別タブへ切り替わった時 / Tabキーを押した時
-        onblur: function() {
+        onblur: function(){
             app.pushScene(PauseScene(this.bgm));
         }
     });

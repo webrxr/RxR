@@ -1,7 +1,7 @@
 var PauseScene = tm.createClass({
     superClass: tm.app.Scene,
     
-    init: function(audio) {
+    init: function(audio){
         this.superInit();
         this.interaction;
         
@@ -13,18 +13,18 @@ var PauseScene = tm.createClass({
         app.stop();
         
         this.audio = audio; 
-        if(audio){ this.audio.pause(); }
+        if(this.audio){ this.audio.pause(); }
     },
     
-    onfocus: function() {
+    onfocus: function(){
         app.start();
     },
     
-    onblur: function() {
+    onblur: function(){
         app.stop();
     },
     
-    onpointingstart: function() {
+    onpointingstart: function(){
         if(this.audio){ this.audio.play(); }
         app.popScene();
     },

@@ -32,11 +32,11 @@ var Stone = tm.createClass({
         this.addChild(this.sprite);
         this.changeColor();
         this.sprite.interaction.setBoundingType("rect");
-        this.sprite.onpointingstart = function(e) { this.parent.dispatchEvent(e); };
-        // this.sprite.draw = function(canvas) { this.drawBoundingRect(canvas); }
+        this.sprite.onpointingstart = function(e){ this.parent.dispatchEvent(e); };
+        // this.sprite.draw = function(canvas){ this.drawBoundingRect(canvas); }
     },
 
-    fadeIn: function() {
+    fadeIn: function(){
         // アルファアニメ
         this.animation.addTween({
             prop: "alpha",

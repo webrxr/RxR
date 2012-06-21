@@ -31,7 +31,7 @@ var Timer = tm.createClass({
         }
     },
 
-    draw: function(canvas) {
+    draw: function(canvas){
         canvas.fillStyle = this.color;
         canvas.fillRect(this.x, this.y, this.width, 30);
     },
@@ -50,7 +50,7 @@ var Timer = tm.createClass({
 var Wave = tm.createClass({
     superClass: tm.app.CanvasElement,
 
-    init: function(x, y, img) {
+    init: function(x, y, img){
         this.superInit();
         this.x = x;
         this.y = y;
@@ -99,7 +99,7 @@ var ClearEffect = tm.createClass({
         this.life++;
     },
 
-    fadeOut: function(time) {
+    fadeOut: function(time){
         this.animation.addTween({
             prop: "alpha",
             begin: 1,
@@ -108,7 +108,7 @@ var ClearEffect = tm.createClass({
         });
     },
     
-    onanimationend: function() {
+    onanimationend: function(){
         this.remove();
     }
 });

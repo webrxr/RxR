@@ -1,5 +1,5 @@
 // リソースの読み込み
-tm.preload(function() {
+tm.preload(function(){
     // ゲームシーン中
     tm.graphics.TextureManager.add("whiteStone", "img/whiteStone.png");
     tm.graphics.TextureManager.add("blackStone", "img/blackStone.png");
@@ -89,12 +89,12 @@ var GeneralSprite = tm.createClass({
 var IconButton = tm.createClass({
     superClass: tm.app.Sprite,
     
-    init: function(img) {
+    init: function(img){
         this.superInit(img.width, img.height, img);
         this.alpha = 0.75;
         this.interaction.setBoundingType("rect");
-        this.onmouseover = function() { this.animation.fade(1.0, 250); };
-        this.onmouseout  = function() { this.animation.fade(0.75, 250); };
+        this.onmouseover = function(){ this.animation.fade(1.0, 250); };
+        this.onmouseout  = function(){ this.animation.fade(0.75, 250); };
     }
 });
 
