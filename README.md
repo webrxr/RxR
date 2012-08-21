@@ -13,6 +13,9 @@ iPhone版とのReverse Reverseの差は
 となっています。
 
 ゲームはこちらからどうぞ - [Reverse Reverse](http://bit.ly/MsWyHn)
+紹介記事はこちらです - [JavaScript ライブラリの tmlib.js を使って iPhone のゲームを Web に移植してみた](http://bit.ly/KkRVeU)
+
+
 
 ## ルール
 
