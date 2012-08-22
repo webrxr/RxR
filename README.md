@@ -1,5 +1,7 @@
 # Web Reverse Reverse
 
+<img src="https://raw.github.com/webrxr/RxR/master/img/icon/Icon@2x.png" width="114" height="114">
+
 phi氏が制作したTMLib.jsを使用してReverse ReverseというiPhoneのゲームをウェブ上で動かしてみました。
 
 - [tmlib.js](https://github.com/phi1618/tmlib.js)
