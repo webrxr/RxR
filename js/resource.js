@@ -105,4 +105,3 @@ var IconButton = tm.createClass({
     this.onmouseout  = function() { this.animation.fade(0.75, 250); };
   }
 });
-

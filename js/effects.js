@@ -36,6 +36,7 @@ var Timer = tm.createClass({
     canvas.fillRect(this.x, this.y, this.width, 30);
   },
 
+
   plusTime: function(plus){
     this.plus = plus * this.timerSpeed;
     this.plusTmp = this.plus / effetcTime;
@@ -55,6 +56,7 @@ var Wave = tm.createClass({
     this.x = x;
     this.y = y;
     this.timer = 20;
+
 
     var self = this;
     var particle = tm.app.Shape(256,256);

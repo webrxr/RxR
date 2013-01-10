@@ -1,8 +1,7 @@
-(function(ns) {
+(function(ns){
 
   // 画像のリスト
   var IMAGES = {
-    // バックグラウンド画像
     "gameBackground": {
       "image": "gameBackground",
       "rect": [240, 360, 640, 960],
@@ -13,6 +12,34 @@
       "rect": [240, 60, 640, 120],
     }
   };
+
+  // ラベルのリスト
+  var UI_DATA = {
+    LABELS: {
+      children: [
+        {
+          type:"Label",name:"levelLabel",
+          x:255,y:60,width:150,fillStyle:"white",
+          text:"dammy",fontSize:32,align:"end"
+        },
+        {
+          type:"Label",name:"scoreLabel",
+          x:253,y:90,width:150,fillStyle:"white",
+          text:"dammy",fontSize:24,align:"end"
+        },
+        {
+          type:"Label",name:"whiteStoneLabel",
+          x:350,y:90,width:150,fillStyle:"white",
+          text:"dammy",fontSize:32,align:"end"
+        },
+        {
+          type:"Label",name:"goalStonesLabel",
+          x:440,y:90,width:150,fillStyle:"white",
+          text:"dammy",fontSize:32,align:"end"
+        },
+      ]
+    }
+  }
 
   ns.MainScene = tm.createClass({
     superClass: tm.app.Scene,
@@ -41,6 +68,9 @@
         this.addChild(sprite);
       }
 
+      // ラベル
+      this.fromJSON(UI_DATA.LABELS);
+
       // クリア時の演出時間
       this.NEXT_TIME = 90;
       this.nextTime = 0;
@@ -53,56 +83,6 @@
         "width": 0,
         "height": 0
       };
-
-      // ラベル
-      this.fromJSON({
-        children: [
-          {
-            type: "Label",
-            name: "levelLabel",
-            x   : 255,
-            y   : 60,
-            width: 150,
-            height: 40,
-            text: userData.level,
-            align: "end",
-            fontSize: 32,
-          },
-          {
-            type: "Label",
-            name: "scoreLabel",
-            x   : 253,
-            y   : 90,
-            width: 150,
-            height: 40,
-            text: userData.score,
-            align: "end",
-            fontSize: 24,
-          },
-          {
-            type: "Label",
-            name: "whiteStoneLabel",
-            x   : 350,
-            y   : 90,
-            width: 150,
-            height: 40,
-            text: gameData.whiteStone,
-            align: "end",
-            fontSize: 32,
-          },
-          {
-            type: "Label",
-            name: "goalStonesLabel",
-            x   : 440,
-            y   : 90,
-            width: 150,
-            height: 40,
-            text: gameData.goalStone,
-            align: "end",
-            fontSize: 32,
-          }
-        ]
-      });
 
       // タイマーの生成
       this.timer = Timer(gameData.time);
@@ -120,7 +100,7 @@
         for(var j = 0; j < this.MAX_HEIGHT; j++){
           this.stone[i][j] = Stone(i, j);
           this.addChild(this.stone[i][j]);
-          this.stone[i][j].addEventListener("pointingstart", function(e) {
+          this.stone[i][j].addEventListener("pointingstart", function(e){
             this.touchStone(e);
           }.bind(this));
         }
@@ -173,7 +153,7 @@
       else if(userData.gameOver == true){
         var self = this;
         this.addChild( tm.fade.FadeOut(
-            app.width, app.height, "#000", 1000, function() {
+            app.width, app.height, "#000", 1000, function(){
               self.bgm.stop();
               userData.time -= self.NEXT_TIME;
               app.replaceScene(EndScene());
@@ -189,20 +169,23 @@
       this.currentSize.width = Math.rand(4, this.MAX_WIDTH);
       this.currentSize.height = Math.rand(4, this.MAX_HEIGHT);
 
-      this.getMargin();
-
       //gameData.goalStone = Math.rand(0, this.currentSize.width * this.currentSize.height);    // 目標の白石数
       gameData.goalStone = 0;
 
-      var margin = this.getMargin();
+      var scale = this.setStoneScale();
+      var margin = this.getMargin(scale);
 
       // 石の初期化
       for(var i = 0; i < this.MAX_WIDTH; i++){
         for(var j = 0; j < this.MAX_HEIGHT; j++){
+
+          this.stone[i][j].setScale(scale);
+
           if( i < this.currentSize.width && j < this.currentSize.height ){
             this.stone[i][j].changeColor(Math.rand(0,1));
             this.stone[i][j].wakeUp();
             this.stone[i][j].visible = true;
+
             this.setPosition(i, j, margin);
           }
           else{
@@ -254,8 +237,8 @@
     /**
      * 中央揃えのためのマージンを取得
      */
-    getMargin: function(){
-      var marginW = (app.width - (this.stone[0][0].width / 2) * this.currentSize.width) / 2;
+    getMargin: function(scale){
+      var marginW = (app.width - (this.stone[0][0].width * scale) * this.currentSize.width) / 2;
 
       return marginW;
     },
@@ -264,8 +247,34 @@
      * 石の位置をリセット
      */
     setPosition: function(x, y, margin){
-      this.stone[x][y].x = this.stone[x][y].width/2 * x + margin + this.stone[x][y].width/4;
-      this.stone[x][y].y = this.stone[x][y].height/2 * (y+1) + 160;
+      this.stone[x][y].x = (this.stone[x][y].width * this.stone[x][y].currentScale * x) + margin + (this.stone[x][y].width * this.stone[0][0].currentScale)/2;
+      this.stone[x][y].y = this.stone[x][y].height * this.stone[x][y].currentScale * (y+1) + 160;
+    },
+
+    /**
+     * 石のサイズをリセット
+     */
+    setStoneScale: function(){
+      var scale = 0;
+      var maxScale = this.currentSize.width;
+      if(this.currentSize.width < this.currentSize.height){ var maxScale = this.currentSize.height; }
+      switch(maxScale){
+        case 4:
+        case 5:
+          scale = 0.75;
+          break;
+        case 6:
+          scale =  0.70;
+          break;
+        case 7:
+          scale =  0.6;
+          break;
+        case 8:
+          scale =  0.55;
+          break;
+      }
+
+      return scale;
     },
 
     /**
@@ -343,7 +352,7 @@
       if( reverseTotal > 0){
         var color = this.stone[x][y].color;
         var anotherColor = this.stone[x][y].WHITE_COLOR;
-        if(color == this.stone[x][y].WHITE_COLOR) { anotherColor = this.stone[x][y].BLACK_COLOR; }
+        if(color == this.stone[x][y].WHITE_COLOR){ anotherColor = this.stone[x][y].BLACK_COLOR; }
 
         this.stone[x][y].changeColor(anotherColor);
       }
@@ -370,10 +379,10 @@
       var rangeW = 0;
       var rangeH = 0;
 
-      if(vx == 1) { rangeW = this.currentSize.height-y-1; }
-      else if(vx == -1) { rangeW = y; }
-      if(vy == 1) { rangeH = this.currentSize.width-x-1; }
-      else if(vy == -1) { rangeH = x; }
+      if(vx == 1){ rangeW = this.currentSize.height-y-1; }
+      else if(vx == -1){ rangeW = y; }
+      if(vy == 1){ rangeH = this.currentSize.width-x-1; }
+      else if(vy == -1){ rangeH = x; }
 
       var range = new Array(rangeW, rangeH);
 
@@ -387,7 +396,7 @@
       var count = 0;
       var anotherColor = this.stone[x][y].WHITE_COLOR;
       var color = this.stone[x][y].color;
-      if(color == this.stone[x][y].WHITE_COLOR) { anotherColor = this.stone[x][y].BLACK_COLOR; }
+      if(color == this.stone[x][y].WHITE_COLOR){ anotherColor = this.stone[x][y].BLACK_COLOR; }
 
       var wall = this.getOptimumRange(vx, vy, range[0], range[1]);
       count = this.getReverseCount(x, y, vx, vy, range, wall, color, anotherColor);
@@ -412,10 +421,10 @@
      */
     getOptimumRange: function(vx, vy, rangeW, rangeH){
       var wall = 0;
-      if(rangeH < rangeW) { wall = rangeW; }
+      if(rangeH < rangeW){ wall = rangeW; }
       else { wall = rangeH; }
       if( vx != 0 && vy != 0 ){
-        if(rangeH < rangeW) { wall = rangeH; }
+        if(rangeH < rangeW){ wall = rangeH; }
         else { wall = rangeW; }
       }
 
@@ -459,8 +468,8 @@
       return magnification[iter];
     },
 
-    // ポーズ画面 : 別タブへ切り替わった時 / Ttbキーを押した時
-    onblur: function() {
+    // ポーズ画面 : 別タブへ切り替わった時 / Tabキーを押した時
+    onblur: function(){
       app.pushScene(PauseScene(this.bgm));
     }
   });

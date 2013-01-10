@@ -1,4 +1,4 @@
-(function(ns) {
+(function(ns){
 
   // 画像のリスト
   var IMAGES = {
@@ -15,11 +15,41 @@
     }
   };
 
+  // ラベルのリスト
+  var UI_DATA = {
+    LABELS: {
+      children: [
+        {
+          type:"Label",name:"levelLabel",
+          x:380,y:215,width:150,fillStyle:"white",
+          text:"dammy",fontSize:48,align:"end"
+        },
+        {
+          type:"Label",name:"scoreLabel",
+          x:240,y:585,width:480,fillStyle:"white",
+          text:"dammy",fontSize:128,align:"center"
+        },
+        {
+          type:"Label",name:"touchCountLabel",
+          x:380,y:280,width:150,fillStyle:"white",
+          text:"dammy",fontSize:48,align:"end"
+        },
+        {
+          type:"Label",name:"timeLabel",
+          x:380,y:350,width:150,fillStyle:"white",
+          text:"dammy",fontSize:48,align:"end"
+        },
+      ]
+    }
+  }
+
   ns.EndScene = tm.createClass({
     superClass: tm.app.Scene,
 
     init: function(){
       this.superInit();
+
+      userData.time = Math.floor(userData.time / 30);
 
       // 画像
       for(var key in IMAGES){
@@ -32,87 +62,42 @@
       }
 
       // ラベル
-      this.fromJSON({
-        children: [
-          {
-            type: "Label",
-            name: "touchCountLabel",
-            x   : 380,
-            y   : 280,
-            width: 150,
-            height: 40,
-            text: userData.touchTotalCount,
-            align: "end",
-            fontSize: 48
-          },
-          {
-            type: "Label",
-            name: "timeLabel",
-            x   : 380,
-            y   : 350,
-            width: 150,
-            height: 40,
-            text: userData.time,
-            align: "end",
-            fontSize: 48
-          },
-          {
-            type: "Label",
-            name: "levelLabel",
-            x   : 380,
-            y   : 215,
-            width: 150,
-            height: 40,
-            text: userData.level,
-            align: "end",
-            fontSize: 48
-          },
-          {
-            type: "Label",
-            name: "scoreLabel",
-            x   : 240,
-            y   : 585,
-            width: 480,
-            height: 40,
-            text: userData.score,
-            align: "center",
-            fontSize: 128
-          }
-        ]
-      });
+      this.fromJSON(UI_DATA.LABELS);
+
+      this.levelLabel.text = userData.level;
+      this.scoreLabel.text = userData.score;
+      this.touchCountLabel.text = userData.touchTotalCount;
+      this.timeLabel.text = userData.time+"秒";
 
       // タイトルボタン
       var iphoneButton = tm.app.iPhoneButton(120, 60, "black");
       iphoneButton.setPosition(120,640);
       iphoneButton.label.text = "Title";
       this.addChild(iphoneButton);
-      iphoneButton.onpointingstart = function() {
+      iphoneButton.onpointingstart = function(){
         tm.sound.SoundManager.get("decide").play();
 
         this.addChild( tm.fade.FadeOut(
-          app.width, app.height, "#000", 1000, function() {
-            app.replaceScene(TitleScene());
-          })
+            app.width, app.height, "#000", 1000, function(){
+              app.replaceScene(TitleScene());
+            })
         );
       };
 
       // ツイートボタン
-      userData.time = Math.floor(userData.time / 30);
-
       var tweetMessage = this.getTweetMessage(userData.score);
       var msg = tm.social.Twitter.createURL({
         type: "tweet",
-        text: "Score : {0}\nTime : {1}秒生存\n{2}".format(userData.score, userData.time, tweetMessage),
+        text: "Reverse Reverse\nScore : {0}\nTime : {1}秒生存\n{2}".format(userData.score, userData.time, tweetMessage),
         hashtags: "RxR,tmlibjs",
-        url: "https://github.com/webrxr/RxR",
+        url: "http://bit.ly/MsWyHn",
       });
       var tweetButton = tm.app.iPhoneButton(120, 60, "black");
       tweetButton.setPosition(360, 640);
       tweetButton.label.text = "Tweet";
       this.addChild(tweetButton);
-      tweetButton.onpointingstart = function() {
+      tweetButton.onpointingstart = function(){
         tm.sound.SoundManager.get("decide").play();
-
         window.open(msg, "_self");
       };
     },
@@ -137,4 +122,5 @@
       app.pushScene(PauseScene());
     }
   });
+
 })(window);

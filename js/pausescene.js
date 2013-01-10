@@ -27,5 +27,5 @@ var PauseScene = tm.createClass({
   onpointingstart: function() {
     if(this.audio){ this.audio.play(); }
     app.popScene();
-  },
+  }
 });
