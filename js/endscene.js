@@ -70,7 +70,7 @@
       this.timeLabel.text = userData.time+"秒";
 
       // タイトルボタン
-      var iphoneButton = tm.app.iPhoneButton(120, 60, "black");
+      var iphoneButton = tm.app.GlossyButton(120, 60, "black");
       iphoneButton.setPosition(120,640);
       iphoneButton.label.text = "Title";
       this.addChild(iphoneButton);
@@ -92,7 +92,7 @@
         hashtags: "RxR,tmlibjs",
         url: "http://bit.ly/MsWyHn",
       });
-      var tweetButton = tm.app.iPhoneButton(120, 60, "black");
+      var tweetButton = tm.app.GlossyButton(120, 60, "black");
       tweetButton.setPosition(360, 640);
       tweetButton.label.text = "Tweet";
       this.addChild(tweetButton);
