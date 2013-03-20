@@ -9,6 +9,8 @@ tm.preload(function() {
 
   app.replaceScene(tm.app.LoadingScene({width:app.width, height:app.height}));
 
+  app.enableStats();
+
   app.run();
 
   userData = tm.util.DataManager.get("user-data");

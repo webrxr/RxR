@@ -221,6 +221,7 @@
       if(all == 0){ w = this.currentSize.width; h = this.currentSize.height; }
       else{ w = this.MAX_WIDTH; h = this.MAX_HEIGHT; }
 
+      /*
       var debugStr = "";
       for(var i = 0; i < h; i++){
         for(var j = 0; j < w; j++){
@@ -232,6 +233,7 @@
       }
 
       console.log(debugStr, "\n");
+      */
     },
 
     /**
