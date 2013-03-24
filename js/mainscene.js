@@ -198,7 +198,7 @@
       }
 
       this.setTotalWhiteStone();
-      this.showBoard(0);
+      // this.showBoard(0);
     },
 
     /**
@@ -305,7 +305,7 @@
       if(reverseTotal){
         tm.sound.SoundManager.get("touch").play();
         this.setTotalWhiteStone();
-        this.showBoard(0);
+        // this.showBoard(0);
 
         ++userData.touchCount;
         ++userData.touchTotalCount;
