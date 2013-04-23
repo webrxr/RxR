@@ -75,7 +75,7 @@
       iphoneButton.label.text = "Title";
       this.addChild(iphoneButton);
       iphoneButton.onpointingstart = function(){
-        tm.sound.SoundManager.get("decide").play();
+        tm.sound.WebAudioManager.get("decide").play();
 
         this.addChild( tm.fade.FadeOut(
             app.width, app.height, "#000", 1000, function(){
@@ -97,7 +97,7 @@
       tweetButton.label.text = "Tweet";
       this.addChild(tweetButton);
       tweetButton.onpointingstart = function(){
-        tm.sound.SoundManager.get("decide").play();
+        tm.sound.WebAudioManager.get("decide").play();
         window.open(msg, "_self");
       };
     },

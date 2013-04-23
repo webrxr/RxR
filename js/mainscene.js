@@ -90,7 +90,7 @@
       this.addChild(this.timer);
 
       // BGM
-      this.bgm = tm.sound.SoundManager.get("bgm");
+      this.bgm = tm.sound.WebAudioManager.get("bgm");
       this.bgm.loop = true;
 
       // 石の生成
@@ -305,7 +305,7 @@
 
       var reverseTotal = this.reverseStoneManager( e.target.iter.i, e.target.iter.j );
       if(reverseTotal){
-        tm.sound.SoundManager.get("touch").play();
+        tm.sound.WebAudioManager.get("touch").play();
         this.setTotalWhiteStone();
         this.showBoard(0);
 
@@ -321,7 +321,7 @@
 
         // クリアー判定
         if( gameData.whiteStone == gameData.goalStone ){
-          tm.sound.SoundManager.get("clear").play();
+          tm.sound.WebAudioManager.get("clear").play();
           userData.level += 1;
           this.timer.plusTime( 5 * (this.currentSize.width+this.currentSize.height) );
 

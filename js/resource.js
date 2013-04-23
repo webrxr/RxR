@@ -31,11 +31,11 @@ tm.preload(function() {
   tm.graphics.TextureManager.add("tmlib", "img/github/tmlib.png");
 
   // サウンド
-  tm.sound.SoundManager.add("bgm", "sound/bgm/bgm", 1);
-  tm.sound.SoundManager.add("op", "sound/bgm/op", 1);
-  tm.sound.SoundManager.add("decide", "sound/se/decide.wav");
-  tm.sound.SoundManager.add("touch", "sound/se/touch.wav");
-  tm.sound.SoundManager.add("clear", "sound/se/clear.wav");
+  tm.sound.WebAudioManager.add("bgm", "sound/bgm/bgm", 1);
+  tm.sound.WebAudioManager.add("op", "sound/bgm/op", 1);
+  tm.sound.WebAudioManager.add("decide", "sound/se/decide.wav");
+  tm.sound.WebAudioManager.add("touch", "sound/se/touch.wav");
+  tm.sound.WebAudioManager.add("clear", "sound/se/clear.wav");
 
   tm.util.ScriptManager.loadStats();
 });

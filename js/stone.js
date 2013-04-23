@@ -31,7 +31,7 @@ var Stone = tm.createClass({
     this.changeColor();
     this.sprite.interaction.setBoundingType("rect");
     this.sprite.onpointingstart = function(e) { this.parent.dispatchEvent(e); };
-    // this.sprite.draw = function(canvas) { this.drawBoundingRect(canvas); }
+//    this.sprite.draw = function(canvas) { this.drawBoundingRect(canvas); }
   },
 
   fadeIn: function() {
@@ -58,6 +58,7 @@ var Stone = tm.createClass({
   setScale: function(scale){
     this.currentScale = scale;
     this.frameSprite.scaleX = this.frameSprite.scaleY = scale;
-    this.sprite.scaleX = this.sprite.scaleY = scale;
+    this.sprite.width = this.sprite.height = 120*scale;
+//    this.sprite.scaleX = this.sprite.scaleY = scale;
   }
 });

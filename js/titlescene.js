@@ -78,7 +78,7 @@
       this.addChild(this.engineGithub);
 
       // BGM
-      this.op = tm.sound.SoundManager.get("op");
+      this.op = tm.sound.WebAudioManager.get("op");
       this.op.loop = true;
       this.op.play();
     },
@@ -112,7 +112,7 @@
       // スタート
       if( app.pointing.getPointingEnd() == true ){
         if(this.startButton.isHitPoint(app.pointing.x, app.pointing.y) == true){
-          tm.sound.SoundManager.get("decide").play();
+          tm.sound.WebAudioManager.get("decide").play();
           this.op.stop();
 
           this.addChild( tm.fade.FadeOut(
@@ -122,11 +122,11 @@
           );
         }
         else if(this.rxrGithub.isHitPoint(app.pointing.x, app.pointing.y) == true){
-          tm.sound.SoundManager.get("touch").play();
+          tm.sound.WebAudioManager.get("touch").play();
           window.open("https://github.com/webrxr/RxR", "_self");
         }
         else if(this.engineGithub.isHitPoint(app.pointing.x, app.pointing.y) == true){
-          tm.sound.SoundManager.get("touch").play();
+          tm.sound.WebAudioManager.get("touch").play();
           window.open("https://github.com/phi1618/tmlib.js", "_self");
         }
       }
