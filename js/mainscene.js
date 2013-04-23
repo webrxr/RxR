@@ -152,13 +152,18 @@
       }
       else if(userData.gameOver == true){
         var self = this;
-        this.addChild( tm.fade.FadeOut(
-            app.width, app.height, "#000", 1000, function(){
-              self.bgm.stop();
-              userData.time -= self.NEXT_TIME;
-              app.replaceScene(EndScene());
-            })
-        );
+
+        var fade = tm.app.RectangleShape(app.width, app.height, {
+          fillStyle: "black",
+          lineWidth: 0,
+        }).addChildTo(this);
+        fade.originX = fade.originY = 0;
+        fade.alpha = 0;
+        fade.tweener.fadeIn(1000).call(function() {
+          self.bgm.stop();
+          userData.time -= self.NEXT_TIME;
+          app.replaceScene(EndScene());
+        });
       }
     },
 
@@ -192,7 +197,6 @@
             this.stone[i][j].sleep();
             this.stone[i][j].visible = false;
           }
-          this.stone[i][j].alpha = 0;
           this.stone[i][j].fadeIn();
         }
       }

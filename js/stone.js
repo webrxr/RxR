@@ -29,18 +29,17 @@ var Stone = tm.createClass({
     this.sprite.scaleX = this.sprite.scaleY = this.currentScale;
     this.addChild(this.sprite);
     this.changeColor();
-    this.sprite.interaction.setBoundingType("rect");
+
+    this.sprite.boundingType ="rect";
+    this.sprite.interaction.enabled = true;
     this.sprite.onpointingstart = function(e) { this.parent.dispatchEvent(e); };
 //    this.sprite.draw = function(canvas) { this.drawBoundingRect(canvas); }
   },
 
   fadeIn: function() {
-    this.animation.addTween({
-      prop: "alpha",
-      begin: 0,
-      finish: 1,
-      duration: 1000
-    });
+    this.alpha = 0;
+    this.tweener.clear();
+    this.tweener.fadeIn(1000);
   },
 
   /**
@@ -59,6 +58,7 @@ var Stone = tm.createClass({
     this.currentScale = scale;
     this.frameSprite.scaleX = this.frameSprite.scaleY = scale;
     this.sprite.width = this.sprite.height = 120*scale;
+//    this.sprite.hide(false);
 //    this.sprite.scaleX = this.sprite.scaleY = scale;
   }
 });

@@ -48,6 +48,7 @@
 
     init: function(){
       this.superInit();
+      var self = this;
 
       userData.time = Math.floor(userData.time / 30);
 
@@ -77,11 +78,15 @@
       iphoneButton.onpointingstart = function(){
         tm.sound.WebAudioManager.get("decide").play();
 
-        this.addChild( tm.fade.FadeOut(
-            app.width, app.height, "#000", 1000, function(){
-              app.replaceScene(TitleScene());
-            })
-        );
+        var fade = tm.app.RectangleShape(app.width, app.height, {
+          fillStyle: "black",
+          lineWidth: 0,
+        }).addChildTo(self);
+        fade.originX = fade.originY = 0;
+        fade.alpha = 0;
+        fade.tweener.fadeIn(1000).call(function() {
+          app.replaceScene(TitleScene());
+        });
       };
 
       // ツイートボタン

@@ -103,7 +103,13 @@ var IconButton = tm.createClass({
     this.superInit(img.width, img.height, img);
     this.alpha = 0.75;
     this.interaction.setBoundingType("rect");
-    this.onmouseover = function() { this.animation.fade(1.0, 250); };
-    this.onmouseout  = function() { this.animation.fade(0.75, 250); };
+    this.onmouseover = function() {
+      this.tweener.clear();
+      this.tweener.fade(1.0, 250);
+    };
+    this.onmouseout  = function() {
+      this.tweener.clear();
+      this.tweener.fade(0.75, 250);
+    };
   }
 });

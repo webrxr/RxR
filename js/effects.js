@@ -107,15 +107,9 @@ var ClearEffect = tm.createClass({
   },
 
   fadeOut: function(time) {
-    this.animation.addTween({
-      prop: "alpha",
-      begin: 1,
-      finish: 0,
-      duration: time
-    });
+    this.tweener.clear();
+    this.tweener.fadeOut(time).call(function() {
+      this.remove();
+    }.bind(this));
   },
-
-  onanimationend: function() {
-    this.remove();
-  }
 });

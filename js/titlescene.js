@@ -115,11 +115,16 @@
           tm.sound.WebAudioManager.get("decide").play();
           this.op.stop();
 
-          this.addChild( tm.fade.FadeOut(
-              app.width, app.height, "#000", 1000, function() {
-                app.replaceScene(MainScene());
-              })
-          );
+          var fade = tm.app.RectangleShape(app.width, app.height, {
+            fillStyle: "black",
+            lineWidth: 0,
+          }).addChildTo(this);
+
+          fade.originX = fade.originY = 0;
+          fade.alpha = 0;
+          fade.tweener.fadeIn(1000).call(function() {
+            app.replaceScene(MainScene());
+          });
         }
         else if(this.rxrGithub.isHitPoint(app.pointing.x, app.pointing.y) == true){
           tm.sound.WebAudioManager.get("touch").play();
